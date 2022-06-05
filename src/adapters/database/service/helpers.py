@@ -1,5 +1,6 @@
 from typing import Union
-from .domain import User
+
+from domain.model.user import User
 
 
 def user_helper(data) -> Union[User, None]:
