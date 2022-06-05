@@ -13,7 +13,10 @@ jobs:
         python-version: [3.8]
         poetry-version: [1.1.13]
     runs-on: ubuntu-latest
+
     steps:
+      - run: echo "configuring tests..."
+
       - name: Checkout
         uses: actions/checkout@v2
         with:
