@@ -38,4 +38,4 @@ jobs:
           poetry install --no-interaction --no-ansi
 
       - name: Run unit tests
-          run: python3 -m pytest --import-mode=append tests/
+        run: python3 -m pytest --import-mode=append tests/
