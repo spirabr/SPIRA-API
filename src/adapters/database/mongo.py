@@ -19,3 +19,6 @@ class MongoAdapter(DatabaseInterface):
 
     def get_user_by_id(self, user_id: str) -> Union[User, None]:
         return user_helper(self._users.find_one({"_id": ObjectId(user_id)}))
+
+    def get_user_by_username(self, username: str) -> Union[User, None]:
+        return user_helper(self._users.find_one({"username": username}))
