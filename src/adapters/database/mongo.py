@@ -8,7 +8,7 @@ from domain.model.user import User
 from adapters.database.service.helpers import user_helper
 
 cfg = configparser.ConfigParser()
-cfg.read("adapters/database/config.cfg")
+cfg.read("adapters/database/.cfg")
 
 
 class MongoAdapter(DatabaseInterface):
