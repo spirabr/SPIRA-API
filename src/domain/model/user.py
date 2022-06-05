@@ -8,7 +8,7 @@ from dataclasses_json import dataclass_json, LetterCase
 @dataclass_json(letter_case=LetterCase.SNAKE)
 @dataclass(frozen=True)
 class User(BaseModel):
-    id: int
+    id: str
     username: str
     email: str
 
@@ -16,7 +16,7 @@ class User(BaseModel):
 @dataclass_json(letter_case=LetterCase.SNAKE)
 @dataclass(frozen=True)
 class UserForm(BaseModel):
-    id: int
+    id: str
     username: str
     email: str
     password: str

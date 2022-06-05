@@ -7,7 +7,7 @@ from domain.ports.database_port import DatabasePort
 
 @inject.autoparams()
 def create_user_router(database_port: DatabasePort):
-    router: APIRouter = APIRouter(prefix="/users")
+    router: APIRouter = APIRouter(prefix="/v1/users")
 
     @router.get("/{user_id}")
     def get_user_by_id(user_id: str):

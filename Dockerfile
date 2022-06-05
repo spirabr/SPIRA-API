@@ -1,12 +1,7 @@
-<<<<<<< HEAD
-FROM python:3.8-slim
-
-=======
 FROM python:3.8
 
 ENV _ENV=development \
     POETRY_VERSION=1.1.13
->>>>>>> change/hexagonal-architecture
 
 WORKDIR /app
 COPY ./src /app 
