@@ -66,7 +66,7 @@ class AuthenticationService:
             payload = jwt.decode(
                 token,
                 cfg["token"]["key"],
-                algorithm=cfg["token"]["algorithm"],
+                algorithms=[cfg["token"]["algorithm"]],
             )
             username: str = payload.get("sub")
             if username is None:
