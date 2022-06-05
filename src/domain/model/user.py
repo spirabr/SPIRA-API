@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 from pydantic import BaseModel
+from typing import Union
 
 from dataclasses_json import dataclass_json, LetterCase
 
@@ -14,9 +15,15 @@ class User(BaseModel):
 
 
 @dataclass_json(letter_case=LetterCase.SNAKE)
-@dataclass(frozen=True)
+class UserForm(BaseModel):
+    username: str
+    email: str
+    password: str
+
+
+@dataclass_json(letter_case=LetterCase.SNAKE)
 class AuthenticationUser(BaseModel):
-    id: str
     username: str
     email: str
     hashed_password: str
+    id: Union[str, None] = None

@@ -13,8 +13,13 @@ class DatabasePort:
     def get_user_by_id(self, user_id: str) -> Union[User, None]:
         return self._database.get_user_by_id(user_id)
 
-    def get_auth_user_by_id(self, user_id: str) -> Union[AuthenticationUser, None]:
-        return self._database.get_auth_ser_by_id(user_id)
+    def get_auth_user_by_username(
+        self, username: str
+    ) -> Union[AuthenticationUser, None]:
+        return self._database.get_auth_user_by_username(username)
 
     def get_user_by_username(self, username: str) -> Union[User, None]:
         return self._database.get_user_by_username(username)
+
+    def insert_user(self, user: AuthenticationUser) -> None:
+        return self._database.insert_user(user)

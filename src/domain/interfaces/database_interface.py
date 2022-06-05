@@ -10,9 +10,15 @@ class DatabaseInterface(ABC):
         pass
 
     @abstractmethod
-    def get_auth_user_by_id(self, user_id: str) -> Union[AuthenticationUser, None]:
+    def get_auth_user_by_username(
+        self, username: str
+    ) -> Union[AuthenticationUser, None]:
         pass
 
     @abstractmethod
     def get_user_by_username(self, username: str) -> Union[User, None]:
+        pass
+
+    @abstractmethod
+    def insert_user(self, user: AuthenticationUser) -> None:
         pass

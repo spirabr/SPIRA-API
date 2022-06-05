@@ -14,7 +14,7 @@ from domain.model.token import TokenData
 from domain.ports.database_port import DatabasePort
 
 cfg = ConfigParser()
-cfg.read("domain/database/.cfg")
+cfg.read("domain/services/.cfg")
 
 
 class AuthenticationService:
@@ -24,6 +24,7 @@ class AuthenticationService:
 
     @inject.autoparams()
     def __init__(self, database_port: DatabasePort):
+
         self._database_port = database_port
 
     def get_password_hash(self, password: str):
@@ -34,30 +35,24 @@ class AuthenticationService:
 
     def authenticate_user(
         self,
-        user_id: str,
+        username: str,
         password: str,
     ) -> AuthenticationUser:
-        user = self._database_port.get_auth_user_by_id(user_id)
+        user = self._database_port.get_auth_user_by_username(username)
         if user is None:
             return False
         if not self.verify_password(password, user.hashed_password):
             return False
         return user
 
-    def validate_new_user(self, user: User):
-        return True, 400
-
-    def create_access_token(
-        self, data: dict, expires_delta: Union[timedelta, None] = None
-    ):
+    def create_access_token(self, data: dict):
         to_encode = data.copy()
-        if expires_delta:
-            expire = datetime.utcnow() + expires_delta
-        else:
-            expire = datetime.utcnow() + timedelta(minutes=15)
+        expire = datetime.utcnow() + timedelta(minutes=int(cfg["token"]["expire_time"]))
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(
-            to_encode, cfg["token"]["key"], algorithm=cfg["token"]["algorithm"]
+            to_encode,
+            cfg["token"]["key"],
+            algorithm=cfg["token"]["algorithm"],
         )
         return encoded_jwt
 
@@ -69,7 +64,9 @@ class AuthenticationService:
         )
         try:
             payload = jwt.decode(
-                token, cfg["token"]["key"], algorithm=cfg["token"]["algorithm"]
+                token,
+                cfg["token"]["key"],
+                algorithm=cfg["token"]["algorithm"],
             )
             username: str = payload.get("sub")
             if username is None:

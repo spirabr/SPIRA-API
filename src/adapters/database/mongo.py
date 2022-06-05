@@ -20,8 +20,13 @@ class MongoAdapter(DatabaseInterface):
     def get_user_by_id(self, user_id: str) -> Union[User, None]:
         return user_helper(self._users.find_one({"_id": ObjectId(user_id)}))
 
-    def get_auth_user_by_id(self, user_id: str) -> Union[AuthenticationUser, None]:
-        return auth_user_helper(self._users.find_one({"_id": ObjectId(user_id)}))
+    def get_auth_user_by_username(
+        self, username: str
+    ) -> Union[AuthenticationUser, None]:
+        return auth_user_helper(self._users.find_one({"username": username}))
 
     def get_user_by_username(self, username: str) -> Union[User, None]:
         return user_helper(self._users.find_one({"username": username}))
+
+    def insert_user(self, user: AuthenticationUser) -> None:
+        self._users.insert_one(user.dict())
