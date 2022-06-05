@@ -18,3 +18,9 @@ class MongoMock(DatabaseInterface):
             return None
         except Exception as e:
             raise e
+
+    def get_auth_user_by_id(self, user_id: str) -> Union[User, None]:
+        pass
+
+    def get_user_by_username(self, username: str) -> Union[User, None]:
+        pass

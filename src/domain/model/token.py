@@ -1,22 +1,18 @@
 from dataclasses import dataclass
-from datetime import datetime
 from pydantic import BaseModel
 
 from dataclasses_json import dataclass_json, LetterCase
+from typing import Union
 
 
 @dataclass_json(letter_case=LetterCase.SNAKE)
 @dataclass(frozen=True)
-class User(BaseModel):
-    id: str
-    username: str
-    email: str
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
 
 @dataclass_json(letter_case=LetterCase.SNAKE)
 @dataclass(frozen=True)
-class AuthenticationUser(BaseModel):
-    id: str
-    username: str
-    email: str
-    hashed_password: str
+class TokenData(BaseModel):
+    username: Union[str, None] = None

@@ -4,14 +4,17 @@ from fastapi import Depends, status, HTTPException
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from typing import Union
-from data.database import Database
-import os
-from dotenv import load_dotenv
 from jose import JWTError, jwt
+from configparser import ConfigParser
 import inject
 
-from domain.model.user import User, TokenData
+
+from domain.model.user import User, AuthenticationUser
+from domain.model.token import TokenData
 from domain.ports.database_port import DatabasePort
+
+cfg = ConfigParser()
+cfg.read("domain/database/.cfg")
 
 
 class AuthenticationService:
@@ -33,8 +36,8 @@ class AuthenticationService:
         self,
         user_id: str,
         password: str,
-    ) -> User:
-        user = self._database_port.get_user_by_id(user_id)
+    ) -> AuthenticationUser:
+        user = self._database_port.get_auth_user_by_id(user_id)
         if user is None:
             return False
         if not self.verify_password(password, user.hashed_password):
@@ -54,7 +57,7 @@ class AuthenticationService:
             expire = datetime.utcnow() + timedelta(minutes=15)
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(
-            to_encode, os.environ["SECRET_KEY"], algorithm=os.environ["ALGORITHM"]
+            to_encode, cfg["token"]["key"], algorithm=cfg["token"]["algorithm"]
         )
         return encoded_jwt
 
@@ -66,7 +69,7 @@ class AuthenticationService:
         )
         try:
             payload = jwt.decode(
-                token, os.environ["SECRET_KEY"], os.environ["ALGORITHM"]
+                token, cfg["token"]["key"], algorithm=cfg["token"]["algorithm"]
             )
             username: str = payload.get("sub")
             if username is None:
