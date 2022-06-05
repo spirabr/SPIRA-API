@@ -33,18 +33,19 @@ def create_user_router(
     async def authenticate_and_create_token(
         form_data: OAuth2PasswordRequestForm = Depends(),
     ):
+        unauthorized_exception = HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
         try:
             user = authentication_service.authenticate_user(
                 form_data.username, form_data.password
             )
-        except Exception as e:
-            raise e
+        except:
+            raise unauthorized_exception
         if not user:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Incorrect username or password",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
+            raise unauthorized_exception
         access_token = authentication_service.create_access_token(
             data=JWTData(sub=user.username).dict()
         )
