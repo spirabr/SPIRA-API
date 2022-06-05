@@ -11,8 +11,6 @@ class User(BaseModel):
     id: int
     username: str
     email: str
-    created_at: datetime
-    updated_at: datetime
 
 
 @dataclass_json(letter_case=LetterCase.SNAKE)
@@ -22,5 +20,3 @@ class UserForm(BaseModel):
     username: str
     email: str
     password: str
-    created_at: datetime
-    updated_at: datetime
