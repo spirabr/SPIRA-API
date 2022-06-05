@@ -3,7 +3,7 @@ from typing import Union
 from bson import ObjectId
 import configparser
 
-from domain.ports.database_interface import DatabaseInterface
+from domain.interfaces.database_interface import DatabaseInterface
 from domain.model.user import User
 from adapters.database.service.helpers import user_helper
 

@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from websockets import Data
 
 from adapters.database.mongo import MongoAdapter
-from domain.ports.database_interface import DatabaseInterface
+from domain.interfaces.database_interface import DatabaseInterface
 
 
 def inject_dependencies() -> None:
