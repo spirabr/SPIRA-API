@@ -17,13 +17,13 @@ def test_get_user_by_id_success():
     }
 
 
-def test_get_user_by_id_invalid_id():
+def test_get_user_by_id_invalid_id_exception():
     response = client.get("/v1/users/invalid_id")
     assert response.status_code == 400
     assert response.json() == {"detail": "user id is not valid"}
 
 
-def test_get_user_by_id_not_found():
+def test_get_user_by_id_not_found_exception():
     response = client.get("/v1/users/507f1f77bcf86cd799439021")
     assert response.status_code == 404
     assert response.json() == {"detail": "user not found"}
