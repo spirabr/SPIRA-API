@@ -19,8 +19,14 @@ def create_user_router(
     @router.get("/{user_id}")
     def get_user_by_id(
         user_id: str,
-        user: User = Depends(authentication_service.get_current_user),
+        requesting_user: User = Depends(authentication_service.get_current_user),
     ):
+        try:
+            user = database_port.get_user_by_id(user_id=user_id)
+        except:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, "user id is not valid")
+        if user is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "user not found")
         return jsonable_encoder(user.dict())
 
     @router.post("/auth", response_model=Token)
@@ -45,7 +51,10 @@ def create_user_router(
         return {"access_token": access_token, "token_type": "bearer"}
 
     @router.post("/")
-    def create_user(user_form: UserForm):
+    def create_user(
+        user_form: UserForm,
+        requesting_user: User = Depends(authentication_service.get_current_user),
+    ):
         new_user = AuthenticationUser(
             username=user_form.username,
             email=user_form.email,
