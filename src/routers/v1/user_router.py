@@ -55,14 +55,14 @@ def create_user_router(
         user_form: UserForm,
         requesting_user: User = Depends(authentication_service.get_current_user),
     ):
-        new_user = AuthenticationUser(
-            username=user_form.username,
-            email=user_form.email,
-            hashed_password=authentication_service.get_password_hash(
-                user_form.password
-            ),
-        )
         try:
+            new_user = AuthenticationUser(
+                username=user_form.username,
+                email=user_form.email,
+                hashed_password=authentication_service.get_password_hash(
+                    user_form.password
+                ),
+            )
             database_port.insert_user(new_user)
             return {"message": "user registered!"}
         except:
