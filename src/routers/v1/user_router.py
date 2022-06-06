@@ -6,12 +6,12 @@ from fastapi.security import OAuth2PasswordRequestForm
 from domain.ports.database_port import DatabasePort
 from domain.model.user import User, UserForm, AuthenticationUser
 from domain.model.token import Token, JWTData
-from domain.services.authentication_service import AuthenticationService
+from domain.services.authentication_service import IAuthenticationService
 
 
 @inject.autoparams()
 def create_user_router(
-    authentication_service: AuthenticationService, database_port: DatabasePort
+    authentication_service: IAuthenticationService, database_port: DatabasePort
 ):
     router: APIRouter = APIRouter(prefix="/v1/users")
 

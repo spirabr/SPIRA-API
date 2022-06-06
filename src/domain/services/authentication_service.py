@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, status, HTTPException
@@ -17,14 +18,50 @@ cfg = ConfigParser()
 cfg.read("domain/services/.cfg")
 
 
-class AuthenticationService:
+class IAuthenticationService(ABC):
+    @abstractmethod
+    def _configure_injections(self):
+        pass
+
+    @abstractmethod
+    def get_password_hash(self, password: str):
+        pass
+
+    @abstractmethod
+    def verify_password(self, plain_password: str, hashed_password: str):
+        pass
+
+    @abstractmethod
+    def authenticate_user(
+        self,
+        username: str,
+        password: str,
+    ) -> AuthenticationUser:
+        pass
+
+    @abstractmethod
+    def create_access_token(self, data: dict):
+        pass
+
+    @abstractmethod
+    async def get_current_user(self) -> User:
+        pass
+
+    @abstractmethod
+    async def check_user(self, user_id: str):
+        pass
+
+
+class AuthenticationService(IAuthenticationService):
 
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-    @inject.autoparams()
-    def __init__(self, database_port: DatabasePort):
+    def __init__(self):
+        pass
 
+    @inject.autoparams()
+    def _configure_injections(self, database_port: DatabasePort):
         self._database_port = database_port
 
     def get_password_hash(self, password: str):
