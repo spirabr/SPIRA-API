@@ -1,29 +1,21 @@
-from typing import Union
 from bson.objectid import ObjectId
+from mongomock import MongoClient
+from passlib.context import CryptContext
 
-from src.domain.model.user import User
-from src.domain.interfaces.database_interface import DatabaseInterface
+from src.adapters.database.mongo import MongoAdapter
 
 
-class MongoMock(DatabaseInterface):
+class MongoMock(MongoAdapter):
     def __init__(self):
-        pass
-
-    def get_user_by_id(self, user_id: str) -> Union[User, None]:
-        print(user_id)
-        if user_id == "507f1f77bcf86cd799439011":
-            return User(id=user_id, username="test_username", email="test_email")
-        try:
-            ObjectId(user_id)
-            return None
-        except Exception as e:
-            raise e
-
-    def get_auth_user_by_username(self, username: str) -> Union[User, None]:
-        pass
-
-    def get_user_by_username(self, username: str) -> Union[User, None]:
-        pass
-
-    def insert_user(self, username: str) -> Union[User, None]:
-        pass
+        self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+        self._conn = MongoClient()
+        self._db = self._conn.spira_db
+        self._users = self._db.users
+        self._users.insert_one(
+            {
+                "_id": ObjectId("507f191e810c19729de860ea"),
+                "username": "test_username",
+                "email": "test_email",
+                "hashed_password": self.pwd_context.hash("fake_password"),
+            }
+        )

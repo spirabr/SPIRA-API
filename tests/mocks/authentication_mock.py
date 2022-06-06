@@ -12,7 +12,7 @@ class AuthenticationServiceMock(IAuthenticationService):
         pass
 
     def get_password_hash(self, password: str):
-        pass
+        return "fake_password_hash"
 
     def verify_password(self, plain_password: str, hashed_password: str):
         pass

@@ -26,10 +26,13 @@ def client_without_auth():
     return client
 
 
+# tests with authentication
+
+
 def test_get_user_by_id_success(client_with_auth: TestClient):
-    response = client_with_auth.get("/v1/users/507f1f77bcf86cd799439011")
+    response = client_with_auth.get("/v1/users/507f191e810c19729de860ea")
     assert response.json() == {
-        "id": "507f1f77bcf86cd799439011",
+        "id": "507f191e810c19729de860ea",
         "email": "test_email",
         "username": "test_username",
     }
@@ -48,7 +51,32 @@ def test_get_user_by_id_not_found_exception(client_with_auth: TestClient):
     assert response.json() == {"detail": "user not found"}
 
 
+def test_post_create_success(client_with_auth: TestClient):
+    fake_user = {"username": "teste", "email": "teste@gmail.com", "password": "abcde"}
+    response = client_with_auth.post(
+        "/v1/users/",
+        headers={"Content-Type": "application/json"},
+        json=fake_user,
+    )
+    assert response.json() == {"message": "user registered!"}
+    assert response.status_code == 200
+
+
+# tests without authentication
+
+
 def test_get_user_by_id_unauthorized(client_without_auth: TestClient):
     response = client_without_auth.get("/v1/users/507f1f77bcf86cd799439021")
+    assert response.json() == {"detail": "Not authenticated"}
+    assert response.status_code == 401
+
+
+def test_post_create_unauthorized(client_without_auth: TestClient):
+    fake_user = {"username": "teste", "email": "teste@gmail.com", "password": "abcde"}
+    response = client_without_auth.post(
+        "/v1/users/",
+        headers={"Content-Type": "application/json"},
+        json=fake_user,
+    )
     assert response.json() == {"detail": "Not authenticated"}
     assert response.status_code == 401
