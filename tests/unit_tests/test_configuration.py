@@ -1,8 +1,4 @@
-import os
-
 import inject
-from fastapi import FastAPI
-from websockets import Data
 
 from tests.mocks.mongo_mock import MongoMock
 from tests.mocks.authentication_mock import AuthenticationServiceMock

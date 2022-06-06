@@ -1,8 +1,4 @@
-import os
-
 import inject
-from fastapi import FastAPI
-from websockets import Data
 
 from adapters.database.mongo import MongoAdapter
 from domain.interfaces.database_interface import DatabaseInterface
