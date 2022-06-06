@@ -2,7 +2,6 @@ import inject
 from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordRequestForm
-from datetime import timedelta
 
 from domain.ports.database_port import DatabasePort
 from domain.model.user import User, UserForm, AuthenticationUser
@@ -66,12 +65,11 @@ def create_user_router(
         try:
             database_port.insert_user(new_user)
             return {"message": "user registered!"}
-        except Exception as e:
-            raise e
-            # raise HTTPException(
-            #    status_code=status.HTTP_400_BAD_REQUEST,
-            #    detail="Failed to register new user",
-            #    headers={"WWW-Authenticate": "Bearer"},
-            # )
+        except:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Failed to register new user",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
 
     return router
