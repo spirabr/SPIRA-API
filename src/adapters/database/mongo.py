@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from typing import Union
+from typing import Union, List
 from bson import ObjectId
 import configparser
 
@@ -42,6 +42,14 @@ class MongoAdapter(DatabaseInterface):
         self._users.insert_one(user.dict())
 
     # inference methods
+
+    def get_inference_list_by_user_id(
+        self, user_id: str
+    ) -> Union[List[Inference], None]:
+        return [
+            inference_helper(inference)
+            for inference in self._inferences.find({"user_id": user_id})
+        ]
 
     def get_inference_by_id(self, inference_id: str) -> Union[Inference, None]:
         return inference_helper(

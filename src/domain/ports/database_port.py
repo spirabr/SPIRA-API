@@ -1,5 +1,5 @@
 import inject
-from typing import Union
+from typing import Union, List
 
 from domain.model.user import User, AuthenticationUser
 from domain.model.inference import Inference
@@ -28,6 +28,11 @@ class DatabasePort:
         return self._database.insert_user(user)
 
     # inference methods
+
+    def get_inference_list_by_user_id(
+        self, user_id: str
+    ) -> Union[List[Inference], None]:
+        return self._database.get_inference_list_by_user_id(user_id)
 
     def get_inference_by_id(self, inference_id: str) -> Union[Inference, None]:
         return self._database.get_inference_by_id(inference_id)

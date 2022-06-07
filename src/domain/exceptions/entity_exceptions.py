@@ -18,6 +18,12 @@ class EntityExceptions:
         )
 
     @classmethod
+    def get_list_exception(cls):
+        return HTTPException(
+            status.HTTP_400_BAD_REQUEST, "failed to retrieve " + cls.entity + " list"
+        )
+
+    @classmethod
     def get_registry_exception(cls):
         return HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

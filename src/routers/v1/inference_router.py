@@ -53,4 +53,19 @@ def create_inference_router(
         except:
             raise InferenceExceptions.get_registry_exception()
 
+    @router.get("/{user_id}/inferences")
+    def get_inference_list(
+        user_id: str,
+        requesting_user: User = Depends(authentication_service.get_current_user),
+    ):
+        if requesting_user.id != user_id:
+            raise BaseExceptions.get_forbidden_exception()
+        try:
+            inference_list = database_port.get_inference_list_by_user_id(
+                user_id=user_id
+            )
+            return jsonable_encoder({"inferences": inference_list})
+        except Exception as e:
+            raise e
+
     return router
