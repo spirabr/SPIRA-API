@@ -99,11 +99,11 @@ class AuthenticationService(IAuthenticationService):
             )
             username: str = payload.get("sub")
             if username is None:
-                raise BaseExceptions.unauthorized_exception()
+                raise BaseExceptions.get_unauthorized_exception()
             token_data = TokenData(username=username)
         except JWTError:
-            raise BaseExceptions.unauthorized_exception()
+            raise BaseExceptions.get_unauthorized_exception()
         user = self._database_port.get_user_by_username(token_data.username)
         if user is None:
-            raise BaseExceptions.unauthorized_exception()
+            raise BaseExceptions.get_unauthorized_exception()
         return user
