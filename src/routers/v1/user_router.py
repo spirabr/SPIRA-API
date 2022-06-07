@@ -1,6 +1,5 @@
-from lib2to3.pytree import Base
 import inject
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -9,7 +8,7 @@ from domain.model.user import User, UserForm, AuthenticationUser
 from domain.model.token import Token, JWTData
 from domain.services.authentication_service import IAuthenticationService
 from domain.exceptions.base_exceptions import BaseExceptions
-from domain.exceptions.entity_exceptions import UserExceptions, InferenceExceptions
+from domain.exceptions.entity_exceptions import UserExceptions
 
 
 @inject.autoparams()
@@ -65,23 +64,5 @@ def create_user_router(
             return {"message": "user registered!"}
         except:
             raise UserExceptions.get_registry_exception()
-
-    @router.get("/{user_id}/inferences/{inference_id}")
-    def get_inference_by_id(
-        inference_id: str,
-        user_id: str,
-        requesting_user: User = Depends(authentication_service.get_current_user),
-    ):
-        if requesting_user.id != user_id:
-            raise BaseExceptions.get_forbidden_exception()
-        try:
-            inference = database_port.get_inference_by_id(inference_id=inference_id)
-        except:
-            raise InferenceExceptions.get_id_not_valid_exception()
-        if inference is None:
-            raise InferenceExceptions.get_id_not_found_exception()
-        if inference.user_id != user_id:
-            raise BaseExceptions.get_forbidden_exception()
-        return jsonable_encoder(inference.dict())
 
     return router
