@@ -25,6 +25,16 @@ class EntityExceptions:
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+    @classmethod
+    def get_list_exception(cls):
+        return HTTPException(
+            status.HTTP_400_BAD_REQUEST, "failed to retrieve " + cls.entity + " list"
+        )
+
 
 class UserExceptions(EntityExceptions):
     entity: str = "user"
+
+
+class ModelExceptions(EntityExceptions):
+    entity: str = "model"
