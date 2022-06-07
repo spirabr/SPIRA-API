@@ -5,7 +5,12 @@ import configparser
 
 from domain.interfaces.database_interface import DatabaseInterface
 from domain.model.user import User, AuthenticationUser
-from adapters.database.service.helpers import user_helper, auth_user_helper
+from domain.model.inference import Inference
+from adapters.database.service.helpers import (
+    user_helper,
+    auth_user_helper,
+    inference_helper,
+)
 
 cfg = configparser.ConfigParser()
 cfg.read("adapters/database/.cfg")
@@ -16,6 +21,11 @@ class MongoAdapter(DatabaseInterface):
         self._conn = MongoClient(cfg["database"]["conn_url"])
         self._db = getattr(self._conn, cfg["database"]["database_name"])
         self._users = getattr(self._db, cfg["database"]["user_collection_name"])
+        self._inferences = getattr(
+            self._db, cfg["database"]["inference_collection_name"]
+        )
+
+    # user methods
 
     def get_user_by_id(self, user_id: str) -> Union[User, None]:
         return user_helper(self._users.find_one({"_id": ObjectId(user_id)}))
@@ -30,3 +40,13 @@ class MongoAdapter(DatabaseInterface):
 
     def insert_user(self, user: AuthenticationUser) -> None:
         self._users.insert_one(user.dict())
+
+    # inference methods
+
+    def get_inference_by_id(self, inference_id: str) -> Union[Inference, None]:
+        return inference_helper(
+            self._inferences.find_one({"_id": ObjectId(inference_id)})
+        )
+
+    def insert_inference(self, inference: Inference) -> None:
+        return self._inferences.insert_one(inference.dict())

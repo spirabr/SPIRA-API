@@ -48,7 +48,7 @@ class IAuthenticationService(ABC):
         pass
 
     @abstractmethod
-    async def check_user(self, user_id: str):
+    async def check_requesting_user(self, user_id: str, requesting_user: User):
         pass
 
 
@@ -116,11 +116,10 @@ class AuthenticationService(IAuthenticationService):
             raise credentials_exception
         return user
 
-    async def check_user(self, user_id: str, user: User = Depends(get_current_user)):
-        if user.id != user_id:
+    async def check_requesting_user(self, user_id: str, requesting_user: User):
+        if requesting_user.id != user_id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Forbidden operation",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-        return user

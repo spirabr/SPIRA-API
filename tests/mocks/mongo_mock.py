@@ -11,6 +11,7 @@ class MongoMock(MongoAdapter):
         self._conn = MongoClient()
         self._db = self._conn.spira_db
         self._users = self._db.users
+        self._inferences = self._db.inferences
         self._users.insert_one(
             {
                 "_id": ObjectId("507f191e810c19729de860ea"),

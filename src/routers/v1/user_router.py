@@ -72,4 +72,29 @@ def create_user_router(
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
+    @router.get("/{user_id}/inferences/{inference_id}")
+    def get_inference_by_id(
+        inference_id: str,
+        user_id: str,
+        requesting_user: User = Depends(authentication_service.get_current_user),
+    ):
+        forbidden_exception = HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden operation",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+        if requesting_user.id != user_id:
+            raise forbidden_exception
+        try:
+            inference = database_port.get_inference_by_id(inference_id=inference_id)
+        except:
+            raise HTTPException(
+                status.HTTP_400_BAD_REQUEST, "inference id is not valid"
+            )
+        if inference is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "inference not found")
+        if inference.user_id != user_id:
+            raise forbidden_exception
+        return jsonable_encoder(inference.dict())
+
     return router
