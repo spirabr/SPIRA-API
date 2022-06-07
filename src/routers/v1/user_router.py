@@ -1,3 +1,4 @@
+from lib2to3.pytree import Base
 import inject
 from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.encoders import jsonable_encoder
@@ -7,6 +8,8 @@ from domain.ports.database_port import DatabasePort
 from domain.model.user import User, UserForm, AuthenticationUser
 from domain.model.token import Token, JWTData
 from domain.services.authentication_service import IAuthenticationService
+from domain.exceptions.base_exceptions import BaseExceptions
+from domain.exceptions.entity_exceptions import UserExceptions, InferenceExceptions
 
 
 @inject.autoparams()
@@ -23,28 +26,23 @@ def create_user_router(
         try:
             user = database_port.get_user_by_id(user_id=user_id)
         except:
-            raise HTTPException(status.HTTP_400_BAD_REQUEST, "user id is not valid")
+            raise UserExceptions.id_not_valid_exception()
         if user is None:
-            raise HTTPException(status.HTTP_404_NOT_FOUND, "user not found")
+            raise UserExceptions.id_not_found_exception()
         return jsonable_encoder(user.dict())
 
     @router.post("/auth", response_model=Token)
     async def authenticate_and_create_token(
         form_data: OAuth2PasswordRequestForm = Depends(),
     ):
-        unauthorized_exception = HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
         try:
             user = authentication_service.authenticate_user(
                 form_data.username, form_data.password
             )
         except:
-            raise unauthorized_exception
+            raise BaseExceptions.login_unauthorized_exception()
         if not user:
-            raise unauthorized_exception
+            raise BaseExceptions.login_unauthorized_exception()
         access_token = authentication_service.create_access_token(
             data=JWTData(sub=user.username).dict()
         )
@@ -66,11 +64,7 @@ def create_user_router(
             database_port.insert_user(new_user)
             return {"message": "user registered!"}
         except:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Failed to register new user",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
+            raise UserExceptions.registry_exception()
 
     @router.get("/{user_id}/inferences/{inference_id}")
     def get_inference_by_id(
@@ -78,23 +72,16 @@ def create_user_router(
         user_id: str,
         requesting_user: User = Depends(authentication_service.get_current_user),
     ):
-        forbidden_exception = HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Forbidden operation",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
         if requesting_user.id != user_id:
-            raise forbidden_exception
+            raise BaseExceptions.forbidden_exception()
         try:
             inference = database_port.get_inference_by_id(inference_id=inference_id)
         except:
-            raise HTTPException(
-                status.HTTP_400_BAD_REQUEST, "inference id is not valid"
-            )
+            raise InferenceExceptions.id_not_valid_exception()
         if inference is None:
-            raise HTTPException(status.HTTP_404_NOT_FOUND, "inference not found")
+            raise InferenceExceptions.id_not_found_exception()
         if inference.user_id != user_id:
-            raise forbidden_exception
+            raise BaseExceptions.forbidden_exception()
         return jsonable_encoder(inference.dict())
 
     return router
