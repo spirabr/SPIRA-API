@@ -38,6 +38,7 @@ def test_get_inference_by_id_success(client_with_auth: TestClient):
         "sex": "M",
         "age": 23,
         "user_id": "507f191e810c19729de860ea",
+        "model_id": "629f992d45cda830033cf4cd",
     }
     assert response.status_code == 200
 
@@ -69,18 +70,48 @@ def test_get_inference_of_another_user_exception(client_with_auth: TestClient):
 
 
 def test_post_create_inference_success(client_with_auth: TestClient):
-    fake_user = {"sex": "F", "age": 23}
+    fake_inference = {"sex": "F", "age": 23, "model_id": "629f992d45cda830033cf4cd"}
     response = client_with_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",
         headers={"Content-Type": "application/json"},
-        json=fake_user,
+        json=fake_inference,
     )
     assert response.json() == {"message": "inference registered!"}
     assert response.status_code == 200
 
 
+def test_post_create_inference_with_invalid_model_id_exception(
+    client_with_auth: TestClient,
+):
+    fake_inference = {"sex": "F", "age": 23, "model_id": "invalid_id"}
+    response = client_with_auth.post(
+        "/v1/users/507f191e810c19729de860ea/inferences",
+        headers={"Content-Type": "application/json"},
+        json=fake_inference,
+    )
+    assert response.status_code == 400
+    assert response.json() == {"detail": "model id is not valid"}
+
+
+def test_post_create_inference_with_inexistent_model_id_exception(
+    client_with_auth: TestClient,
+):
+    fake_inference = {"sex": "F", "age": 23, "model_id": "507f191e810c19729de860ea"}
+    response = client_with_auth.post(
+        "/v1/users/507f191e810c19729de860ea/inferences",
+        headers={"Content-Type": "application/json"},
+        json=fake_inference,
+    )
+    assert response.status_code == 404
+    assert response.json() == {"detail": "model not found"}
+
+
 def test_post_create_inference_for_another_user_exception(client_with_auth: TestClient):
-    fake_inference = {"sex": "F", "age": 23}
+    fake_inference = {
+        "sex": "F",
+        "age": 23,
+        "model_id": "629f992d45cda830033cf4cd",
+    }
     response = client_with_auth.post(
         "/v1/users/629d34d2663c15eb2ed15494/inferences",
         headers={"Content-Type": "application/json"},
@@ -100,12 +131,14 @@ def test_get_inference_list_success(client_with_auth: TestClient):
                 "sex": "M",
                 "age": 23,
                 "user_id": "507f191e810c19729de860ea",
+                "model_id": "629f992d45cda830033cf4cd",
             },
             {
                 "id": "629f81986abaa3c5e6cf7c17",
                 "sex": "F",
                 "age": 32,
                 "user_id": "507f191e810c19729de860ea",
+                "model_id": "629f994245cda830033cf4cf",
             },
         ]
     }

@@ -7,7 +7,7 @@ from domain.model.user import User
 from domain.model.inference import Inference, InferenceForm
 from domain.services.authentication_service import IAuthenticationService
 from domain.exceptions.base_exceptions import BaseExceptions
-from domain.exceptions.entity_exceptions import InferenceExceptions
+from domain.exceptions.entity_exceptions import InferenceExceptions, ModelExceptions
 
 
 @inject.autoparams()
@@ -43,10 +43,17 @@ def create_inference_router(
         if requesting_user.id != user_id:
             raise BaseExceptions.get_forbidden_exception()
         try:
+            model = database_port.get_model_by_id(model_id=inference_form.model_id)
+        except:
+            raise ModelExceptions.get_id_not_valid_exception()
+        if model is None:
+            raise ModelExceptions.get_id_not_found_exception()
+        try:
             new_inference = Inference(
                 age=inference_form.age,
                 sex=inference_form.sex,
                 user_id=user_id,
+                model_id=inference_form.model_id,
             )
             database_port.insert_inference(new_inference)
             return {"message": "inference registered!"}

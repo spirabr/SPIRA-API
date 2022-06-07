@@ -39,6 +39,7 @@ def inference_helper(data) -> Union[Inference, None]:
             "age": data["age"],
             "sex": data["sex"],
             "user_id": data["user_id"],
+            "model_id": data["model_id"],
         }
     )
 
