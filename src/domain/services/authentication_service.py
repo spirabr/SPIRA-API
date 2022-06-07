@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
-from fastapi import Depends, status, HTTPException
+from fastapi import Depends
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
-from typing import Union
 from jose import JWTError, jwt
 from configparser import ConfigParser
 import inject

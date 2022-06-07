@@ -1,4 +1,3 @@
-from doctest import FAIL_FAST
 from fastapi import FastAPI
 import uvicorn
 

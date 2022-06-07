@@ -4,6 +4,7 @@ from fastapi.encoders import jsonable_encoder
 
 from domain.ports.database_port import DatabasePort
 from domain.model.user import User
+from domain.model.inference import Inference, InferenceForm
 from domain.services.authentication_service import IAuthenticationService
 from domain.exceptions.base_exceptions import BaseExceptions
 from domain.exceptions.entity_exceptions import InferenceExceptions
@@ -32,5 +33,24 @@ def create_inference_router(
         if inference.user_id != user_id:
             raise BaseExceptions.get_forbidden_exception()
         return jsonable_encoder(inference.dict())
+
+    @router.post("/{user_id}/inferences")
+    def create_inference(
+        inference_form: InferenceForm,
+        user_id: str,
+        requesting_user: User = Depends(authentication_service.get_current_user),
+    ):
+        if requesting_user.id != user_id:
+            raise BaseExceptions.get_forbidden_exception()
+        try:
+            new_inference = Inference(
+                age=inference_form.age,
+                sex=inference_form.sex,
+                user_id=user_id,
+            )
+            database_port.insert_inference(new_inference)
+            return {"message": "inference registered!"}
+        except:
+            raise InferenceExceptions.get_registry_exception()
 
     return router
