@@ -25,9 +25,9 @@ def create_user_router(
         try:
             user = database_port.get_user_by_id(user_id=user_id)
         except:
-            raise UserExceptions.id_not_valid_exception()
+            raise UserExceptions.get_id_not_valid_exception()
         if user is None:
-            raise UserExceptions.id_not_found_exception()
+            raise UserExceptions.get_id_not_found_exception()
         return jsonable_encoder(user.dict())
 
     @router.post("/auth", response_model=Token)
@@ -39,9 +39,9 @@ def create_user_router(
                 form_data.username, form_data.password
             )
         except:
-            raise BaseExceptions.login_unauthorized_exception()
+            raise BaseExceptions.get_login_unauthorized_exception()
         if not user:
-            raise BaseExceptions.login_unauthorized_exception()
+            raise BaseExceptions.get_login_unauthorized_exception()
         access_token = authentication_service.create_access_token(
             data=JWTData(sub=user.username).dict()
         )
@@ -63,6 +63,6 @@ def create_user_router(
             database_port.insert_user(new_user)
             return {"message": "user registered!"}
         except:
-            raise UserExceptions.registry_exception()
+            raise UserExceptions.get_registry_exception()
 
     return router
