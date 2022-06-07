@@ -1,7 +1,8 @@
 import inject
-from typing import Union
+from typing import Union, List
 
 from domain.model.user import User, AuthenticationUser
+from domain.model.model import Model
 from domain.interfaces.database_interface import DatabaseInterface
 
 
@@ -23,3 +24,9 @@ class DatabasePort:
 
     def insert_user(self, user: AuthenticationUser) -> None:
         return self._database.insert_user(user)
+
+    def get_model_by_id(self, model_id: str) -> Union[Model, None]:
+        return self._database.get_model_by_id(model_id)
+
+    def get_model_list(self) -> Union[List[Model], None]:
+        return self._database.get_model_list()
