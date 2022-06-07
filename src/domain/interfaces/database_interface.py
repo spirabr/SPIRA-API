@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import List, Union
+from typing import Union, List
 
 from domain.model.user import User, AuthenticationUser
+from domain.model.model import Model
 from domain.model.inference import Inference
 
 
@@ -36,4 +37,12 @@ class DatabaseInterface(ABC):
 
     @abstractmethod
     def insert_inference(self, inference: Inference) -> None:
+        pass
+
+    @abstractmethod
+    def get_model_by_id(self, model_id: str) -> Union[Model, None]:
+        pass
+
+    @abstractmethod
+    def get_model_list(self) -> Union[List[Model], None]:
         pass

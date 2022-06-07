@@ -2,6 +2,7 @@ from typing import Union
 
 from domain.model.user import User, AuthenticationUser
 from domain.model.inference import Inference
+from domain.model.model import Model
 
 
 def user_helper(data) -> Union[User, None]:
@@ -38,5 +39,18 @@ def inference_helper(data) -> Union[Inference, None]:
             "age": data["age"],
             "sex": data["sex"],
             "user_id": data["user_id"],
+        }
+    )
+
+
+def model_helper(data) -> Union[Model, None]:
+    if data == None:
+        return None
+    return Model(
+        **{
+            "id": str(data["_id"]),
+            "name": data["name"],
+            "subscribing_topic": data["subscribing_topic"],
+            "publishing_topic": data["publishing_topic"],
         }
     )
