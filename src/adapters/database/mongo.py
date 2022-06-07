@@ -7,11 +7,13 @@ from domain.interfaces.database_interface import DatabaseInterface
 from domain.model.user import User, AuthenticationUser
 from domain.model.inference import Inference
 from domain.model.model import Model
+from domain.model.result import Result
 from adapters.database.service.helpers import (
     user_helper,
     auth_user_helper,
     model_helper,
     inference_helper,
+    result_helper,
 )
 
 cfg = configparser.ConfigParser()
@@ -69,3 +71,8 @@ class MongoAdapter(DatabaseInterface):
 
     def get_model_list(self) -> Union[List[Model], None]:
         return [model_helper(model) for model in self._models.find()]
+
+    # result methods
+
+    def get_result_by_inference_id(self, inference_id: str) -> Union[Result, None]:
+        return result_helper(self._results.find_one({"inference_id": inference_id}))

@@ -42,3 +42,7 @@ class InferenceExceptions(EntityExceptions):
 
 class ModelExceptions(EntityExceptions):
     entity: str = "model"
+
+
+class ResultExceptions(EntityExceptions):
+    entity: str = "inference result"

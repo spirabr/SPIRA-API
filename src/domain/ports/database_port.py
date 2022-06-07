@@ -4,6 +4,7 @@ from typing import Union, List
 from domain.model.user import User, AuthenticationUser
 from domain.model.inference import Inference
 from domain.model.model import Model
+from domain.model.result import Result
 from domain.interfaces.database_interface import DatabaseInterface
 
 
@@ -48,3 +49,8 @@ class DatabasePort:
 
     def get_model_list(self) -> Union[List[Model], None]:
         return self._database.get_model_list()
+
+    # result methods
+
+    def get_result_by_inference_id(self, inference_id: str) -> Union[Result, None]:
+        return self._database.get_result_by_inference_id(inference_id)

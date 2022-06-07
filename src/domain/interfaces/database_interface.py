@@ -4,6 +4,7 @@ from typing import Union, List
 from domain.model.user import User, AuthenticationUser
 from domain.model.model import Model
 from domain.model.inference import Inference
+from domain.model.result import Result
 
 
 class DatabaseInterface(ABC):
@@ -45,4 +46,8 @@ class DatabaseInterface(ABC):
 
     @abstractmethod
     def get_model_list(self) -> Union[List[Model], None]:
+        pass
+
+    @abstractmethod
+    def get_result_by_inference_id(self, inference_id: str) -> Union[Result, None]:
         pass
