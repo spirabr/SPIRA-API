@@ -13,6 +13,7 @@ import inject
 from domain.model.user import User, AuthenticationUser
 from domain.model.token import TokenData
 from domain.ports.database_port import DatabasePort
+from domain.exceptions.base_exceptions import BaseExceptions
 
 cfg = ConfigParser()
 cfg.read("domain/services/.cfg")
@@ -45,10 +46,6 @@ class IAuthenticationService(ABC):
 
     @abstractmethod
     async def get_current_user(self) -> User:
-        pass
-
-    @abstractmethod
-    async def check_user(self, user_id: str):
         pass
 
 
@@ -94,11 +91,6 @@ class AuthenticationService(IAuthenticationService):
         return encoded_jwt
 
     async def get_current_user(self, token: str = Depends(oauth2_scheme)) -> User:
-        credentials_exception = HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
         try:
             payload = jwt.decode(
                 token,
@@ -107,20 +99,11 @@ class AuthenticationService(IAuthenticationService):
             )
             username: str = payload.get("sub")
             if username is None:
-                raise credentials_exception
+                raise BaseExceptions.unauthorized_exception()
             token_data = TokenData(username=username)
         except JWTError:
-            raise credentials_exception
+            raise BaseExceptions.unauthorized_exception()
         user = self._database_port.get_user_by_username(token_data.username)
         if user is None:
-            raise credentials_exception
-        return user
-
-    async def check_user(self, user_id: str, user: User = Depends(get_current_user)):
-        if user.id != user_id:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Forbidden operation",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
+            raise BaseExceptions.unauthorized_exception()
         return user

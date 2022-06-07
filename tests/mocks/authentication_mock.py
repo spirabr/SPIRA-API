@@ -29,6 +29,3 @@ class AuthenticationServiceMock(IAuthenticationService):
 
     async def get_current_user(self) -> User:
         return User(id="fake_id", username="fake_username", email="fake_email")
-
-    async def check_user(self, user_id: str):
-        return User(id="fake_id", username="fake_username", email="fake_email")

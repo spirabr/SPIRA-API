@@ -7,6 +7,8 @@ from domain.ports.database_port import DatabasePort
 from domain.model.user import User, UserForm, AuthenticationUser
 from domain.model.token import Token, JWTData
 from domain.services.authentication_service import IAuthenticationService
+from domain.exceptions.base_exceptions import BaseExceptions
+from domain.exceptions.entity_exceptions import UserExceptions
 
 
 @inject.autoparams()
@@ -23,28 +25,23 @@ def create_user_router(
         try:
             user = database_port.get_user_by_id(user_id=user_id)
         except:
-            raise HTTPException(status.HTTP_400_BAD_REQUEST, "user id is not valid")
+            raise UserExceptions.id_not_valid_exception()
         if user is None:
-            raise HTTPException(status.HTTP_404_NOT_FOUND, "user not found")
+            raise UserExceptions.id_not_found_exception()
         return jsonable_encoder(user.dict())
 
     @router.post("/auth", response_model=Token)
     async def authenticate_and_create_token(
         form_data: OAuth2PasswordRequestForm = Depends(),
     ):
-        unauthorized_exception = HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
         try:
             user = authentication_service.authenticate_user(
                 form_data.username, form_data.password
             )
         except:
-            raise unauthorized_exception
+            raise BaseExceptions.login_unauthorized_exception()
         if not user:
-            raise unauthorized_exception
+            raise BaseExceptions.login_unauthorized_exception()
         access_token = authentication_service.create_access_token(
             data=JWTData(sub=user.username).dict()
         )
@@ -66,10 +63,6 @@ def create_user_router(
             database_port.insert_user(new_user)
             return {"message": "user registered!"}
         except:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Failed to register new user",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
+            raise UserExceptions.registry_exception()
 
     return router
