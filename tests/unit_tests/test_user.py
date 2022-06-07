@@ -1,10 +1,21 @@
 from fastapi.testclient import TestClient
 from src.app import create_app
 
-from tests.unit_tests.test_configuration import inject_dependencies
 
-inject_dependencies()
-client = TestClient(create_app())
+from tests.unit_tests.test_configuration import inject_dependencies
+from tests.mocks.mongo_mock import MongoMock
+from src.domain.ports.database_port import DatabasePort
+
+
+def plug_adapters_to_ports():
+    ports = {}
+    ports["database"] = DatabasePort(MongoMock())
+    return ports
+
+
+ports = plug_adapters_to_ports()
+app = create_app(ports["database"])
+client = TestClient(app)
 
 
 def test_get_user_by_id_success():

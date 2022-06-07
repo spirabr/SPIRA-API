@@ -8,16 +8,23 @@ from domain.ports.database_port import DatabasePort
 from adapters.database.mongo import MongoAdapter
 
 
-def create_app() -> FastAPI:
+def plug_adapters_to_ports():
+    ports = {}
+    ports["database"] = DatabasePort(MongoAdapter())
+    return ports
+
+
+def create_app(database_port: DatabasePort) -> FastAPI:
     app: FastAPI = FastAPI()
-    database_port = DatabasePort(MongoAdapter())
     app.include_router(create_user_router(database_port))
     return app
 
 
 if __name__ == "__main__":
+    ports = plug_adapters_to_ports()
+    app = create_app(ports["database"])
     uvicorn.run(
-        create_app(),
+        app,
         host="0.0.0.0",
         port=8000,
         reload=False,
