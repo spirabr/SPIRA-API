@@ -51,7 +51,7 @@ def test_get_user_by_id_not_found_exception(client_with_auth: TestClient):
     assert response.json() == {"detail": "user not found"}
 
 
-def test_post_create_success(client_with_auth: TestClient):
+def test_post_create_user_success(client_with_auth: TestClient):
     fake_user = {"username": "teste", "email": "teste@gmail.com", "password": "abcde"}
     response = client_with_auth.post(
         "/v1/users/",
@@ -71,7 +71,7 @@ def test_get_user_by_id_unauthorized(client_without_auth: TestClient):
     assert response.status_code == 401
 
 
-def test_post_create_unauthorized(client_without_auth: TestClient):
+def test_post_create_user_unauthorized(client_without_auth: TestClient):
     fake_user = {"username": "teste", "email": "teste@gmail.com", "password": "abcde"}
     response = client_without_auth.post(
         "/v1/users/",
