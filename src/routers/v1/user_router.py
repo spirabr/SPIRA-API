@@ -73,15 +73,15 @@ def create_user_router(
         requesting_user: User = Depends(authentication_service.get_current_user),
     ):
         if requesting_user.id != user_id:
-            raise BaseExceptions.forbidden_exception()
+            raise BaseExceptions.get_forbidden_exception()
         try:
             inference = database_port.get_inference_by_id(inference_id=inference_id)
         except:
-            raise InferenceExceptions.id_not_valid_exception()
+            raise InferenceExceptions.get_id_not_valid_exception()
         if inference is None:
-            raise InferenceExceptions.id_not_found_exception()
+            raise InferenceExceptions.get_id_not_found_exception()
         if inference.user_id != user_id:
-            raise BaseExceptions.forbidden_exception()
+            raise BaseExceptions.get_forbidden_exception()
         return jsonable_encoder(inference.dict())
 
     return router
