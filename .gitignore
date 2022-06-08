@@ -1,8 +1,6 @@
 .vscode/
 __pycache__/
 
-.cfg
-.ini
 .env
 .venv
 env/
