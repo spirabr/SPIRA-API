@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "spira-api"
+version = "0.1.0"
+description = "API for SPIRA Project"
+authors = ["Vitor Daisuke Tamae <dai.tamae@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi = "^0.78.0"
+Inject = "^4.3.1"
+pydantic = "^1.9.1"
+pymongo = "^4.1.1"
+uvicorn = "^0.17.6"
+websockets = "^10.3"
+dataclasses-json = "^0.5.7"
+mypy = "^0.960"
+black = "^22.3.0"
+pytest = "^7.1.2"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry>=1.1.13"]
+build-backend = "poetry.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "src"
+]
