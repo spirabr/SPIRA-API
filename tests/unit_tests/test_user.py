@@ -1,13 +1,25 @@
 from fastapi.testclient import TestClient
 from src.app import create_app
+import pytest
 
-from tests.unit_tests.test_configuration import inject_dependencies
-
-inject_dependencies()
-client = TestClient(create_app())
+from tests.mocks.mongo_mock import MongoMock
+from src.domain.ports.database_port import DatabasePort
 
 
-def test_get_user_by_id_success():
+def plug_adapters_to_ports():
+    ports = {}
+    ports["database"] = DatabasePort(MongoMock())
+    return ports
+
+
+@pytest.fixture()
+def client():
+    ports = plug_adapters_to_ports()
+    app = create_app(ports["database"])
+    return TestClient(app)
+
+
+def test_get_user_by_id_success(client):
     response = client.get("/v1/users/507f1f77bcf86cd799439011")
     assert response.status_code == 200
     assert response.json() == {
@@ -17,13 +29,13 @@ def test_get_user_by_id_success():
     }
 
 
-def test_get_user_by_id_invalid_id_exception():
+def test_get_user_by_id_invalid_id_exception(client):
     response = client.get("/v1/users/invalid_id")
     assert response.status_code == 400
     assert response.json() == {"detail": "user id is not valid"}
 
 
-def test_get_user_by_id_not_found_exception():
+def test_get_user_by_id_not_found_exception(client):
     response = client.get("/v1/users/507f1f77bcf86cd799439021")
     assert response.status_code == 404
     assert response.json() == {"detail": "user not found"}

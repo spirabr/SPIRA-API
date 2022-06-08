@@ -1,11 +1,9 @@
-import inject
 from fastapi import APIRouter, HTTPException, status
 from fastapi.encoders import jsonable_encoder
 
 from domain.ports.database_port import DatabasePort
 
 
-@inject.autoparams()
 def create_user_router(database_port: DatabasePort):
     router: APIRouter = APIRouter(prefix="/v1/users")
 
