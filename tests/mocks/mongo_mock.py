@@ -1,17 +1,20 @@
 from typing import Union
 from bson.objectid import ObjectId
 
-from src.domain.model.user import User
-from src.domain.interfaces.database_interface import DatabaseInterface
+from src.core.model.user import User
 
 
-class MongoMock(DatabaseInterface):
+class MongoMock:
     def __init__(self):
         pass
 
-    def get_user_by_id(self, user_id: str) -> Union[User, None]:
+    def get_user_by_id(self, user_id: str):
         if user_id == "507f1f77bcf86cd799439011":
-            return User(id=user_id, username="test_username", email="test_email")
+            return {
+                "_id": ObjectId(user_id),
+                "username": "test_username",
+                "email": "test_email",
+            }
         try:
             ObjectId(user_id)
             return None
