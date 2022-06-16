@@ -3,7 +3,7 @@ from src.app import create_app
 import pytest
 
 from tests.mocks.mongo_mock import MongoMock
-from src.domain.ports.database_port import DatabasePort
+from src.core.ports.database_port import DatabasePort
 
 
 def plug_adapters_to_ports():
@@ -31,7 +31,7 @@ def test_get_user_by_id_success(client):
 
 def test_get_user_by_id_invalid_id_exception(client):
     response = client.get("/v1/users/invalid_id")
-    assert response.status_code == 400
+    assert response.status_code == 422
     assert response.json() == {"detail": "user id is not valid"}
 
 

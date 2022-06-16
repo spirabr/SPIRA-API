@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 import uvicorn
 
-from routers.v1.user_router import create_user_router
 
-from domain.ports.database_port import DatabasePort
+from core.ports.database_port import DatabasePort
 
 from adapters.database.mongo import MongoAdapter
+
+from adapters.routers.v1.user_router import create_user_router
 
 
 def plug_adapters_to_ports():
