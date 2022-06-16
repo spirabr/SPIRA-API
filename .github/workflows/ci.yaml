@@ -1,12 +1,9 @@
 name: CI
 
 on:
-<<<<<<< HEAD
   push:
     branches:
       - "tests/*"
-=======
->>>>>>> change/hexagonal-architecture
   pull_request:
     branches:
       - "*"

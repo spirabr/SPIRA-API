@@ -1,13 +1,7 @@
-<<<<<<< HEAD
 from typing import Optional, List
 from core.model.model import Model
 from core.model.user import User, UserCreation, UserWithPassword
 from core.model.inference import Inference, InferenceCreation
-=======
-from typing import Optional, Union
-
-from core.model.user import User
->>>>>>> change/hexagonal-architecture
 
 
 class DatabasePort:
@@ -25,7 +19,6 @@ class DatabasePort:
                 "email": user["email"],
             }
         )
-<<<<<<< HEAD
 
     def get_user_by_username(self, username: str) -> Optional[User]:
         user = self._database_adapter.get_user_by_username(username)
@@ -117,5 +110,3 @@ class DatabasePort:
 
     def insert_user(self, new_user: UserCreation):
         self._database_adapter.insert_user(new_user)
-=======
->>>>>>> change/hexagonal-architecture
