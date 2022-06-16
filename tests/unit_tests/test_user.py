@@ -47,7 +47,7 @@ def client_without_auth():
 
 
 def test_get_user_by_id_success(client_with_auth: TestClient):
-    headers = {"Authorization": "mock_token"}
+    headers = {"Authorization": "Bearer mock_token"}
     response = client_with_auth.get(
         "/v1/users/507f1f77bcf86cd799439011", headers=headers
     )
@@ -60,14 +60,14 @@ def test_get_user_by_id_success(client_with_auth: TestClient):
 
 
 def test_get_user_by_id_invalid_id_exception(client_with_auth: TestClient):
-    headers = {"Authorization": "mock_token"}
+    headers = {"Authorization": "Bearer mock_token"}
     response = client_with_auth.get("/v1/users/invalid_id", headers=headers)
     assert response.status_code == 422
     assert response.json() == {"detail": "user id is not valid"}
 
 
 def test_get_user_by_id_not_found_exception(client_with_auth: TestClient):
-    headers = {"Authorization": "mock_token"}
+    headers = {"Authorization": "Bearer mock_token"}
     response = client_with_auth.get(
         "/v1/users/507f1f77bcf86cd799439021", headers=headers
     )
@@ -84,7 +84,10 @@ def test_post_create_user_success(client_with_auth: TestClient):
     }
     response = client_with_auth.post(
         "/v1/users/",
-        headers={"Content-Type": "application/json", "Authorization": "mock_token"},
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": "Bearer mock_token",
+        },
         json=fake_user,
     )
     assert response.status_code == 200
@@ -101,7 +104,7 @@ def test_get_user_by_id_no_token_heder(client_without_auth: TestClient):
 
 
 def test_get_user_by_id_unauthorized(client_without_auth: TestClient):
-    headers = {"Authorization": "mock_token"}
+    headers = {"Authorization": "Bearer mock_token"}
     response = client_without_auth.get(
         "/v1/users/507f1f77bcf86cd799439021", headers=headers
     )

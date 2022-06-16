@@ -43,7 +43,7 @@ def client_without_auth():
 
 
 def test_get_model_by_id_success(client_with_auth: TestClient):
-    headers = {"Authorization": "mock_token"}
+    headers = {"Authorization": "Bearer mock_token"}
     response = client_with_auth.get(
         "/v1/models/629f992d45cda830033cf4cd", headers=headers
     )
@@ -57,14 +57,14 @@ def test_get_model_by_id_success(client_with_auth: TestClient):
 
 
 def test_get_model_by_id_invalid_id_exception(client_with_auth: TestClient):
-    headers = {"Authorization": "mock_token"}
+    headers = {"Authorization": "Bearer mock_token"}
     response = client_with_auth.get("/v1/models/invalid_id", headers=headers)
     assert response.status_code == 422
     assert response.json() == {"detail": "model id is not valid"}
 
 
 def test_get_model_by_id_not_found_exception(client_with_auth: TestClient):
-    headers = {"Authorization": "mock_token"}
+    headers = {"Authorization": "Bearer mock_token"}
     response = client_with_auth.get(
         "/v1/models/507f1f77bcf86cd799439021", headers=headers
     )
@@ -73,7 +73,7 @@ def test_get_model_by_id_not_found_exception(client_with_auth: TestClient):
 
 
 def test_get_model_list_success(client_with_auth: TestClient):
-    headers = {"Authorization": "mock_token"}
+    headers = {"Authorization": "Bearer mock_token"}
     response = client_with_auth.get("/v1/models", headers=headers)
     assert response.json() == {
         "models": [

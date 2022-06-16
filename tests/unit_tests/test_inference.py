@@ -43,7 +43,7 @@ def client_without_auth():
 
 
 def test_get_inference_by_id_success(client_with_auth: TestClient):
-    headers = {"Authorization": "mock_token"}
+    headers = {"Authorization": "Bearer mock_token"}
     response = client_with_auth.get(
         "/v1/users/507f191e810c19729de860ea/inferences/629f815d6abaa3c5e6cf7c16",
         headers=headers,
@@ -61,7 +61,7 @@ def test_get_inference_by_id_success(client_with_auth: TestClient):
 def test_get_inference_by_id_invalid_id_not_found_exception(
     client_with_auth: TestClient,
 ):
-    headers = {"Authorization": "mock_token"}
+    headers = {"Authorization": "Bearer mock_token"}
     response = client_with_auth.get(
         "/v1/users/507f191e810c19729de860ea/inferences/invalid_id", headers=headers
     )
@@ -70,7 +70,7 @@ def test_get_inference_by_id_invalid_id_not_found_exception(
 
 
 def test_get_inference_by_id_not_found_exception(client_with_auth: TestClient):
-    headers = {"Authorization": "mock_token"}
+    headers = {"Authorization": "Bearer mock_token"}
     response = client_with_auth.get(
         "/v1/users/507f191e810c19729de860ea/inferences/507f1f77bcf86cd799439021",
         headers=headers,
@@ -80,7 +80,7 @@ def test_get_inference_by_id_not_found_exception(client_with_auth: TestClient):
 
 
 def test_get_inference_of_another_user_exception(client_with_auth: TestClient):
-    headers = {"Authorization": "mock_token"}
+    headers = {"Authorization": "Bearer mock_token"}
     response = client_with_auth.get(
         "/v1/users/629d34d2663c15eb2ed15494/inferences/629e4f781ed5308d4b8212bc",
         headers=headers,
@@ -98,7 +98,10 @@ def test_post_create_inference_success(client_with_auth: TestClient):
     }
     response = client_with_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",
-        headers={"Content-Type": "application/json", "Authorization": "mock_token"},
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": "Bearer mock_token",
+        },
         json=fake_inference,
     )
     assert response.json() == {"message": "inference registered!"}
@@ -116,7 +119,10 @@ def test_post_create_inference_with_invalid_model_id_exception(
     }
     response = client_with_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",
-        headers={"Content-Type": "application/json", "Authorization": "mock_token"},
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": "Bearer mock_token",
+        },
         json=fake_inference,
     )
     assert response.status_code == 422
@@ -134,7 +140,10 @@ def test_post_create_inference_with_inexistent_model_exception(
     }
     response = client_with_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",
-        headers={"Content-Type": "application/json", "Authorization": "mock_token"},
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": "Bearer mock_token",
+        },
         json=fake_inference,
     )
     assert response.status_code == 404
@@ -150,7 +159,10 @@ def test_post_create_inference_for_another_user_exception(client_with_auth: Test
     }
     response = client_with_auth.post(
         "/v1/users/629d34d2663c15eb2ed15494/inferences",
-        headers={"Content-Type": "application/json", "Authorization": "mock_token"},
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": "Bearer mock_token",
+        },
         json=fake_inference,
     )
     assert response.json() == {"detail": "Forbidden operation"}
@@ -158,7 +170,7 @@ def test_post_create_inference_for_another_user_exception(client_with_auth: Test
 
 
 def test_get_inference_list_success(client_with_auth: TestClient):
-    headers = {"Authorization": "mock_token"}
+    headers = {"Authorization": "Bearer mock_token"}
     response = client_with_auth.get(
         "/v1/users/507f191e810c19729de860ea/inferences/", headers=headers
     )
@@ -184,7 +196,7 @@ def test_get_inference_list_success(client_with_auth: TestClient):
 
 
 def test_get_inference_list_of_another_user_exception(client_with_auth: TestClient):
-    headers = {"Authorization": "mock_token"}
+    headers = {"Authorization": "Bearer mock_token"}
     response = client_with_auth.get(
         "/v1/users/629d34d2663c15eb2ed15494/inferences/", headers=headers
     )
