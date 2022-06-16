@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from typing import Optional, Union
 from fastapi import status
 from core.ports.authentication_port import AuthenticationPort
@@ -18,6 +19,17 @@ def get_by_id(
         raise LogicException(
             "could not validate the credentials", status.HTTP_401_UNAUTHORIZED
         )
+=======
+from typing import Union
+from fastapi import status
+
+from core.ports.database_port import DatabasePort
+from core.model.user import User
+from core.model.exception import LogicException
+
+
+def get_by_id(database_port: DatabasePort, user_id: str) -> Union[User, LogicException]:
+>>>>>>> change/hexagonal-architecture
     try:
         user = database_port.get_user_by_id(user_id)
     except:
@@ -27,6 +39,7 @@ def get_by_id(
     if user is None:
         raise LogicException("user not found", status.HTTP_404_NOT_FOUND)
     return user
+<<<<<<< HEAD
 
 
 def _authenticate_user(
@@ -112,3 +125,5 @@ def create_new_user(
         raise LogicException(
             "cound not create new user", status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+=======
+>>>>>>> change/hexagonal-architecture

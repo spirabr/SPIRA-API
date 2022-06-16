@@ -5,6 +5,7 @@ class User(BaseModel):
     id: str
     username: str
     email: str
+<<<<<<< HEAD
 
 
 class UserWithPassword(User):
@@ -19,3 +20,5 @@ class UserCreation(BaseModel):
 
 class UserCreationForm(UserCreation):
     password_confirmation: str
+=======
+>>>>>>> change/hexagonal-architecture

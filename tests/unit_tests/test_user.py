@@ -2,7 +2,9 @@ from fastapi.testclient import TestClient
 import pytest
 
 from src.app import create_app
+import pytest
 
+<<<<<<< HEAD
 from adapters.authentication.authentication_adapter import AuthenticationAdapter
 from adapters.database.mongo_adapter import MongoAdapter
 
@@ -25,8 +27,18 @@ def configure_ports_with_auth():
     ports["database_port"] = DatabasePort(MongoMock())
     ports["authentication_port"] = AuthenticationPort(AuthenticationMock())
     return ports
+=======
+from tests.mocks.mongo_mock import MongoMock
+from src.core.ports.database_port import DatabasePort
 
+>>>>>>> change/hexagonal-architecture
 
+def plug_adapters_to_ports():
+    ports = {}
+    ports["database"] = DatabasePort(MongoMock())
+    return ports
+
+<<<<<<< HEAD
 @pytest.fixture()
 def client_with_auth():
     app = create_app(configure_ports_with_auth())
@@ -44,6 +56,18 @@ def test_get_user_by_id_success(client_with_auth: TestClient):
     response = client_with_auth.get(
         "/v1/users/507f1f77bcf86cd799439011", headers=headers
     )
+=======
+
+@pytest.fixture()
+def client():
+    ports = plug_adapters_to_ports()
+    app = create_app(ports["database"])
+    return TestClient(app)
+
+
+def test_get_user_by_id_success(client):
+    response = client.get("/v1/users/507f1f77bcf86cd799439011")
+>>>>>>> change/hexagonal-architecture
     assert response.status_code == 200
     assert response.json() == {
         "id": "507f1f77bcf86cd799439011",
@@ -52,18 +76,28 @@ def test_get_user_by_id_success(client_with_auth: TestClient):
     }
 
 
+<<<<<<< HEAD
 def test_get_user_by_id_invalid_id_exception(client_with_auth: TestClient):
     headers = {"Authorization": "mock_token"}
     response = client_with_auth.get("/v1/users/invalid_id", headers=headers)
+=======
+def test_get_user_by_id_invalid_id_exception(client):
+    response = client.get("/v1/users/invalid_id")
+>>>>>>> change/hexagonal-architecture
     assert response.status_code == 422
     assert response.json() == {"detail": "user id is not valid"}
 
 
+<<<<<<< HEAD
 def test_get_user_by_id_not_found_exception(client_with_auth: TestClient):
     headers = {"Authorization": "mock_token"}
     response = client_with_auth.get(
         "/v1/users/507f1f77bcf86cd799439021", headers=headers
     )
+=======
+def test_get_user_by_id_not_found_exception(client):
+    response = client.get("/v1/users/507f1f77bcf86cd799439021")
+>>>>>>> change/hexagonal-architecture
     assert response.status_code == 404
     assert response.json() == {"detail": "user not found"}
 
