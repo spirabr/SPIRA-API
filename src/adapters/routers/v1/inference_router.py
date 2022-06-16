@@ -1,34 +1,50 @@
-from fastapi import APIRouter, HTTPException, Request, Depends, status
-from fastapi.security import OAuth2PasswordRequestForm
+import inject
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.encoders import jsonable_encoder
 from adapters.routers.v1.utils.auth import get_header_bearer_token
-from core.model.user import User, UserCreationForm
-from core.ports.authentication_port import AuthenticationPort
-
-from core.ports.database_port import DatabasePort
-from core.services.user_service import (
-    get_by_id,
-    authenticate_and_generate_token,
-    create_new_user,
-)
-from core.model.exception import LogicException
 from core.model.token import Token
 
+from core.ports.authentication_port import AuthenticationPort
+from core.ports.database_port import DatabasePort
 
-def create_user_router(
+from core.model.user import User
+from core.model.inference import Inference, InferenceCreation
+from core.model.exception import LogicException
+from core.services.inference_service import create_new_inference, get_by_id, get_list
+
+
+@inject.autoparams()
+def create_inference_router(
     authentication_port: AuthenticationPort, database_port: DatabasePort
 ):
     router: APIRouter = APIRouter(prefix="/v1/users")
 
-    @router.get("/{user_id}", response_model=User)
-    def get_user_by_id(user_id: str, req: Request):
+    @router.get("/{user_id}/inferences/{inference_id}", response_model=Inference)
+    def get_inference_by_id(inference_id: str, user_id: str, req: Request):
         try:
             token_content = get_header_bearer_token(req)
         except:
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Not authenticated")
-
         try:
-            user = get_by_id(
+            inference = get_by_id(
+                authentication_port,
+                database_port,
+                inference_id,
+                user_id,
+                Token(content=token_content),
+            )
+        except LogicException as e:
+            raise HTTPException(e.error_status, e.message)
+        return inference
+
+    @router.get("/{user_id}/inferences")
+    def get_inference_list(user_id: str, req: Request):
+        try:
+            token_content = get_header_bearer_token(req)
+        except:
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Not authenticated")
+        try:
+            inference_list = get_list(
                 authentication_port,
                 database_port,
                 user_id,
@@ -36,38 +52,24 @@ def create_user_router(
             )
         except LogicException as e:
             raise HTTPException(e.error_status, e.message)
-        return user
+        return {"inferences": jsonable_encoder(inference_list)}
 
-    @router.post("/auth")
-    async def authenticate_and_create_token(
-        form_data: OAuth2PasswordRequestForm = Depends(),
-    ):
-        try:
-            access_token = authenticate_and_generate_token(
-                authentication_port,
-                database_port,
-                form_data.username,
-                form_data.password,
-            )
-        except LogicException as e:
-            raise HTTPException(e.error_status, e.message)
-        return {"access_token": access_token.content, "token_type": "bearer"}
-
-    @router.post("/")
-    def create_user(user_form: UserCreationForm, req: Request):
+    @router.post("/{user_id}/inferences")
+    def create_inference(user_id: str, inference_form: InferenceCreation, req: Request):
         try:
             token_content = get_header_bearer_token(req)
         except:
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Not authenticated")
         try:
-            create_new_user(
+            create_new_inference(
                 authentication_port,
                 database_port,
-                user_form,
+                user_id,
+                inference_form,
                 Token(content=token_content),
             )
         except LogicException as e:
             raise HTTPException(e.error_status, e.message)
-        return {"message": "user registered!"}
+        return {"message": "inference registered!"}
 
     return router
