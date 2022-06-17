@@ -4,7 +4,7 @@ from core.ports.authentication_port import AuthenticationPort
 
 from core.ports.database_port import DatabasePort
 from core.model.user import User, UserCreation, UserCreationForm, UserWithPassword
-from core.model.exception import LogicException
+from core.model.exception import DefaultExceptions, LogicException
 from core.model.token import Token, TokenData
 
 
@@ -15,9 +15,7 @@ def get_by_id(
     token: Token,
 ) -> Union[User, LogicException]:
     if not authentication_port.validate_token(token):
-        raise LogicException(
-            "could not validate the credentials", status.HTTP_401_UNAUTHORIZED
-        )
+        raise DefaultExceptions.credentials_exception
     try:
         user = database_port.get_user_by_id(user_id)
     except:
@@ -38,9 +36,7 @@ def _authenticate_user(
     user_with_password: UserWithPassword = (
         database_port.get_user_by_username_with_password(username)
     )
-    if user_with_password is None:
-        raise
-    if not authentication_port.verify_password(
+    if user_with_password is None or not authentication_port.verify_password(
         plain_password, user_with_password.password
     ):
         raise
@@ -62,14 +58,10 @@ def authenticate_and_generate_token(
         user: User = _authenticate_user(
             authentication_port, database_port, username, password
         )
+        if user is None:
+            raise
     except:
-        raise LogicException(
-            "Incorrect username or password", status.HTTP_401_UNAUTHORIZED
-        )
-    if user is None:
-        raise LogicException(
-            "Incorrect username or password", status.HTTP_401_UNAUTHORIZED
-        )
+        raise DefaultExceptions.user_form_exception
     token = authentication_port.generate_token(data=TokenData(username=user.username))
     return token
 
@@ -93,9 +85,7 @@ def create_new_user(
     token: Token,
 ):
     if not authentication_port.validate_token(token):
-        raise LogicException(
-            "could not validate the credentials", status.HTTP_401_UNAUTHORIZED
-        )
+        raise DefaultExceptions.credentials_exception
     try:
         _validate_new_user(authentication_port, database_port, user_form)
     except LogicException as e:
