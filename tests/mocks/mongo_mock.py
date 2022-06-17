@@ -2,7 +2,7 @@ from bson.objectid import ObjectId
 from mongomock import MongoClient
 from passlib.context import CryptContext
 
-from src.adapters.database.mongo import MongoAdapter
+from adapters.database.mongo_adapter import MongoAdapter
 
 
 class MongoMock(MongoAdapter):
@@ -14,13 +14,21 @@ class MongoMock(MongoAdapter):
         self._inferences = self._db.inferences
         self._models = self._db.models
 
-        self._users.insert_one(
-            {
-                "_id": ObjectId("507f191e810c19729de860ea"),
-                "username": "test_username",
-                "email": "test_email",
-                "hashed_password": self.pwd_context.hash("fake_password"),
-            }
+        self._users.insert_many(
+            [
+                {
+                    "_id": ObjectId("507f191e810c19729de860ea"),
+                    "username": "test_username",
+                    "email": "test_email",
+                    "hashed_password": "fake_password",
+                },
+                {
+                    "_id": ObjectId("507f1f77bcf86cd799439011"),
+                    "username": "test_username2",
+                    "email": "test_email2",
+                    "hashed_password": "fake_password2",
+                },
+            ]
         )
 
         self._inferences.insert_many(
