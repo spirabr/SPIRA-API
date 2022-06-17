@@ -64,6 +64,7 @@ class DatabasePort:
                 "sex": inference["sex"],
                 "user_id": inference["user_id"],
                 "model_id": inference["model_id"],
+                "status": inference["status"],
             }
         )
 
@@ -77,6 +78,7 @@ class DatabasePort:
                     "sex": inference["sex"],
                     "user_id": inference["user_id"],
                     "model_id": inference["model_id"],
+                    "status": inference["status"],
                 }
             )
             for inference in inference_list
@@ -113,4 +115,11 @@ class DatabasePort:
         ]
 
     def get_result_by_inference_id(self, inference_id: str) -> Result:
-        self._database_adapter.get_result_by_inference_id(inference_id)
+        result = self._database_adapter.get_result_by_inference_id(inference_id)
+        return Result(
+            **{
+                "inference_id": result["inference_id"],
+                "output": result["output"],
+                "diagnosis": result["diagnosis"],
+            }
+        )

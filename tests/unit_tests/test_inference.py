@@ -54,6 +54,7 @@ def test_get_inference_by_id_success(client_with_auth: TestClient):
         "age": 23,
         "user_id": "507f191e810c19729de860ea",
         "model_id": "629f992d45cda830033cf4cd",
+        "status": "processing",
     }
     assert response.status_code == 200
 
@@ -183,6 +184,7 @@ def test_get_inference_list_success(client_with_auth: TestClient):
                 "age": 23,
                 "user_id": "507f191e810c19729de860ea",
                 "model_id": "629f992d45cda830033cf4cd",
+                "status": "processing",
             },
             {
                 "id": "629f81986abaa3c5e6cf7c17",
@@ -190,6 +192,7 @@ def test_get_inference_list_success(client_with_auth: TestClient):
                 "age": 32,
                 "user_id": "507f191e810c19729de860ea",
                 "model_id": "629f994245cda830033cf4cf",
+                "status": "processing",
             },
         ]
     }

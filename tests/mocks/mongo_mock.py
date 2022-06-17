@@ -39,6 +39,7 @@ class MongoMock(MongoAdapter):
                     "age": 23,
                     "user_id": "507f191e810c19729de860ea",
                     "model_id": "629f992d45cda830033cf4cd",
+                    "status": "processing",
                 },
                 {
                     "_id": ObjectId("629f81986abaa3c5e6cf7c17"),
@@ -46,6 +47,7 @@ class MongoMock(MongoAdapter):
                     "age": 32,
                     "user_id": "507f191e810c19729de860ea",
                     "model_id": "629f994245cda830033cf4cf",
+                    "status": "processing",
                 },
                 {
                     "_id": ObjectId("629e4f781ed5308d4b8212bc"),
@@ -53,6 +55,7 @@ class MongoMock(MongoAdapter):
                     "age": 22,
                     "user_id": "629d34d2663c15eb2ed15494",
                     "model_id": "629f994245cda830033cf4cf",
+                    "status": "processing",
                 },
             ]
         )

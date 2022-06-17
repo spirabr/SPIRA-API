@@ -8,7 +8,7 @@ from core.ports.authentication_port import AuthenticationPort
 from core.ports.database_port import DatabasePort
 
 from core.model.user import User
-from core.model.inference import Inference, InferenceCreation
+from core.model.inference import Inference, InferenceCreation, InferenceCreationForm
 from core.model.exception import LogicException
 from core.services.inference_service import create_new_inference, get_by_id, get_list
 
@@ -55,7 +55,9 @@ def create_inference_router(
         return {"inferences": jsonable_encoder(inference_list)}
 
     @router.post("/{user_id}/inferences")
-    def create_inference(user_id: str, inference_form: InferenceCreation, req: Request):
+    def create_inference(
+        user_id: str, inference_form: InferenceCreationForm, req: Request
+    ):
         try:
             token_content = get_header_bearer_token(req)
         except:
