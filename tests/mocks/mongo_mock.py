@@ -13,6 +13,7 @@ class MongoMock(MongoAdapter):
         self._users = self._db.users
         self._inferences = self._db.inferences
         self._models = self._db.models
+        self._results = self._db.results
 
         self._users.insert_many(
             [
@@ -75,4 +76,13 @@ class MongoMock(MongoAdapter):
                     "publishing_topic": "fake_topic_4",
                 },
             ]
+        )
+
+        self._results.insert_one(
+            {
+                "_id": ObjectId("62abf2cd154f18493d74fcd2"),
+                "inference_id": "629f815d6abaa3c5e6cf7c16",
+                "output": 0.98765,
+                "diagnosis": "positive",
+            }
         )

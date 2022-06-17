@@ -23,12 +23,12 @@ def get_inference_result(
         )
     except LogicException as e:
         raise e
-
+    result = database_port.get_result_by_inference_id(inference_id)
     try:
         result = database_port.get_result_by_inference_id(inference_id)
     except:
         raise LogicException(
-            "result id is not valid", status.HTTP_422_UNPROCESSABLE_ENTITY
+            "inference id is not valid", status.HTTP_422_UNPROCESSABLE_ENTITY
         )
     if result is None:
         raise LogicException("result not found", status.HTTP_404_NOT_FOUND)

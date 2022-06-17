@@ -55,4 +55,4 @@ class MongoAdapter:
     # result methods
 
     def get_result_by_inference_id(self, inference_id: str):
-        self._results.find_one({"inference_id": inference_id})
+        return self._results.find_one({"inference_id": inference_id})

@@ -118,6 +118,7 @@ class DatabasePort:
         result = self._database_adapter.get_result_by_inference_id(inference_id)
         return Result(
             **{
+                "id": str(result["_id"]),
                 "inference_id": result["inference_id"],
                 "output": result["output"],
                 "diagnosis": result["diagnosis"],
