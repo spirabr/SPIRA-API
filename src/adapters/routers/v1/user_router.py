@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException, Request, Depends, status
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from fastapi.encoders import jsonable_encoder
-from adapters.routers.v1.utils.auth import get_header_bearer_token
 from core.model.user import User, UserCreationForm
 from core.ports.authentication_port import AuthenticationPort
 
@@ -16,17 +15,14 @@ from core.model.token import Token
 
 
 def create_user_router(
-    authentication_port: AuthenticationPort, database_port: DatabasePort
+    authentication_port: AuthenticationPort,
+    database_port: DatabasePort,
+    oauth2_scheme: OAuth2PasswordBearer,
 ):
     router: APIRouter = APIRouter(prefix="/v1/users")
 
     @router.get("/{user_id}", response_model=User)
-    def get_user_by_id(user_id: str, req: Request):
-        try:
-            token_content = get_header_bearer_token(req)
-        except:
-            raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Not authenticated")
-
+    def get_user_by_id(user_id: str, token_content: str = Depends(oauth2_scheme)):
         try:
             user = get_by_id(
                 authentication_port,
@@ -54,11 +50,9 @@ def create_user_router(
         return {"access_token": access_token.content, "token_type": "bearer"}
 
     @router.post("/")
-    def create_user(user_form: UserCreationForm, req: Request):
-        try:
-            token_content = get_header_bearer_token(req)
-        except:
-            raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Not authenticated")
+    def create_user(
+        user_form: UserCreationForm, token_content: str = Depends(oauth2_scheme)
+    ):
         try:
             create_new_user(
                 authentication_port,

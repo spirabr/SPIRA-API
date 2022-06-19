@@ -85,8 +85,8 @@ def test_post_create_user_success(client_with_auth: TestClient):
     response = client_with_auth.post(
         "/v1/users/",
         headers={
-            "Content-Type": "application/json",
             "Authorization": "Bearer mock_token",
+            "Content-Type": "application/json",
         },
         json=fake_user,
     )

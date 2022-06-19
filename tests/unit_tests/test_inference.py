@@ -99,8 +99,8 @@ def test_post_create_inference_success(client_with_auth: TestClient):
     response = client_with_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",
         headers={
-            "Content-Type": "application/json",
             "Authorization": "Bearer mock_token",
+            "Content-Type": "application/json",
         },
         json=fake_inference,
     )

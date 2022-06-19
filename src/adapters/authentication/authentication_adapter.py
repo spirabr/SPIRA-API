@@ -51,7 +51,7 @@ class AuthenticationAdapter:
                 cfg["token"]["key"],
                 algorithms=[cfg["token"]["algorithm"]],
             )
-            username: str = payload.get("sub")
+            username: str = payload.get("username")
         except:
             raise
         return TokenData(username=username)

@@ -1,7 +1,7 @@
 import inject
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.encoders import jsonable_encoder
-from adapters.routers.v1.utils.auth import get_header_bearer_token
+from fastapi.security import OAuth2PasswordBearer
 from core.model.token import Token
 
 from core.model.user import User
@@ -15,15 +15,12 @@ from core.model.exception import LogicException
 def create_model_router(
     authentication_port: AuthenticationPort,
     database_port: DatabasePort,
+    oauth2_scheme: OAuth2PasswordBearer,
 ):
     router: APIRouter = APIRouter(prefix="/v1/models")
 
     @router.get("/{model_id}")
-    def get_model_by_id(model_id: str, req: Request):
-        try:
-            token_content = get_header_bearer_token(req)
-        except:
-            raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Not authenticated")
+    def get_model_by_id(model_id: str, token_content: str = Depends(oauth2_scheme)):
         try:
             model = get_by_id(
                 authentication_port,
@@ -36,11 +33,7 @@ def create_model_router(
         return jsonable_encoder(model.dict())
 
     @router.get("/")
-    def get_model_list(req: Request):
-        try:
-            token_content = get_header_bearer_token(req)
-        except:
-            raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Not authenticated")
+    def get_model_list(token_content: str = Depends(oauth2_scheme)):
         try:
             model_list = get_list(
                 authentication_port, database_port, Token(content=token_content)
