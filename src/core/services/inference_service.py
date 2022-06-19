@@ -4,10 +4,8 @@ from core.model.token import Token
 from core.ports.authentication_port import AuthenticationPort
 
 from core.ports.database_port import DatabasePort
-from core.model.inference import Inference, InferenceCreationForm
+from core.model.inference import Inference, InferenceCreation
 from core.model.exception import DefaultExceptions, LogicException
-
-import core.services.model_service as model_service
 
 
 def get_by_id(
@@ -67,7 +65,7 @@ def get_list(
 def _validate_new_inference(
     authentication_port: AuthenticationPort,
     database_port: DatabasePort,
-    inference_form: InferenceCreationForm,
+    inference_form: InferenceCreation,
 ):
     try:
         model = database_port.get_model_by_id(inference_form.model_id)
@@ -84,7 +82,7 @@ def create_new_inference(
     authentication_port: AuthenticationPort,
     database_port: DatabasePort,
     user_id: str,
-    inference_form: InferenceCreationForm,
+    inference_form: InferenceCreation,
     token: Token,
 ):
     try:
