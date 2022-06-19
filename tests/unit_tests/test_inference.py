@@ -95,7 +95,6 @@ def test_post_create_inference_success(client_with_auth: TestClient):
         "sex": "F",
         "age": 23,
         "model_id": "629f992d45cda830033cf4cd",
-        "user_id": "507f191e810c19729de860ea",
     }
     response = client_with_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",
@@ -220,7 +219,6 @@ def test_post_create_inference_unauthorized(client_without_auth: TestClient):
         "sex": "F",
         "age": 23,
         "model_id": "629f992d45cda830033cf4cd",
-        "user_id": "507f191e810c19729de860ea",
     }
     response = client_without_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",

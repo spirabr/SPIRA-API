@@ -1,8 +1,9 @@
 from pymongo import MongoClient
 from bson import ObjectId
 import configparser
-from core.model.inference import InferenceCreation
 
+from core.model.inference import InferenceCreation
+from core.model.result import ResultCreation
 from core.model.user import UserCreation
 
 cfg = configparser.ConfigParser()
@@ -50,9 +51,13 @@ class MongoAdapter:
         return self._inferences.find({"user_id": user_id})
 
     def insert_inference(self, new_inference: InferenceCreation):
-        self._inferences.insert_one(new_inference.dict())
+        _id = self._inferences.insert_one(new_inference.dict())
+        return _id.inserted_id
 
     # result methods
 
     def get_result_by_inference_id(self, inference_id: str):
         return self._results.find_one({"inference_id": inference_id})
+
+    def insert_result(self, new_result: ResultCreation):
+        self._results.insert_one(new_result.dict())

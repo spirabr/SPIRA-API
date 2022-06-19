@@ -1,6 +1,6 @@
 from typing import Optional, List
 from core.model.model import Model
-from core.model.result import Result
+from core.model.result import Result, ResultCreation
 from core.model.user import User, UserCreation, UserWithPassword
 from core.model.inference import Inference, InferenceCreation
 
@@ -8,6 +8,8 @@ from core.model.inference import Inference, InferenceCreation
 class DatabasePort:
     def __init__(self, database_adapter):
         self._database_adapter = database_adapter
+
+    # user methods
 
     def get_user_by_id(self, user_id: str) -> Optional[User]:
         user = self._database_adapter.get_user_by_id(user_id)
@@ -51,6 +53,8 @@ class DatabasePort:
     def insert_user(self, new_user: UserCreation):
         self._database_adapter.insert_user(new_user)
 
+    # inference methods
+
     def get_inference_by_id(
         self, inference_id: str, user_id: str
     ) -> Optional[Inference]:
@@ -84,8 +88,10 @@ class DatabasePort:
             for inference in inference_list
         ]
 
-    def insert_inference(self, new_inference: InferenceCreation):
-        self._database_adapter.insert_inference(new_inference)
+    def insert_inference(self, new_inference: InferenceCreation) -> str:
+        return str(self._database_adapter.insert_inference(new_inference))
+
+    # model methods
 
     def get_model_by_id(self, model_id: str) -> Optional[Model]:
         model = self._database_adapter.get_model_by_id(model_id)
@@ -114,6 +120,8 @@ class DatabasePort:
             for model in model_list
         ]
 
+    # result methods
+
     def get_result_by_inference_id(self, inference_id: str) -> Result:
         result = self._database_adapter.get_result_by_inference_id(inference_id)
         return Result(
@@ -124,3 +132,6 @@ class DatabasePort:
                 "diagnosis": result["diagnosis"],
             }
         )
+
+    def insert_result(self, new_result: ResultCreation):
+        self._database_adapter.insert_result(new_result)

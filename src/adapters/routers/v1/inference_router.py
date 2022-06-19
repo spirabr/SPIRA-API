@@ -8,6 +8,7 @@ from core.model.token import Token
 from core.model.inference import Inference, InferenceCreationForm
 from core.model.exception import LogicException
 from core.services.inference_service import create_new_inference, get_by_id, get_list
+from core.services.result_service import create_inference_result
 
 
 def create_inference_router(
@@ -53,11 +54,19 @@ def create_inference_router(
         token_content: str = Depends(oauth2_scheme),
     ):
         try:
-            create_new_inference(
+            inference_id = create_new_inference(
                 authentication_port,
                 database_port,
                 user_id,
                 inference_form,
+                Token(content=token_content),
+            )
+
+            create_inference_result(
+                authentication_port,
+                database_port,
+                user_id,
+                inference_id,
                 Token(content=token_content),
             )
         except LogicException as e:

@@ -108,8 +108,9 @@ def create_new_inference(
             model_id=inference_form.model_id,
             status=Status.processing_status,
         )
-        database_port.insert_inference(new_inference)
+        new_id = database_port.insert_inference(new_inference)
     except:
         raise LogicException(
             "cound not create new inference", status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+    return new_id
