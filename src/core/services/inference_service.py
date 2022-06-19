@@ -104,7 +104,7 @@ def create_new_inference(
         new_inference = InferenceCreation(
             age=inference_form.age,
             sex=inference_form.sex,
-            user_id=inference_form.user_id,
+            user_id=user_id,
             model_id=inference_form.model_id,
             status=Status.processing_status,
         )

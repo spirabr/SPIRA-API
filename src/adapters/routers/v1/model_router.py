@@ -1,17 +1,15 @@
-import inject
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
-from core.model.token import Token
 
+from core.model.token import Token
 from core.model.user import User
-from core.ports.authentication_port import AuthenticationPort
-from core.ports.database_port import DatabasePort
 from core.services.model_service import get_by_id, get_list
 from core.model.exception import LogicException
+from core.ports.authentication_port import AuthenticationPort
+from core.ports.database_port import DatabasePort
 
 
-@inject.autoparams()
 def create_model_router(
     authentication_port: AuthenticationPort,
     database_port: DatabasePort,

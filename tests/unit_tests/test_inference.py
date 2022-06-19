@@ -7,7 +7,7 @@ from adapters.authentication.authentication_adapter import AuthenticationAdapter
 from adapters.database.mongo_adapter import MongoAdapter
 
 from core.ports.authentication_port import AuthenticationPort
-from src.core.ports.database_port import DatabasePort
+from core.ports.database_port import DatabasePort
 
 from tests.mocks.authentication_mock import AuthenticationMock
 from tests.mocks.mongo_mock import MongoMock
@@ -116,7 +116,6 @@ def test_post_create_inference_with_invalid_model_id_exception(
         "sex": "F",
         "age": 23,
         "model_id": "invalid_id",
-        "user_id": "507f191e810c19729de860ea",
     }
     response = client_with_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",
@@ -136,7 +135,6 @@ def test_post_create_inference_with_inexistent_model_exception(
     fake_inference = {
         "sex": "F",
         "age": 23,
-        "user_id": "507f191e810c19729de860ea",
         "model_id": "507f191e810c19729de860ea",
     }
     response = client_with_auth.post(
@@ -156,7 +154,6 @@ def test_post_create_inference_for_another_user_exception(client_with_auth: Test
         "sex": "F",
         "age": 23,
         "model_id": "invalid_id",
-        "user_id": "507f191e810c19729de860ea",
     }
     response = client_with_auth.post(
         "/v1/users/629d34d2663c15eb2ed15494/inferences",

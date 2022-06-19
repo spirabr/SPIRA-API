@@ -1,17 +1,16 @@
-from fastapi import APIRouter, HTTPException, Request, Depends, status
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
-from fastapi.encoders import jsonable_encoder
-from core.model.user import User, UserCreationForm
-from core.ports.authentication_port import AuthenticationPort
 
+from core.model.user import User, UserCreationForm
+from core.model.exception import LogicException
+from core.model.token import Token
+from core.ports.authentication_port import AuthenticationPort
 from core.ports.database_port import DatabasePort
 from core.services.user_service import (
     get_by_id,
     authenticate_and_generate_token,
     create_new_user,
 )
-from core.model.exception import LogicException
-from core.model.token import Token
 
 
 def create_user_router(

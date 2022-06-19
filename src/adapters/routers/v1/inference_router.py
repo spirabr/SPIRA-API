@@ -1,19 +1,15 @@
-import inject
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
-from core.model.token import Token
 
 from core.ports.authentication_port import AuthenticationPort
 from core.ports.database_port import DatabasePort
-
-from core.model.user import User
-from core.model.inference import Inference, InferenceCreation, InferenceCreationForm
+from core.model.token import Token
+from core.model.inference import Inference, InferenceCreationForm
 from core.model.exception import LogicException
 from core.services.inference_service import create_new_inference, get_by_id, get_list
 
 
-@inject.autoparams()
 def create_inference_router(
     authentication_port: AuthenticationPort,
     database_port: DatabasePort,
@@ -52,19 +48,10 @@ def create_inference_router(
 
     @router.post("/{user_id}/inferences")
     def create_inference(
-<<<<<<< HEAD
-        user_id: str, inference_form: InferenceCreationForm, req: Request
-    ):
-        try:
-            token_content = get_header_bearer_token(req)
-        except:
-            raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Not authenticated")
-=======
         user_id: str,
-        inference_form: InferenceCreation,
+        inference_form: InferenceCreationForm,
         token_content: str = Depends(oauth2_scheme),
     ):
->>>>>>> main
         try:
             create_new_inference(
                 authentication_port,
