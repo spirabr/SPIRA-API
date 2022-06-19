@@ -7,11 +7,13 @@ from core.ports.database_port import DatabasePort
 from core.model.token import Token
 from core.model.inference import Inference, InferenceCreationForm
 from core.model.exception import LogicException
+from core.ports.message_service_port import MessageServicePort
 from core.services.inference_service import create_new_inference, get_by_id, get_list
 from core.services.result_service import create_inference_result
 
 
 def create_inference_router(
+    message_service_port: MessageServicePort,
     authentication_port: AuthenticationPort,
     database_port: DatabasePort,
     oauth2_scheme: OAuth2PasswordBearer,
@@ -54,7 +56,9 @@ def create_inference_router(
         token_content: str = Depends(oauth2_scheme),
     ):
         try:
+
             inference_id = create_new_inference(
+                message_service_port,
                 authentication_port,
                 database_port,
                 user_id,

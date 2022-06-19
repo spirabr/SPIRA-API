@@ -12,3 +12,9 @@ class ResultCreation(BaseModel):
     inference_id: str
     output: float
     diagnosis: str
+
+
+class ResultUpdate(BaseModel):
+    inference_id: str
+    output: float
+    diagnosis: str

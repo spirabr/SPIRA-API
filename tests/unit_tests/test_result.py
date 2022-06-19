@@ -1,8 +1,10 @@
 from fastapi.testclient import TestClient
 import pytest
 from unittest.mock import patch, MagicMock
+from adapters.message_service.nats_adapter import NATSAdapter
 from core.model.inference import InferenceCreation
 from core.model.result import ResultCreation
+from core.ports.message_service_port import MessageServicePort
 
 from src.app import create_app
 
@@ -23,6 +25,7 @@ def configure_ports_without_auth():
     ports = {}
     ports["database_port"] = DatabasePort(MongoMock())
     ports["authentication_port"] = AuthenticationPort(AuthenticationAdapter())
+    ports["message_service_port"] = MessageServicePort(NATSAdapter())
     return ports
 
 
@@ -30,6 +33,7 @@ def configure_ports_with_auth():
     ports = {}
     ports["database_port"] = database_port_instance
     ports["authentication_port"] = AuthenticationPort(AuthenticationMock())
+    ports["message_service_port"] = MessageServicePort(NATSAdapter())
     return ports
 
 

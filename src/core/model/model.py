@@ -3,6 +3,6 @@ from pydantic import BaseModel
 
 class Model(BaseModel):
     name: str
-    subscribing_topic: str
-    publishing_topic: str
+    receiving_channel: str
+    publishing_channel: str
     id: str
