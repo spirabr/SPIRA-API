@@ -5,6 +5,7 @@ __pycache__/
 .ini
 .env
 .venv
+*.pyc
 env/
 venv/
 ENV/
