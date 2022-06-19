@@ -3,7 +3,7 @@ import pytest
 from adapters.message_service.nats_adapter import NATSAdapter
 from core.ports.message_service_port import MessageServicePort
 
-from src.app import create_app
+from adapters.routers.app import create_app
 
 from tests.config import (
     configure_ports_without_auth,

@@ -12,3 +12,6 @@ class MessageServicePort:
         await self._message_service_adapter.send_message(
             json.dumps(letter.content.dict()), letter.publishing_channel
         )
+
+    async def receive_message(self) -> ResultUpdate:
+        return self._message_service_adapter.receive_message()
