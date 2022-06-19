@@ -5,6 +5,7 @@ import uvicorn
 
 from adapters.authentication.authentication_adapter import AuthenticationAdapter
 from adapters.database.mongo_adapter import MongoAdapter
+from adapters.routers.v1.result_router import create_result_router
 
 from core.ports.authentication_port import AuthenticationPort
 from core.ports.database_port import DatabasePort
@@ -27,13 +28,24 @@ def create_app(ports: dict) -> FastAPI:
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
     app.include_router(
-        create_inference_router(ports["authentication_port"], ports["database_port"],oauth2_scheme)
+        create_inference_router(
+            ports["authentication_port"], ports["database_port"], oauth2_scheme
+        )
     )
     app.include_router(
-        create_model_router(ports["authentication_port"], ports["database_port"],oauth2_scheme)
+        create_model_router(
+            ports["authentication_port"], ports["database_port"], oauth2_scheme
+        )
     )
     app.include_router(
-        create_user_router(ports["authentication_port"], ports["database_port"],oauth2_scheme)
+        create_user_router(
+            ports["authentication_port"], ports["database_port"], oauth2_scheme
+        )
+    )
+    app.include_router(
+        create_result_router(
+            ports["authentication_port"], ports["database_port"], oauth2_scheme
+        )
     )
     return app
 

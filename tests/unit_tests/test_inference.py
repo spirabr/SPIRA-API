@@ -7,7 +7,7 @@ from adapters.authentication.authentication_adapter import AuthenticationAdapter
 from adapters.database.mongo_adapter import MongoAdapter
 
 from core.ports.authentication_port import AuthenticationPort
-from src.core.ports.database_port import DatabasePort
+from core.ports.database_port import DatabasePort
 
 from tests.mocks.authentication_mock import AuthenticationMock
 from tests.mocks.mongo_mock import MongoMock
@@ -54,6 +54,7 @@ def test_get_inference_by_id_success(client_with_auth: TestClient):
         "age": 23,
         "user_id": "507f191e810c19729de860ea",
         "model_id": "629f992d45cda830033cf4cd",
+        "status": "processing",
     }
     assert response.status_code == 200
 
@@ -114,7 +115,6 @@ def test_post_create_inference_with_invalid_model_id_exception(
         "sex": "F",
         "age": 23,
         "model_id": "invalid_id",
-        "user_id": "507f191e810c19729de860ea",
     }
     response = client_with_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",
@@ -134,7 +134,6 @@ def test_post_create_inference_with_inexistent_model_exception(
     fake_inference = {
         "sex": "F",
         "age": 23,
-        "user_id": "507f191e810c19729de860ea",
         "model_id": "507f191e810c19729de860ea",
     }
     response = client_with_auth.post(
@@ -154,7 +153,6 @@ def test_post_create_inference_for_another_user_exception(client_with_auth: Test
         "sex": "F",
         "age": 23,
         "model_id": "invalid_id",
-        "user_id": "507f191e810c19729de860ea",
     }
     response = client_with_auth.post(
         "/v1/users/629d34d2663c15eb2ed15494/inferences",
@@ -182,6 +180,7 @@ def test_get_inference_list_success(client_with_auth: TestClient):
                 "age": 23,
                 "user_id": "507f191e810c19729de860ea",
                 "model_id": "629f992d45cda830033cf4cd",
+                "status": "processing",
             },
             {
                 "id": "629f81986abaa3c5e6cf7c17",
@@ -189,6 +188,7 @@ def test_get_inference_list_success(client_with_auth: TestClient):
                 "age": 32,
                 "user_id": "507f191e810c19729de860ea",
                 "model_id": "629f994245cda830033cf4cf",
+                "status": "processing",
             },
         ]
     }
@@ -219,7 +219,6 @@ def test_post_create_inference_unauthorized(client_without_auth: TestClient):
         "sex": "F",
         "age": 23,
         "model_id": "629f992d45cda830033cf4cd",
-        "user_id": "507f191e810c19729de860ea",
     }
     response = client_without_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",

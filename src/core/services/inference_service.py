@@ -1,5 +1,6 @@
 from typing import List, Union
 from fastapi import status
+from core.model.constants import Status
 from core.model.token import Token
 from core.ports.authentication_port import AuthenticationPort
 
@@ -105,9 +106,11 @@ def create_new_inference(
             sex=inference_form.sex,
             user_id=user_id,
             model_id=inference_form.model_id,
+            status=Status.processing_status,
         )
-        database_port.insert_inference(new_inference)
+        new_id = database_port.insert_inference(new_inference)
     except:
         raise LogicException(
             "cound not create new inference", status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+    return new_id
