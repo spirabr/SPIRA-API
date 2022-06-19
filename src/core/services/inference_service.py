@@ -7,8 +7,6 @@ from core.ports.database_port import DatabasePort
 from core.model.inference import Inference, InferenceCreation, InferenceCreationForm
 from core.model.exception import DefaultExceptions, LogicException
 
-import core.services.model_service as model_service
-
 
 def get_by_id(
     authentication_port: AuthenticationPort,
