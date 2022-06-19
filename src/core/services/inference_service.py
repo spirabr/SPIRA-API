@@ -66,7 +66,7 @@ def get_list(
 def _validate_new_inference(
     authentication_port: AuthenticationPort,
     database_port: DatabasePort,
-    inference_form: InferenceCreation,
+    inference_form: InferenceCreationForm,
 ):
     try:
         model = database_port.get_model_by_id(inference_form.model_id)

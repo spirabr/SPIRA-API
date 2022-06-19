@@ -15,6 +15,7 @@ from src.core.ports.database_port import DatabasePort
 from tests.mocks.authentication_mock import AuthenticationMock
 from tests.mocks.mongo_mock import MongoMock
 
+
 database_port_instance = DatabasePort(MongoMock())
 
 
@@ -81,12 +82,6 @@ def test_post_create_result_with_inference_success(client_with_auth: TestClient)
     def fake_insert_inference(new_inference: InferenceCreation):
         return "fake_inference_id"
 
-    fake_inference = {
-        "sex": "F",
-        "age": 23,
-        "model_id": "629f992d45cda830033cf4cd",
-    }
-
     # injecting mocks
     with patch.object(
         database_port_instance,
@@ -97,6 +92,12 @@ def test_post_create_result_with_inference_success(client_with_auth: TestClient)
         "insert_result",
         MagicMock(side_effect=fake_insert_result),
     ) as fake_result_insert:
+
+        fake_inference = {
+            "sex": "F",
+            "age": 23,
+            "model_id": "629f992d45cda830033cf4cd",
+        }
 
         response = client_with_auth.post(
             "/v1/users/507f191e810c19729de860ea/inferences",
