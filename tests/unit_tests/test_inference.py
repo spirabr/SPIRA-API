@@ -3,15 +3,6 @@ import pytest
 
 from src.app import create_app
 
-from adapters.authentication.authentication_adapter import AuthenticationAdapter
-from adapters.database.mongo_adapter import MongoAdapter
-
-from core.ports.authentication_port import AuthenticationPort
-from core.ports.database_port import DatabasePort
-
-from tests.mocks.authentication_mock import AuthenticationMock
-from tests.mocks.mongo_mock import MongoMock
-
 from tests.unit_tests.config import (
     configure_ports_without_auth,
     configure_ports_with_auth,
