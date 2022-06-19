@@ -44,7 +44,7 @@ class DatabasePort:
                 "id": str(user["_id"]),
                 "username": user["username"],
                 "email": user["email"],
-                "password": user["hashed_password"],
+                "password": user["password"],
             }
         )
 

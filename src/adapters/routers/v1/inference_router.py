@@ -1,7 +1,7 @@
 import inject
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.encoders import jsonable_encoder
-from adapters.routers.v1.utils.auth import get_header_bearer_token
+from fastapi.security import OAuth2PasswordBearer
 from core.model.token import Token
 
 from core.ports.authentication_port import AuthenticationPort
@@ -15,16 +15,16 @@ from core.services.inference_service import create_new_inference, get_by_id, get
 
 @inject.autoparams()
 def create_inference_router(
-    authentication_port: AuthenticationPort, database_port: DatabasePort
+    authentication_port: AuthenticationPort,
+    database_port: DatabasePort,
+    oauth2_scheme: OAuth2PasswordBearer,
 ):
     router: APIRouter = APIRouter(prefix="/v1/users")
 
     @router.get("/{user_id}/inferences/{inference_id}", response_model=Inference)
-    def get_inference_by_id(inference_id: str, user_id: str, req: Request):
-        try:
-            token_content = get_header_bearer_token(req)
-        except:
-            raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Not authenticated")
+    def get_inference_by_id(
+        inference_id: str, user_id: str, token_content: str = Depends(oauth2_scheme)
+    ):
         try:
             inference = get_by_id(
                 authentication_port,
@@ -38,11 +38,7 @@ def create_inference_router(
         return inference
 
     @router.get("/{user_id}/inferences")
-    def get_inference_list(user_id: str, req: Request):
-        try:
-            token_content = get_header_bearer_token(req)
-        except:
-            raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Not authenticated")
+    def get_inference_list(user_id: str, token_content: str = Depends(oauth2_scheme)):
         try:
             inference_list = get_list(
                 authentication_port,
@@ -56,12 +52,19 @@ def create_inference_router(
 
     @router.post("/{user_id}/inferences")
     def create_inference(
+<<<<<<< HEAD
         user_id: str, inference_form: InferenceCreationForm, req: Request
     ):
         try:
             token_content = get_header_bearer_token(req)
         except:
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Not authenticated")
+=======
+        user_id: str,
+        inference_form: InferenceCreation,
+        token_content: str = Depends(oauth2_scheme),
+    ):
+>>>>>>> main
         try:
             create_new_inference(
                 authentication_port,

@@ -8,8 +8,6 @@ from core.ports.database_port import DatabasePort
 from core.model.inference import Inference, InferenceCreation, InferenceCreationForm
 from core.model.exception import DefaultExceptions, LogicException
 
-import core.services.model_service as model_service
-
 
 def get_by_id(
     authentication_port: AuthenticationPort,
@@ -19,10 +17,8 @@ def get_by_id(
     token: Token,
 ) -> Union[Inference, LogicException]:
     try:
-        if not authentication_port.validate_token(token):
-            raise
-        decode_token_content = authentication_port.decode_token(token)
-        user = database_port.get_user_by_username(decode_token_content.username)
+        decoded_token_content = authentication_port.decode_token(token)
+        user = database_port.get_user_by_username(decoded_token_content.username)
     except:
         raise DefaultExceptions.credentials_exception
 
@@ -49,10 +45,8 @@ def get_list(
     token: Token,
 ) -> Union[List[Inference], LogicException]:
     try:
-        if not authentication_port.validate_token(token):
-            raise
-        decode_token_content = authentication_port.decode_token(token)
-        user = database_port.get_user_by_username(decode_token_content.username)
+        decoded_token_content = authentication_port.decode_token(token)
+        user = database_port.get_user_by_username(decoded_token_content.username)
     except:
         raise DefaultExceptions.credentials_exception
 
@@ -93,12 +87,11 @@ def create_new_inference(
     token: Token,
 ):
     try:
-        if not authentication_port.validate_token(token):
-            raise
-        decode_token_content = authentication_port.decode_token(token)
-        user = database_port.get_user_by_username(decode_token_content.username)
+        decoded_token_content = authentication_port.decode_token(token)
+        user = database_port.get_user_by_username(decoded_token_content.username)
     except:
         raise DefaultExceptions.credentials_exception
+
     if user.id != user_id:
         raise DefaultExceptions.forbidden_exception
 

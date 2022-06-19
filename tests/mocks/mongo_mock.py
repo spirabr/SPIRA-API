@@ -21,13 +21,13 @@ class MongoMock(MongoAdapter):
                     "_id": ObjectId("507f191e810c19729de860ea"),
                     "username": "test_username",
                     "email": "test_email",
-                    "hashed_password": "fake_password",
+                    "password": "fake_password",
                 },
                 {
                     "_id": ObjectId("507f1f77bcf86cd799439011"),
                     "username": "test_username2",
                     "email": "test_email2",
-                    "hashed_password": "fake_password2",
+                    "password": "fake_password2",
                 },
             ]
         )
