@@ -3,7 +3,7 @@ import pytest
 
 from src.app import create_app
 
-from tests.unit_tests.config import (
+from tests.integration_tests.config import (
     configure_ports_without_auth,
     configure_ports_with_auth,
 )
