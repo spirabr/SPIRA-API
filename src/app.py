@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.security import OAuth2PasswordBearer
 import uvicorn
 
 
@@ -22,14 +23,17 @@ def configure_ports():
 
 def create_app(ports: dict) -> FastAPI:
     app: FastAPI = FastAPI()
+
+    oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
     app.include_router(
-        create_inference_router(ports["authentication_port"], ports["database_port"])
+        create_inference_router(ports["authentication_port"], ports["database_port"],oauth2_scheme)
     )
     app.include_router(
-        create_model_router(ports["authentication_port"], ports["database_port"])
+        create_model_router(ports["authentication_port"], ports["database_port"],oauth2_scheme)
     )
     app.include_router(
-        create_user_router(ports["authentication_port"], ports["database_port"])
+        create_user_router(ports["authentication_port"], ports["database_port"],oauth2_scheme)
     )
     return app
 
