@@ -4,7 +4,7 @@ from core.model.token import Token
 from core.ports.authentication_port import AuthenticationPort
 
 from core.ports.database_port import DatabasePort
-from core.model.inference import Inference, InferenceCreationForm
+from core.model.inference import Inference, InferenceCreation, InferenceCreationForm
 from core.model.exception import DefaultExceptions, LogicException
 
 import core.services.model_service as model_service
@@ -102,7 +102,13 @@ def create_new_inference(
         raise e
 
     try:
-        database_port.insert_inference(inference_form)
+        new_inference = InferenceCreation(
+            age=inference_form.age,
+            sex=inference_form.sex,
+            user_id=user_id,
+            model_id=inference_form.model_id,
+        )
+        database_port.insert_inference(new_inference)
     except:
         raise LogicException(
             "cound not create new inference", status.HTTP_500_INTERNAL_SERVER_ERROR

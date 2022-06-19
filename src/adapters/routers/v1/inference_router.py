@@ -8,7 +8,7 @@ from core.ports.authentication_port import AuthenticationPort
 from core.ports.database_port import DatabasePort
 
 from core.model.user import User
-from core.model.inference import Inference, InferenceCreation
+from core.model.inference import Inference, InferenceCreationForm
 from core.model.exception import LogicException
 from core.services.inference_service import create_new_inference, get_by_id, get_list
 
@@ -53,7 +53,7 @@ def create_inference_router(
     @router.post("/{user_id}/inferences")
     def create_inference(
         user_id: str,
-        inference_form: InferenceCreation,
+        inference_form: InferenceCreationForm,
         token_content: str = Depends(oauth2_scheme),
     ):
         try:

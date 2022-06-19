@@ -14,3 +14,9 @@ class InferenceCreation(BaseModel):
     sex: str
     user_id: str
     model_id: str
+
+
+class InferenceCreationForm(BaseModel):
+    age: int
+    sex: str
+    model_id: str
