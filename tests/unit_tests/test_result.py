@@ -15,27 +15,19 @@ from src.core.ports.database_port import DatabasePort
 from tests.mocks.authentication_mock import AuthenticationMock
 from tests.mocks.mongo_mock import MongoMock
 
+from tests.unit_tests.config import (
+    configure_ports_without_auth,
+    configure_ports_with_auth,
+)
 
 database_port_instance = DatabasePort(MongoMock())
 
 
-def configure_ports_without_auth():
-    ports = {}
-    ports["database_port"] = DatabasePort(MongoMock())
-    ports["authentication_port"] = AuthenticationPort(AuthenticationAdapter())
-    return ports
-
-
-def configure_ports_with_auth():
-    ports = {}
-    ports["database_port"] = database_port_instance
-    ports["authentication_port"] = AuthenticationPort(AuthenticationMock())
-    return ports
-
-
 @pytest.fixture()
 def client_with_auth():
-    app = create_app(configure_ports_with_auth())
+    ports = configure_ports_with_auth()
+    ports["database_port"] = database_port_instance
+    app = create_app(ports)
     yield TestClient(app)
 
 
