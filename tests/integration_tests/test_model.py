@@ -5,6 +5,7 @@ from core.ports.message_service_port import MessageServicePort
 
 from src.app import create_app
 
+<<<<<<< HEAD:tests/unit_tests/test_model.py
 from adapters.authentication.authentication_adapter import AuthenticationAdapter
 from adapters.database.mongo_adapter import MongoAdapter
 
@@ -29,6 +30,12 @@ def configure_ports_with_auth():
     ports["authentication_port"] = AuthenticationPort(AuthenticationMock())
     ports["message_service_port"] = MessageServicePort(NATSAdapter())
     return ports
+=======
+from tests.integration_tests.config import (
+    configure_ports_without_auth,
+    configure_ports_with_auth,
+)
+>>>>>>> main:tests/integration_tests/test_model.py
 
 
 @pytest.fixture()

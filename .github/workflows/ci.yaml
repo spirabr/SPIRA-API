@@ -40,5 +40,5 @@ jobs:
           poetry config virtualenvs.create false
           poetry install --no-interaction --no-ansi
 
-      - name: Run unit tests
+      - name: Run tests
         run: python3 -m pytest --import-mode=append tests/
