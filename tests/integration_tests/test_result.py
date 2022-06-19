@@ -1,41 +1,28 @@
 from fastapi.testclient import TestClient
 import pytest
 from unittest.mock import patch, MagicMock
-from core.model.inference import InferenceCreation
-from core.model.result import ResultCreation
 
 from src.app import create_app
 
-from adapters.authentication.authentication_adapter import AuthenticationAdapter
-from adapters.database.mongo_adapter import MongoAdapter
+from core.ports.database_port import DatabasePort
+from core.model.inference import InferenceCreation
+from core.model.result import ResultCreation
 
-from core.ports.authentication_port import AuthenticationPort
-from src.core.ports.database_port import DatabasePort
-
-from tests.mocks.authentication_mock import AuthenticationMock
 from tests.mocks.mongo_mock import MongoMock
 
+from tests.integration_tests.config import (
+    configure_ports_without_auth,
+    configure_ports_with_auth,
+)
 
 database_port_instance = DatabasePort(MongoMock())
 
 
-def configure_ports_without_auth():
-    ports = {}
-    ports["database_port"] = DatabasePort(MongoMock())
-    ports["authentication_port"] = AuthenticationPort(AuthenticationAdapter())
-    return ports
-
-
-def configure_ports_with_auth():
-    ports = {}
-    ports["database_port"] = database_port_instance
-    ports["authentication_port"] = AuthenticationPort(AuthenticationMock())
-    return ports
-
-
 @pytest.fixture()
 def client_with_auth():
-    app = create_app(configure_ports_with_auth())
+    ports = configure_ports_with_auth()
+    ports["database_port"] = database_port_instance
+    app = create_app(ports)
     yield TestClient(app)
 
 
