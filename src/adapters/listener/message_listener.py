@@ -15,7 +15,9 @@ async def listen_for_messages_loop(
     for i in range(int(cfg["loop_params"]["loop_timeout"])):
         await sleep(int(cfg["loop_params"]["loop_interval"]))
         try:
-            await listen_for_messages_and_update(message_service_port, database_port)
+            await listen_for_messages_and_update(
+                message_service_port, database_port, cfg["loop_params"]["loop_timeout"]
+            )
         except Exception as e:
             raise e
 
