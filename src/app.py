@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordBearer
 import uvicorn
-
+import asyncio
 
 from adapters.authentication.authentication_adapter import AuthenticationAdapter
 from adapters.database.mongo_adapter import MongoAdapter
@@ -17,11 +17,13 @@ from adapters.routers.v1.model_router import create_model_router
 from adapters.routers.v1.user_router import create_user_router
 
 
-def configure_ports():
+async def configure_ports():
     ports = {}
     ports["database_port"] = DatabasePort(MongoAdapter())
     ports["authentication_port"] = AuthenticationPort(AuthenticationAdapter())
-    ports["message_service_port"] = MessageServicePort(NATSAdapter.create_adapter())
+    ports["message_service_port"] = MessageServicePort(
+        await NATSAdapter.create_adapter()
+    )
     return ports
 
 
@@ -57,7 +59,8 @@ def create_app(ports: dict) -> FastAPI:
 
 
 if __name__ == "__main__":
-    app = create_app(configure_ports())
+    ports = asyncio.run(configure_ports())
+    app = create_app(ports)
     uvicorn.run(
         app,
         host="0.0.0.0",
