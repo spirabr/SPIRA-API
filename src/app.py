@@ -2,8 +2,6 @@ from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordBearer
 import uvicorn
 
-from pydantic import BaseSettings
-
 from adapters.authentication.authentication_adapter import AuthenticationAdapter
 from adapters.database.mongo_adapter import MongoAdapter
 from adapters.message_service.nats_adapter import NATSAdapter
@@ -48,7 +46,7 @@ def configure_ports():
             authentication_settings.deprecated,
         )
     )
-    ports["message_service_port"] = MessageServicePort(NATSAdapter())
+    ports["message_service_port"] = MessageServicePort(NATSAdapter.create_adapter())
     return ports
 
 

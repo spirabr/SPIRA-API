@@ -20,6 +20,7 @@ passlib = "^1.7.4"
 python-multipart = "^0.0.5"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 mongomock = "^4.0.0"
+nats-py = {extras = ["nkeys"], version = "^2.1.3"}
 
 [tool.poetry.dev-dependencies]
 
