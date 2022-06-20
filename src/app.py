@@ -21,7 +21,7 @@ def configure_ports():
     ports = {}
     ports["database_port"] = DatabasePort(MongoAdapter())
     ports["authentication_port"] = AuthenticationPort(AuthenticationAdapter())
-    ports["message_service_port"] = MessageServicePort(NATSAdapter())
+    ports["message_service_port"] = MessageServicePort(NATSAdapter.create_adapter())
     return ports
 
 

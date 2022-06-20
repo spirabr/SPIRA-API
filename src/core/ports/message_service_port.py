@@ -1,3 +1,5 @@
+import json
+
 from core.model.message_service import RequestLetter
 from core.model.result import ResultUpdate
 
@@ -8,8 +10,11 @@ class MessageServicePort:
 
     def send_message(self, letter: RequestLetter):
         self._message_service_adapter.send_message(
-            letter.content.dict(), letter.publishing_channel
+            json.dumps(letter.content.dict()), letter.publishing_channel
         )
 
-    def receive_message(self, receiving_channel: str) -> ResultUpdate:
-        return self._message_service_adapter.receive_message(receiving_channel)
+    async def receive_message(self, receiving_channel: str) -> ResultUpdate:
+        message_dict = json.loads(
+            await self._message_service_adapter.receive_message(receiving_channel)
+        )[0]
+        return ResultUpdate(**message_dict)

@@ -1,14 +1,27 @@
-from core.model.result import ResultUpdate
+import nats
+from nats.aio.client import Client
+import configparser
+
+cfg = configparser.ConfigParser()
+cfg.read("adapters/message_service/.cfg")
 
 
 class NATSAdapter:
+    @classmethod
+    async def create_adapter(cls):
+        self = NATSAdapter()
+        self._conn_url = cfg["broker"]["conn_url"]
+        self._nc = await nats.connect(self._conn_url)
+        return self
+
     def __init__(self):
-        pass
+        self._conn_url = ""
+        self._nc: Client = None
 
-    def send_message(self, message: dict, publishing_topic: str):
-        # to be implemented
-        pass
+    async def send_message(self, message: dict, publishing_topic: str):
+        await self._nc.publish(
+            publishing_topic, str.encode(str(message), encoding="utf-8")
+        )
 
-    def receive_message(self, receiving_channel: str) -> ResultUpdate:
-        # temporary mock
-        return ResultUpdate(inference_id="fake_id", output=0.5, diagnosis="negative")
+    async def receive_message(self, receiving_channel: str) -> str:
+        return (await self._nc.request(receiving_channel)).data.decode("utf-8")
