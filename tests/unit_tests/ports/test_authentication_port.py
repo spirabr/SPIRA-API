@@ -77,7 +77,7 @@ def test_decode_token_exception(authentication_port: AuthenticationPort):
         mock_method.assert_called_once_with(fake_token)
 
 
-def test_verify_password_exception(authentication_port: AuthenticationPort):
+def test_verify_password(authentication_port: AuthenticationPort):
     def fake_verify_password(plain_password: str, user_password: str) -> bool:
         return True
 
@@ -107,7 +107,7 @@ def test_verify_password_exception(authentication_port: AuthenticationPort):
         assert return_value == False
 
 
-def test_get_password_hash_exception(authentication_port: AuthenticationPort):
+def test_get_password_hash(authentication_port: AuthenticationPort):
     def fake_get_password_hash(plain_password: str) -> str:
         return "fake_hash"
 
