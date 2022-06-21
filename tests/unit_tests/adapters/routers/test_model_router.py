@@ -10,7 +10,7 @@ from core.model.user import User, UserCreationForm
 
 from src.app import create_app
 
-from tests.integration_tests.config import (
+from tests.config import (
     configure_ports_without_auth,
     configure_ports_with_auth,
 )
