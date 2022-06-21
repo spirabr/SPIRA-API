@@ -284,34 +284,7 @@ def test_post_create_inference_exception(client_with_auth: TestClient):
 # tests without authentication
 
 
-def test_get_user_by_id_no_token_header(client_without_auth: TestClient):
-    response = client_without_auth.get("/v1/users/507f1f77bcf86cd799439021")
-    assert response.json() == {"detail": "Not authenticated"}
-    assert response.status_code == 401
-
-
-def test_post_create_user_no_token_header(client_without_auth: TestClient):
-    fake_user = {
-        "username": "teste",
-        "email": "teste@gmail.com",
-        "password": "abcde",
-        "password_confirmation": "abcde",
-    }
-    response = client_without_auth.post(
-        "/v1/users/",
-        headers={
-            "Content-Type": "application/json",
-        },
-        json=fake_user,
-    )
-    assert response.json() == {"detail": "Not authenticated"}
-    assert response.status_code == 401
-
-
-# tests without authentication
-
-
-def test_get_inference_by_id_unauthorized(client_without_auth: TestClient):
+def test_get_inference_by_id_no_token_header(client_without_auth: TestClient):
     response = client_without_auth.get(
         "/v1/users/507f191e810c19729de860ea/inferences/629f815d6abaa3c5e6cf7c16"
     )
@@ -319,7 +292,7 @@ def test_get_inference_by_id_unauthorized(client_without_auth: TestClient):
     assert response.status_code == 401
 
 
-def test_post_create_inference_unauthorized(client_without_auth: TestClient):
+def test_post_create_inference_no_token_header(client_without_auth: TestClient):
     fake_inference = {
         "sex": "F",
         "age": 23,
@@ -334,7 +307,7 @@ def test_post_create_inference_unauthorized(client_without_auth: TestClient):
     assert response.status_code == 401
 
 
-def test_get_inference_list_unauthorized(client_without_auth: TestClient):
+def test_get_inference_list_no_token_header(client_without_auth: TestClient):
     response = client_without_auth.get("/v1/users/507f191e810c19729de860ea/inferences/")
     assert response.json() == {"detail": "Not authenticated"}
     assert response.status_code == 401

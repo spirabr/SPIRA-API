@@ -78,3 +78,16 @@ def test_post_create_result_with_inference_success(client_with_auth: TestClient)
     )
     assert response.json() == {"message": "inference registered!"}
     assert response.status_code == 200
+
+
+# tests without authentication
+
+
+def test_get_result_by_inference_unauthorized(client_without_auth: TestClient):
+    headers = {"Authorization": "Bearer mock_token"}
+    response = client_without_auth.get(
+        "/v1/users/507f191e810c19729de860ea/inferences/629f815d6abaa3c5e6cf7c16/result",
+        headers=headers,
+    )
+    assert response.json() == {"detail": "could not validate the credentials"}
+    assert response.status_code == 401

@@ -77,3 +77,19 @@ def test_get_model_list_success(client_with_auth: TestClient):
 
 
 # tests without authentication
+
+
+def test_get_model_by_id_unauthorized(client_without_auth: TestClient):
+    headers = {"Authorization": "Bearer mock_token"}
+    response = client_without_auth.get(
+        "/v1/models/629f992d45cda830033cf4cd", headers=headers
+    )
+    assert response.json() == {"detail": "could not validate the credentials"}
+    assert response.status_code == 401
+
+
+def test_get_models_list_unauthorized(client_without_auth: TestClient):
+    headers = {"Authorization": "Bearer mock_token"}
+    response = client_without_auth.get("/v1/models", headers=headers)
+    assert response.json() == {"detail": "could not validate the credentials"}
+    assert response.status_code == 401

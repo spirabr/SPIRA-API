@@ -15,6 +15,9 @@ cfg.read("adapters/authentication/.cfg")
 class AuthenticationAdapter:
     def __init__(self):
         self._pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+        self._expire_time = int(cfg["token"]["expire_time"])
+        self._key = cfg["token"]["key"]
+        self._algorithm = cfg["token"]["algorithm"]
 
     def get_password_hash(self, plain_password: str) -> str:
         return self._pwd_context.hash(plain_password)
@@ -24,12 +27,12 @@ class AuthenticationAdapter:
 
     def generate_token(self, data: TokenData) -> Token:
         to_encode = data.dict().copy()
-        expire = datetime.utcnow() + timedelta(minutes=int(cfg["token"]["expire_time"]))
+        expire = datetime.utcnow() + timedelta(minutes=self._expire_time)
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(
             to_encode,
-            cfg["token"]["key"],
-            algorithm=cfg["token"]["algorithm"],
+            self._key,
+            algorithm=self._algorithm,
         )
         return Token(content=encoded_jwt)
 
@@ -37,8 +40,8 @@ class AuthenticationAdapter:
         try:
             jwt.decode(
                 token.content,
-                cfg["token"]["key"],
-                algorithms=[cfg["token"]["algorithm"]],
+                self._key,
+                algorithms=[self._algorithm],
             )
         except:
             return False
@@ -48,8 +51,8 @@ class AuthenticationAdapter:
         try:
             payload = jwt.decode(
                 token.content,
-                cfg["token"]["key"],
-                algorithms=[cfg["token"]["algorithm"]],
+                self._key,
+                algorithms=[self._algorithm],
             )
             username: str = payload.get("username")
         except:
