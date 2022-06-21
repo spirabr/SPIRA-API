@@ -3,7 +3,7 @@ import pytest
 
 from src.app import create_app
 
-from tests.integration_tests.config import (
+from tests.config import (
     configure_ports_without_auth,
     configure_ports_with_auth,
 )
@@ -188,7 +188,7 @@ def test_get_inference_list_of_another_user_exception(client_with_auth: TestClie
 # tests without authentication
 
 
-def test_get_inference_by_id_no_token_header(client_without_auth: TestClient):
+def test_get_inference_by_id_unauthorized(client_without_auth: TestClient):
     headers = {"Authorization": "Bearer mock_token"}
     response = client_without_auth.get(
         "/v1/users/507f191e810c19729de860ea/inferences/629f815d6abaa3c5e6cf7c16",
@@ -198,7 +198,7 @@ def test_get_inference_by_id_no_token_header(client_without_auth: TestClient):
     assert response.status_code == 401
 
 
-def test_post_create_inference_no_token_header(client_without_auth: TestClient):
+def test_post_create_inference_unauthorized(client_without_auth: TestClient):
     fake_inference = {
         "sex": "F",
         "age": 23,
@@ -216,7 +216,7 @@ def test_post_create_inference_no_token_header(client_without_auth: TestClient):
     assert response.status_code == 401
 
 
-def test_get_inference_list_no_token_header(client_without_auth: TestClient):
+def test_get_inference_list_unauthorized(client_without_auth: TestClient):
     headers = {"Authorization": "Bearer mock_token"}
     response = client_without_auth.get(
         "/v1/users/507f191e810c19729de860ea/inferences/", headers=headers
