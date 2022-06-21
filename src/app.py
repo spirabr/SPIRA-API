@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordBearer
 import uvicorn
 
+from pydantic import BaseSettings
 
 from adapters.authentication.authentication_adapter import AuthenticationAdapter
 from adapters.database.mongo_adapter import MongoAdapter
@@ -14,11 +15,35 @@ from adapters.routers.v1.inference_router import create_inference_router
 from adapters.routers.v1.model_router import create_model_router
 from adapters.routers.v1.user_router import create_user_router
 
+from settings import DatabaseSettings, AuthenticationSettings
+
 
 def configure_ports():
+    database_settings = DatabaseSettings(
+        _env_file="database.env", _env_file_encoding="utf-8"
+    )
+    authentication_settings = AuthenticationSettings(
+        _env_file="authentication.env", _env_file_encoding="utf-8"
+    )
+
     ports = {}
-    ports["database_port"] = DatabasePort(MongoAdapter())
-    ports["authentication_port"] = AuthenticationPort(AuthenticationAdapter())
+    ports["database_port"] = DatabasePort(
+        MongoAdapter(
+            database_settings.conn_url,
+            database_settings.database_name,
+            database_settings.user_collection_name,
+            database_settings.inference_collection_name,
+            database_settings.model_collection_name,
+            database_settings.result_collection_name,
+        )
+    )
+    ports["authentication_port"] = AuthenticationPort(
+        AuthenticationAdapter(
+            authentication_settings.expire_time,
+            authentication_settings.key,
+            authentication_settings.algorithm,
+        )
+    )
     return ports
 
 

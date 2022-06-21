@@ -3,6 +3,9 @@ version: "3"
 services:
   api:
     build: .
+    env_file: 
+      - envs/database.env
+      - envs/authentication.env
     image: api_image
     command: python3 app.py
     ports:
@@ -10,17 +13,14 @@ services:
       
   mongo:
     image: mongo
+    env_file:
+      - envs/mongo.env
     restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
 
   mongo-express:
     image: mongo-express
     restart: always
     ports:
       - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${ME_CONFIG_MONGODB_ADMINUSERNAME}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${ME_CONFIG_MONGODB_ADMINPASSWORD}
-      ME_CONFIG_MONGODB_URL: ${ME_CONFIG_MONGODB_URL}
+    env_file:
+      - envs/mongo.env
