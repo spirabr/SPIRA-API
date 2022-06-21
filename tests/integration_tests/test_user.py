@@ -72,12 +72,6 @@ def test_post_create_user_success(client_with_auth: TestClient):
 # tests without authentication
 
 
-def test_get_user_by_id_no_token_heder(client_without_auth: TestClient):
-    response = client_without_auth.get("/v1/users/507f1f77bcf86cd799439021")
-    assert response.json() == {"detail": "Not authenticated"}
-    assert response.status_code == 401
-
-
 def test_get_user_by_id_unauthorized(client_without_auth: TestClient):
     headers = {"Authorization": "Bearer mock_token"}
     response = client_without_auth.get(
@@ -88,6 +82,7 @@ def test_get_user_by_id_unauthorized(client_without_auth: TestClient):
 
 
 def test_post_create_user_unauthorized(client_without_auth: TestClient):
+
     fake_user = {
         "username": "teste",
         "email": "teste@gmail.com",
@@ -96,8 +91,11 @@ def test_post_create_user_unauthorized(client_without_auth: TestClient):
     }
     response = client_without_auth.post(
         "/v1/users/",
-        headers={"Content-Type": "application/json"},
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": "Bearer mock_token",
+        },
         json=fake_user,
     )
-    assert response.json() == {"detail": "Not authenticated"}
+    assert response.json() == {"detail": "could not validate the credentials"}
     assert response.status_code == 401
