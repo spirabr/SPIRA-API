@@ -62,45 +62,19 @@ def test_get_result_by_inference_id_success(client_with_auth: TestClient):
 
 def test_post_create_result_with_inference_success(client_with_auth: TestClient):
 
-    # defining mock calls to port database
-    def fake_insert_result(new_result: ResultCreation):
-        pass
+    fake_inference = {
+        "sex": "F",
+        "age": 23,
+        "model_id": "629f992d45cda830033cf4cd",
+    }
 
-    def fake_insert_inference(new_inference: InferenceCreation):
-        return "fake_inference_id"
-
-    # injecting mocks
-    with patch.object(
-        database_port_instance,
-        "insert_inference",
-        MagicMock(side_effect=fake_insert_inference),
-    ), patch.object(
-        database_port_instance,
-        "insert_result",
-        MagicMock(side_effect=fake_insert_result),
-    ) as fake_result_insert:
-
-        fake_inference = {
-            "sex": "F",
-            "age": 23,
-            "model_id": "629f992d45cda830033cf4cd",
-        }
-
-        response = client_with_auth.post(
-            "/v1/users/507f191e810c19729de860ea/inferences",
-            headers={
-                "Authorization": "Bearer mock_token",
-                "Content-Type": "application/json",
-            },
-            json=fake_inference,
-        )
-
-        fake_result_insert.assert_called_once_with(
-            ResultCreation(
-                inference_id="fake_inference_id",
-                output=-1,
-                diagnosis="not available",
-            )
-        )
-        assert response.json() == {"message": "inference registered!"}
-        assert response.status_code == 200
+    response = client_with_auth.post(
+        "/v1/users/507f191e810c19729de860ea/inferences",
+        headers={
+            "Authorization": "Bearer mock_token",
+            "Content-Type": "application/json",
+        },
+        json=fake_inference,
+    )
+    assert response.json() == {"message": "inference registered!"}
+    assert response.status_code == 200

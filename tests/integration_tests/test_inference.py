@@ -186,32 +186,3 @@ def test_get_inference_list_of_another_user_exception(client_with_auth: TestClie
 
 
 # tests without authentication
-
-
-def test_get_inference_by_id_unauthorized(client_without_auth: TestClient):
-    response = client_without_auth.get(
-        "/v1/users/507f191e810c19729de860ea/inferences/629f815d6abaa3c5e6cf7c16"
-    )
-    assert response.json() == {"detail": "Not authenticated"}
-    assert response.status_code == 401
-
-
-def test_post_create_inference_unauthorized(client_without_auth: TestClient):
-    fake_inference = {
-        "sex": "F",
-        "age": 23,
-        "model_id": "629f992d45cda830033cf4cd",
-    }
-    response = client_without_auth.post(
-        "/v1/users/507f191e810c19729de860ea/inferences",
-        headers={"Content-Type": "application/json"},
-        json=fake_inference,
-    )
-    assert response.json() == {"detail": "Not authenticated"}
-    assert response.status_code == 401
-
-
-def test_get_inference_list_unauthorized(client_without_auth: TestClient):
-    response = client_without_auth.get("/v1/users/507f191e810c19729de860ea/inferences/")
-    assert response.json() == {"detail": "Not authenticated"}
-    assert response.status_code == 401
