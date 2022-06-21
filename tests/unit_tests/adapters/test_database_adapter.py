@@ -1,13 +1,9 @@
-from unittest.mock import MagicMock, patch
-from bson import ObjectId
 import pytest
+from bson import ObjectId
 from adapters.database.mongo_adapter import MongoAdapter
-from core.model.inference import Inference, InferenceCreation
-from core.model.model import Model
-from core.model.result import Result, ResultCreation
-from core.model.user import User, UserCreation, UserWithPassword
-
-from core.ports.database_port import DatabasePort
+from core.model.inference import InferenceCreation
+from core.model.result import ResultCreation
+from core.model.user import UserCreation
 from tests.mocks.mongo_mock import MongoMock
 
 
