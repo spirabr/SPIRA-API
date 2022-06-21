@@ -14,3 +14,5 @@ class AuthenticationSettings(BaseSettings):
     expire_time: str
     key: str
     algorithm: str
+    context_scheme: str
+    deprecated: str

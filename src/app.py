@@ -42,6 +42,8 @@ def configure_ports():
             authentication_settings.expire_time,
             authentication_settings.key,
             authentication_settings.algorithm,
+            authentication_settings.context_scheme,
+            authentication_settings.deprecated,
         )
     )
     return ports

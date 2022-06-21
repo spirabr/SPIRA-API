@@ -8,8 +8,10 @@ from core.model.token import Token, TokenData
 
 
 class AuthenticationAdapter:
-    def __init__(self, expire_time, key, algorithm):
-        self._pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    def __init__(self, expire_time, key, algorithm, context_scheme, deprecated):
+        self._pwd_context = CryptContext(
+            schemes=[context_scheme], deprecated=deprecated
+        )
         self._expire_time = int(expire_time)
         self._key = key
         self._algorithm = algorithm
