@@ -19,7 +19,7 @@ from adapters.routers.v1.user_router import create_user_router
 from settings import DatabaseSettings, AuthenticationSettings
 
 
-def configure_ports():
+async def configure_ports():
     database_settings = DatabaseSettings(
         _env_file="database.env", _env_file_encoding="utf-8"
     )
@@ -47,7 +47,9 @@ def configure_ports():
             authentication_settings.deprecated,
         )
     )
-    ports["message_service_port"] = MessageServicePort(NATSAdapter.create_adapter())
+    ports["message_service_port"] = MessageServicePort(
+        await NATSAdapter.create_adapter()
+    )
     return ports
 
 
