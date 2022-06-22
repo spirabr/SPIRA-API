@@ -1,25 +1,27 @@
 from pymongo import MongoClient
 from bson import ObjectId
-import configparser
 
 from core.model.inference import InferenceCreation
 from core.model.result import ResultCreation
 from core.model.user import UserCreation
 
-cfg = configparser.ConfigParser()
-cfg.read("adapters/database/.cfg")
-
 
 class MongoAdapter:
-    def __init__(self):
-        self._conn = MongoClient(cfg["database"]["conn_url"])
-        self._db = getattr(self._conn, cfg["database"]["database_name"])
-        self._users = getattr(self._db, cfg["database"]["user_collection_name"])
-        self._inferences = getattr(
-            self._db, cfg["database"]["inference_collection_name"]
-        )
-        self._models = getattr(self._db, cfg["database"]["model_collection_name"])
-        self._results = getattr(self._db, cfg["database"]["result_collection_name"])
+    def __init__(
+        self,
+        conn_url,
+        database_name,
+        user_collection_name,
+        inference_collection_name,
+        model_collection_name,
+        result_collection_name,
+    ):
+        self._conn = MongoClient(conn_url)
+        self._db = getattr(self._conn, database_name)
+        self._users = getattr(self._db, user_collection_name)
+        self._inferences = getattr(self._db, inference_collection_name)
+        self._models = getattr(self._db, model_collection_name)
+        self._results = getattr(self._db, result_collection_name)
 
     # user methods
 

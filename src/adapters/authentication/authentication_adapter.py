@@ -1,23 +1,20 @@
-import configparser
 from typing import Optional
 from passlib.context import CryptContext
-from fastapi.security import OAuth2PasswordBearer
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from jose import jwt
 
 from core.model.token import Token, TokenData
 
-cfg = configparser.ConfigParser()
-cfg.read("adapters/authentication/.cfg")
-
 
 class AuthenticationAdapter:
-    def __init__(self):
-        self._pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-        self._expire_time = int(cfg["token"]["expire_time"])
-        self._key = cfg["token"]["key"]
-        self._algorithm = cfg["token"]["algorithm"]
+    def __init__(self, expire_time, key, algorithm, context_scheme, deprecated):
+        self._pwd_context = CryptContext(
+            schemes=[context_scheme], deprecated=deprecated
+        )
+        self._expire_time = int(expire_time)
+        self._key = key
+        self._algorithm = algorithm
 
     def get_password_hash(self, plain_password: str) -> str:
         return self._pwd_context.hash(plain_password)
