@@ -1,12 +1,7 @@
 from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordBearer
 import uvicorn
-<<<<<<< HEAD
 import asyncio
-=======
-
-from pydantic import BaseSettings
->>>>>>> main
 
 from adapters.authentication.authentication_adapter import AuthenticationAdapter
 from adapters.database.mongo_adapter import MongoAdapter
