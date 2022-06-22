@@ -1,13 +1,11 @@
 from bson.objectid import ObjectId
 from mongomock import MongoClient
-from passlib.context import CryptContext
 
 from adapters.database.mongo_adapter import MongoAdapter
 
 
 class MongoMock(MongoAdapter):
     def __init__(self):
-        self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
         self._conn = MongoClient()
         self._db = self._conn.spira_db
         self._users = self._db.users

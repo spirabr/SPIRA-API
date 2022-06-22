@@ -3,6 +3,9 @@ version: "3"
 services:
   api:
     build: .
+    env_file: 
+      - envs/database.env
+      - envs/authentication.env
     image: api_image
     command: python3 app.py
     ports:
@@ -10,28 +13,15 @@ services:
       
   mongo:
     image: mongo
+    env_file:
+      - envs/mongo.env
     restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-    logging:
-      driver: none
 
   mongo-express:
     image: mongo-express
+    env_file:
+      - envs/mongo.env
     restart: always
     ports:
       - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${ME_CONFIG_MONGODB_ADMINUSERNAME}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${ME_CONFIG_MONGODB_ADMINPASSWORD}
-      ME_CONFIG_MONGODB_URL: ${ME_CONFIG_MONGODB_URL}
     
-
-  nats:
-    image: 'nats:2.1.2'
-    expose:
-      - "4222"
-    ports:
-      - "8222:8222"
-    hostname: nats-server

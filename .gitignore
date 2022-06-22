@@ -6,6 +6,7 @@ __pycache__/
 .cfg
 .ini
 .env
+*.env
 .venv
 *.pyc
 env/
