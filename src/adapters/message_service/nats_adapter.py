@@ -1,21 +1,13 @@
 import nats
 from nats.aio.client import Client
-import configparser
-
-import logging
-
-cfg = configparser.ConfigParser()
-cfg.read("adapters/message_service/.cfg")
 
 
 class NATSAdapter:
     @classmethod
-    async def create_adapter(cls):
+    async def create_adapter(cls, conn_url):
         self = NATSAdapter()
-        self._conn_url = cfg["broker"]["conn_url"]
-        logging.debug(self._conn_url)
+        self._conn_url = conn_url
         self._nc = await nats.connect(self._conn_url)
-        logging.debug("Connected to nats!")
         return self
 
     def __init__(self):

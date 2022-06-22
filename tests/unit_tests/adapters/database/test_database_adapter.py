@@ -109,8 +109,8 @@ def test_get_model_by_id(database_adapter: MongoAdapter):
     assert model == {
         "_id": ObjectId("629f992d45cda830033cf4cd"),
         "name": "fake_model",
-        "subscribing_topic": "fake_topic_1",
-        "publishing_topic": "fake_topic_2",
+        "receiving_channel": "fake_channel_1",
+        "publishing_channel": "fake_channel_2",
     }
 
 
@@ -120,14 +120,14 @@ def test_get_model_list(database_adapter: MongoAdapter):
         {
             "_id": ObjectId("629f992d45cda830033cf4cd"),
             "name": "fake_model",
-            "subscribing_topic": "fake_topic_1",
-            "publishing_topic": "fake_topic_2",
+            "receiving_channel": "fake_channel_1",
+            "publishing_channel": "fake_channel_2",
         },
         {
             "_id": ObjectId("629f994245cda830033cf4cf"),
             "name": "fake_model_2",
-            "subscribing_topic": "fake_topic_3",
-            "publishing_topic": "fake_topic_4",
+            "receiving_channel": "fake_channel_3",
+            "publishing_channel": "fake_channel_4",
         },
     ]
 

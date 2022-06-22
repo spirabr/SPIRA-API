@@ -16,3 +16,7 @@ class AuthenticationSettings(BaseSettings):
     algorithm: str
     context_scheme: str
     deprecated: str
+
+
+class MessageServiceSettings(BaseSettings):
+    conn_url: str

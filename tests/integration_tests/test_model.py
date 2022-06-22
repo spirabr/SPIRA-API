@@ -5,11 +5,7 @@ from core.ports.message_service_port import MessageServicePort
 
 from src.app import create_app
 
-<<<<<<< HEAD
 from tests.config import (
-=======
-from tests.integration_tests.config import (
->>>>>>> 8e95255... Commited unsaved changes fro last merge
     configure_ports_without_auth,
     configure_ports_with_auth,
 )

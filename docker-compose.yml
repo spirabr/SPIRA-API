@@ -6,6 +6,7 @@ services:
     env_file: 
       - envs/database.env
       - envs/authentication.env
+      - envs/message_service.env
     image: api_image
     command: python3 app.py
     ports:

@@ -16,7 +16,7 @@ from adapters.routers.v1.inference_router import create_inference_router
 from adapters.routers.v1.model_router import create_model_router
 from adapters.routers.v1.user_router import create_user_router
 
-from settings import DatabaseSettings, AuthenticationSettings
+from settings import DatabaseSettings, AuthenticationSettings, MessageServiceSettings
 
 
 async def configure_ports():
@@ -25,6 +25,9 @@ async def configure_ports():
     )
     authentication_settings = AuthenticationSettings(
         _env_file="authentication.env", _env_file_encoding="utf-8"
+    )
+    message_service_settings = MessageServiceSettings(
+        _env_file="message_service.env", _env_file_encoding="utf-8"
     )
 
     ports = {}
@@ -48,7 +51,7 @@ async def configure_ports():
         )
     )
     ports["message_service_port"] = MessageServicePort(
-        await NATSAdapter.create_adapter()
+        await NATSAdapter.create_adapter(message_service_settings.conn_url)
     )
     return ports
 

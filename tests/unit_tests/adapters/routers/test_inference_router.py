@@ -207,6 +207,7 @@ def test_post_create_inference_and_result_success(client_with_auth: TestClient):
         mock_create_inference.assert_called_once_with(
             ANY,
             ANY,
+            ANY,
             "507f191e810c19729de860ea",
             InferenceCreationForm(
                 **{
@@ -265,6 +266,7 @@ def test_post_create_inference_exception(client_with_auth: TestClient):
         )
 
         mock_create_inference.assert_called_once_with(
+            ANY,
             ANY,
             ANY,
             "507f191e810c19729de860ea",
