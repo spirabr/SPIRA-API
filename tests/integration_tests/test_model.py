@@ -1,5 +1,7 @@
 from fastapi.testclient import TestClient
 import pytest
+from adapters.message_service.nats_adapter import NATSAdapter
+from core.ports.message_service_port import MessageServicePort
 
 from src.app import create_app
 
@@ -32,8 +34,8 @@ def test_get_model_by_id_success(client_with_auth: TestClient):
     assert response.json() == {
         "id": "629f992d45cda830033cf4cd",
         "name": "fake_model",
-        "subscribing_topic": "fake_topic_1",
-        "publishing_topic": "fake_topic_2",
+        "receiving_channel": "fake_channel_1",
+        "publishing_channel": "fake_channel_2",
     }
     assert response.status_code == 200
 
@@ -62,14 +64,14 @@ def test_get_model_list_success(client_with_auth: TestClient):
             {
                 "id": "629f992d45cda830033cf4cd",
                 "name": "fake_model",
-                "subscribing_topic": "fake_topic_1",
-                "publishing_topic": "fake_topic_2",
+                "receiving_channel": "fake_channel_1",
+                "publishing_channel": "fake_channel_2",
             },
             {
                 "id": "629f994245cda830033cf4cf",
                 "name": "fake_model_2",
-                "subscribing_topic": "fake_topic_3",
-                "publishing_topic": "fake_topic_4",
+                "receiving_channel": "fake_channel_3",
+                "publishing_channel": "fake_channel_4",
             },
         ]
     }

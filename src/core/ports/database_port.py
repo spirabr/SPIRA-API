@@ -101,8 +101,8 @@ class DatabasePort:
             **{
                 "id": str(model["_id"]),
                 "name": model["name"],
-                "subscribing_topic": model["subscribing_topic"],
-                "publishing_topic": model["publishing_topic"],
+                "receiving_channel": model["receiving_channel"],
+                "publishing_channel": model["publishing_channel"],
             }
         )
 
@@ -113,8 +113,8 @@ class DatabasePort:
                 **{
                     "id": str(model["_id"]),
                     "name": model["name"],
-                    "subscribing_topic": model["subscribing_topic"],
-                    "publishing_topic": model["publishing_topic"],
+                    "receiving_channel": model["receiving_channel"],
+                    "publishing_channel": model["publishing_channel"],
                 }
             )
             for model in model_list

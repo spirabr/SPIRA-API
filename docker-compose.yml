@@ -1,4 +1,4 @@
-version: "3"
+version: "3.5"
  
 services:
   api:
@@ -6,22 +6,54 @@ services:
     env_file: 
       - envs/database.env
       - envs/authentication.env
+      - envs/message_service.env
     image: api_image
+    
     command: python3 app.py
     ports:
       - 3000:8000 
+    networks:
+      - nats-network
+      - mongo-network
       
   mongo:
     image: mongo
     env_file:
       - envs/mongo.env
     restart: always
+    logging:
+      driver: "none"
+    networks:
+      - mongo-network
 
   mongo-express:
     image: mongo-express
     env_file:
       - envs/mongo.env
     restart: always
+    logging:
+      driver: "none"
     ports:
       - 8081:8081
-    
+    networks:
+      - mongo-network
+
+  nats-server:
+    image: nats:2.8.4
+    restart: always
+    ports:
+      - 4222:4222
+      - 8222:8222
+    networks:
+      - nats-network
+
+networks:
+  nats-network:
+    driver: bridge
+    name: nats-bridge
+
+  mongo-network:
+    name: mongo-bridge
+
+
+  

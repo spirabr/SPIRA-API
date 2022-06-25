@@ -2,7 +2,7 @@ from pydantic import BaseSettings
 
 
 class DatabaseSettings(BaseSettings):
-    conn_url: str
+    mongo_conn_url: str
     database_name: str
     user_collection_name: str
     inference_collection_name: str
@@ -16,3 +16,7 @@ class AuthenticationSettings(BaseSettings):
     algorithm: str
     context_scheme: str
     deprecated: str
+
+
+class MessageServiceSettings(BaseSettings):
+    nats_conn_url: str
