@@ -1,15 +1,13 @@
-import asyncio
-import nats
 from nats.aio.client import Client
 
 
 class NATSAdapter:
     def __init__(self, conn_url):
         self._conn_url = conn_url
-        self._nc: Client = None
+        self._nc: Client = Client()
 
     async def send_message(self, message: dict, publishing_topic: str):
-        self._nc = await nats.connect(
+        await self._nc.connect(
             self._conn_url,
             ping_interval=1,
             allow_reconnect=True,
