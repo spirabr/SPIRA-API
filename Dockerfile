@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM python:3.9
 
 ENV _ENV=development \
     POETRY_VERSION=1.1.13
