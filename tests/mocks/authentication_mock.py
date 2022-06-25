@@ -1,8 +1,8 @@
 from typing import Optional
 from passlib.context import CryptContext
 
-from src.adapters.authentication.authentication_adapter import AuthenticationAdapter
-from src.core.model.token import Token, TokenData
+from adapters.authentication.authentication_adapter import AuthenticationAdapter
+from core.model.token import Token, TokenData
 
 
 class AuthenticationMock(AuthenticationAdapter):

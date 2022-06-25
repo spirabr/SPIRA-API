@@ -8,7 +8,7 @@ from core.model.model import Model
 from core.model.token import Token
 from core.model.user import User, UserCreationForm
 
-from src.app import create_app
+from adapters.routers.app import create_app
 
 from tests.config import (
     configure_ports_without_auth,
