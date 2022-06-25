@@ -50,14 +50,14 @@ def create_inference_router(
         return {"inferences": jsonable_encoder(inference_list)}
 
     @router.post("/{user_id}/inferences")
-    def create_inference(
+    async def create_inference(
         user_id: str,
         inference_form: InferenceCreationForm,
         token_content: str = Depends(oauth2_scheme),
     ):
         try:
 
-            inference_id = create_new_inference(
+            inference_id = await create_new_inference(
                 message_service_port,
                 authentication_port,
                 database_port,

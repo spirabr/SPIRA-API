@@ -19,7 +19,7 @@ from adapters.routers.v1.user_router import create_user_router
 from settings import DatabaseSettings, AuthenticationSettings, MessageServiceSettings
 
 
-async def configure_ports():
+def configure_ports():
     database_settings = DatabaseSettings(
         _env_file="database.env", _env_file_encoding="utf-8"
     )
@@ -33,7 +33,7 @@ async def configure_ports():
     ports = {}
     ports["database_port"] = DatabasePort(
         MongoAdapter(
-            database_settings.conn_url,
+            database_settings.mongo_conn_url,
             database_settings.database_name,
             database_settings.user_collection_name,
             database_settings.inference_collection_name,
@@ -51,7 +51,7 @@ async def configure_ports():
         )
     )
     ports["message_service_port"] = MessageServicePort(
-        await NATSAdapter.create_adapter(message_service_settings.conn_url)
+        NATSAdapter(message_service_settings.nats_conn_url)
     )
     return ports
 
@@ -88,8 +88,7 @@ def create_app(ports: dict) -> FastAPI:
 
 
 if __name__ == "__main__":
-    ports = asyncio.run(configure_ports())
-    app = create_app(ports)
+    app = create_app(configure_ports())
     uvicorn.run(
         app,
         host="0.0.0.0",
