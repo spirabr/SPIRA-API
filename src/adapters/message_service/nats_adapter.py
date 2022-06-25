@@ -16,6 +16,3 @@ class NATSAdapter:
             publishing_topic, str.encode(str(message), encoding="utf-8")
         )
         await self._nc.close()
-
-    # async def receive_message(self, receiving_channel: str) -> str:
-    #     return (await self._nc.request(receiving_channel)).data.decode("utf-8")
