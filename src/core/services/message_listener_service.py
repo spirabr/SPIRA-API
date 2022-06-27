@@ -17,6 +17,6 @@ async def listen_for_messages_and_update(
 ):
     try:
         result_update = await message_service_port.wait_for_message(central_channel)
-        print(result_update, flush=True)
+        database_port.update_result(result_update)
     except Exception as e:
         print(e, flush=True)

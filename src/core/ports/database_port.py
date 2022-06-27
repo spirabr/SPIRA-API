@@ -135,3 +135,6 @@ class DatabasePort:
 
     def insert_result(self, new_result: ResultCreation):
         self._database_adapter.insert_result(new_result)
+
+    def update_result(self, result_update: ResultCreation):
+        self._database_adapter.update_result(result_update)
