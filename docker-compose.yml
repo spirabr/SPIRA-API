@@ -7,6 +7,7 @@ services:
       - envs/database.env
       - envs/authentication.env
       - envs/message_service.env
+      - envs/message_listener.env
     image: api_image
 <<<<<<< HEAD
     
