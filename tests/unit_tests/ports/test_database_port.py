@@ -1,10 +1,11 @@
 import pytest
 from unittest.mock import MagicMock, patch
 from bson import ObjectId
+from core.model.constants import Status
 
 from core.model.inference import Inference, InferenceCreation
 from core.model.model import Model
-from core.model.result import Result, ResultCreation
+from core.model.result import Result, ResultCreation, ResultUpdate
 from core.model.user import User, UserCreation, UserWithPassword
 from core.ports.database_port import DatabasePort
 from tests.mocks.mongo_mock import MongoMock
@@ -221,6 +222,24 @@ def test_insert_inference(database_port: DatabasePort):
         fake_adapter_insert.assert_called_once_with(new_inference)
 
 
+def test_inference_status_update(database_port: DatabasePort):
+    def fake_adapter_update(inference_id, status):
+        pass
+
+    with patch.object(
+        adapter_instance,
+        "update_inference_status",
+        MagicMock(side_effect=fake_adapter_update),
+    ) as fake_adapter_update:
+        database_port.update_inference_status(
+            "629f815d6abaa3c5e6cf7c16", Status.completed_status
+        )
+
+        fake_adapter_update.assert_called_once_with(
+            "629f815d6abaa3c5e6cf7c16", Status.completed_status
+        )
+
+
 def test_get_model_by_id(database_port: DatabasePort):
     def get_model_by_id(model_id) -> dict:
         return {
@@ -334,3 +353,20 @@ def test_insert_result(database_port: DatabasePort):
         database_port.insert_result(new_result)
 
         fake_adapter_insert.assert_called_once_with(new_result)
+
+
+def test_result_update(database_port: DatabasePort):
+    def fake_adapter_update(result_update):
+        pass
+
+    with patch.object(
+        adapter_instance,
+        "update_result",
+        MagicMock(side_effect=fake_adapter_update),
+    ) as fake_adapter_update:
+        result_update = ResultUpdate(
+            inference_id="629f815d6abaa3c5e6cf7c16", output=0.323, diagnosis="negative"
+        )
+        database_port.update_result(result_update)
+
+        fake_adapter_update.assert_called_once_with(result_update)
