@@ -91,6 +91,9 @@ class DatabasePort:
     def insert_inference(self, new_inference: InferenceCreation) -> str:
         return str(self._database_adapter.insert_inference(new_inference))
 
+    def update_inference_status(self, inference_id: str, status: str):
+        self._database_adapter.update_inference_status(inference_id, status)
+
     # model methods
 
     def get_model_by_id(self, model_id: str) -> Optional[Model]:

@@ -56,6 +56,11 @@ class MongoAdapter:
         _id = self._inferences.insert_one(new_inference.dict())
         return _id.inserted_id
 
+    def update_inference_status(self, inference_id: str, new_status: str):
+        self._inferences.update_one(
+            {"_id": ObjectId(inference_id)}, {"$set": {"status": new_status}}
+        )
+
     # result methods
 
     def get_result_by_inference_id(self, inference_id: str):
