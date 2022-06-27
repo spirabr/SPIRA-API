@@ -29,7 +29,6 @@ async def listen_for_messages_loop(
 
 
 def run_listener(ports: dict):
-    print("running listener!", flush=True)
     asyncio.new_event_loop().run_until_complete(
         listen_for_messages_loop(
             ports["message_service_port"],
