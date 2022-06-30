@@ -12,7 +12,7 @@ class AuthenticationAdapter:
         self._pwd_context = CryptContext(
             schemes=[context_scheme], deprecated=deprecated
         )
-        self._expire_time = int(expire_time)
+        self._expire_time = expire_time
         self._key = key
         self._algorithm = algorithm
 

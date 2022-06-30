@@ -3,7 +3,7 @@ from typing import Tuple
 
 from core.model.exception import DefaultExceptions, LogicException
 from core.model.inference import Inference
-from core.model.result import Result, ResultCreation
+from core.model.result import Result, ResultCreation, ResultUpdate
 from core.model.token import Token
 from core.ports.authentication_port import AuthenticationPort
 from core.ports.database_port import DatabasePort
@@ -62,3 +62,10 @@ def create_inference_result(
             status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
     database_port.insert_result(new_result)
+
+
+def update_inference_result(database_port: DatabasePort, result_update: ResultUpdate):
+    try:
+        database_port.update_result(result_update)
+    except:
+        raise

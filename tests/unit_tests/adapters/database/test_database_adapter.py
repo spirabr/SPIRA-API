@@ -2,7 +2,7 @@ import pytest
 from bson import ObjectId
 from adapters.database.mongo_adapter import MongoAdapter
 from core.model.inference import InferenceCreation
-from core.model.result import ResultCreation
+from core.model.result import ResultCreation, ResultUpdate
 from core.model.user import UserCreation
 from tests.mocks.mongo_mock import MongoMock
 
@@ -11,7 +11,7 @@ from tests.mocks.mongo_mock import MongoMock
 def database_adapter():
 
     # MongoMock inherits all methods from MongoAdapter
-    # but uses a mocked client with de DB
+    # but uses a mocked client with the DB
 
     adapter = MongoMock()
     return adapter
@@ -103,6 +103,19 @@ def test_insert_inference(database_adapter: MongoAdapter):
         pytest.fail("test_insert_inference failed")
 
 
+def test_inference_status_update(database_adapter: MongoAdapter):
+    try:
+        database_adapter.update_inference_status(
+            "629f815d6abaa3c5e6cf7c16", "completed"
+        )
+    except:
+        pytest.fail("test_update_inference_status failed")
+    updated_inference = database_adapter.get_inference_by_id(
+        "629f815d6abaa3c5e6cf7c16", "507f191e810c19729de860ea"
+    )
+    assert updated_inference["status"] == "completed"
+
+
 def test_get_model_by_id(database_adapter: MongoAdapter):
     model = database_adapter.get_model_by_id("629f992d45cda830033cf4cd")
 
@@ -153,3 +166,16 @@ def test_insert_result(database_adapter: MongoAdapter):
         )
     except:
         pytest.fail("test_insert_result failed")
+
+
+def test_update_result(database_adapter: MongoAdapter):
+    try:
+        database_adapter.update_result(
+            ResultUpdate(
+                inference_id="629f815d6abaa3c5e6cf7c16",
+                output=0.987,
+                diagnosis="positive",
+            )
+        )
+    except:
+        pytest.fail("test_update_result failed")

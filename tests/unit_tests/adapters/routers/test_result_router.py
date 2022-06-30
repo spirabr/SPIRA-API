@@ -5,7 +5,7 @@ from unittest.mock import ANY, patch, MagicMock
 from core.model.exception import LogicException
 from core.model.token import Token
 
-from src.app import create_app
+from adapters.routers.app import create_app
 
 from core.ports.database_port import DatabasePort
 from core.model.inference import Inference, InferenceCreation

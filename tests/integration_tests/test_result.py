@@ -2,7 +2,7 @@ from fastapi.testclient import TestClient
 import pytest
 from unittest.mock import patch, MagicMock
 
-from src.app import create_app
+from adapters.routers.app import create_app
 
 from core.ports.database_port import DatabasePort
 from core.model.inference import InferenceCreation

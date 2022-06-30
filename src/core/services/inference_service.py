@@ -118,6 +118,7 @@ async def create_new_inference(
         model = model_service.get_by_id(
             authentication_port, database_port, inference_form.model_id, token
         )
+
         await message_service_port.send_message(
             RequestLetter(
                 content=new_inference, publishing_channel=model.receiving_channel

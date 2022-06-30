@@ -11,7 +11,7 @@ class DatabaseSettings(BaseSettings):
 
 
 class AuthenticationSettings(BaseSettings):
-    expire_time: str
+    expire_time: int
     key: str
     algorithm: str
     context_scheme: str
@@ -20,3 +20,28 @@ class AuthenticationSettings(BaseSettings):
 
 class MessageServiceSettings(BaseSettings):
     nats_conn_url: str
+
+
+class MessageListenerSettings(BaseSettings):
+    loop_timeout: int
+    loop_interval: int
+    central_channel: str
+
+
+class Settings:
+
+    database_settings = DatabaseSettings(
+        _env_file="database.env", _env_file_encoding="utf-8"
+    )
+
+    authentication_settings = AuthenticationSettings(
+        _env_file="authentication.env", _env_file_encoding="utf-8"
+    )
+
+    message_service_settings = MessageServiceSettings(
+        _env_file="message_service.env", _env_file_encoding="utf-8"
+    )
+
+    message_listener_settings = MessageListenerSettings(
+        _env_file="message_listener.env", _env_file_encoding="utf-8"
+    )

@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from bson import ObjectId
 
 from core.model.inference import InferenceCreation
-from core.model.result import ResultCreation
+from core.model.result import ResultCreation, ResultUpdate
 from core.model.user import UserCreation
 
 
@@ -56,6 +56,11 @@ class MongoAdapter:
         _id = self._inferences.insert_one(new_inference.dict())
         return _id.inserted_id
 
+    def update_inference_status(self, inference_id: str, new_status: str):
+        self._inferences.update_one(
+            {"_id": ObjectId(inference_id)}, {"$set": {"status": new_status}}
+        )
+
     # result methods
 
     def get_result_by_inference_id(self, inference_id: str):
@@ -63,3 +68,8 @@ class MongoAdapter:
 
     def insert_result(self, new_result: ResultCreation):
         self._results.insert_one(new_result.dict())
+
+    def update_result(self, result_update: ResultUpdate):
+        self._results.update_one(
+            {"inference_id": result_update.inference_id}, {"$set": result_update.dict()}
+        )
