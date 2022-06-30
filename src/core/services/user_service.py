@@ -1,7 +1,8 @@
 from typing import Optional, Union
 from fastapi import status
-from core.ports.authentication_port import AuthenticationPort
+import re
 
+from core.ports.authentication_port import AuthenticationPort
 from core.ports.database_port import DatabasePort
 from core.model.user import User, UserCreation, UserCreationForm, UserWithPassword
 from core.model.exception import DefaultExceptions, LogicException
@@ -67,13 +68,23 @@ def authenticate_and_generate_token(
 
 
 def _validate_new_user(
-    authentication_port: AuthenticationPort,
     database_port: DatabasePort,
     user_form: UserCreationForm,
 ):
     if user_form.password != user_form.password_confirmation:
         raise LogicException(
             "password and password confirmation don't match",
+            status.HTTP_400_BAD_REQUEST,
+        )
+    existent_user = database_port.get_user_by_username(user_form.username)
+    if existent_user is not None:
+        raise LogicException(
+            "username is already registered",
+            status.HTTP_400_BAD_REQUEST,
+        )
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", user_form.email):
+        raise LogicException(
+            "email format is invalid",
             status.HTTP_400_BAD_REQUEST,
         )
 
@@ -87,7 +98,7 @@ def create_new_user(
     if not authentication_port.validate_token(token):
         raise DefaultExceptions.credentials_exception
     try:
-        _validate_new_user(authentication_port, database_port, user_form)
+        _validate_new_user(database_port, user_form)
     except LogicException as e:
         raise e
     try:
