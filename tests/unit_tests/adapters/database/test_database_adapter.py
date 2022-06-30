@@ -11,7 +11,7 @@ from tests.mocks.mongo_mock import MongoMock
 def database_adapter():
 
     # MongoMock inherits all methods from MongoAdapter
-    # but uses a mocked client with de DB
+    # but uses a mocked client with the DB
 
     adapter = MongoMock()
     return adapter
