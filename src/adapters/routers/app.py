@@ -7,8 +7,6 @@ from adapters.routers.v1.inference_router import create_inference_router
 from adapters.routers.v1.model_router import create_model_router
 from adapters.routers.v1.user_router import create_user_router
 
-from settings import DatabaseSettings, AuthenticationSettings, MessageServiceSettings
-
 
 def create_app(ports: dict) -> FastAPI:
     app: FastAPI = FastAPI()
