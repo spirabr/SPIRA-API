@@ -9,12 +9,7 @@ services:
       - envs/message_service.env
       - envs/message_listener.env
     image: api_image
-<<<<<<< HEAD
-    
-    command: python3 app.py
-=======
     command: python3 main.py
->>>>>>> 532114a... Added listener service to update results incoming from model apis via message service
     ports:
       - 3000:8000 
     networks:
