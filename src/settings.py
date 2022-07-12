@@ -29,7 +29,7 @@ class MessageListenerSettings(BaseSettings):
 
 
 class SimpleStorageSettings(BaseSettings):
-    simple_storage_conn_url: str
+    minio_conn_url: str
     bucket_name: str
 
 

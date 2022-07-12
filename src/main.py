@@ -44,7 +44,7 @@ def configure_ports():
     )
     ports["simple_storage_port"] = SimpleStoragePort(
         MinioAdapter(
-            Settings.simple_storage_settings.simple_storage_conn_url,
+            Settings.simple_storage_settings.minio_conn_url,
             Settings.simple_storage_settings.bucket_name,
         )
     )
