@@ -2,6 +2,7 @@ from threading import Thread
 from adapters.authentication.authentication_adapter import AuthenticationAdapter
 from adapters.database.mongo_adapter import MongoAdapter
 from adapters.message_service.nats_adapter import NATSAdapter
+from adapters.simple_storage.minio_adapter import MinioAdapter
 
 from core.ports.authentication_port import AuthenticationPort
 from core.ports.database_port import DatabasePort
@@ -41,7 +42,12 @@ def configure_ports():
             Settings.message_service_settings.nats_conn_url,
         )
     )
-    ports["simple_storage_port"] = SimpleStoragePort()
+    ports["simple_storage_port"] = SimpleStoragePort(
+        MinioAdapter(
+            Settings.simple_storage_settings.simple_storage_conn_url,
+            Settings.simple_storage_settings.bucket_name,
+        )
+    )
     return ports
 
 

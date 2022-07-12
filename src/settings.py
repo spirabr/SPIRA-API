@@ -28,6 +28,11 @@ class MessageListenerSettings(BaseSettings):
     central_channel: str
 
 
+class SimpleStorageSettings(BaseSettings):
+    simple_storage_conn_url: str
+    bucket_name: str
+
+
 class Settings:
 
     database_settings = DatabaseSettings(
@@ -44,4 +49,8 @@ class Settings:
 
     message_listener_settings = MessageListenerSettings(
         _env_file="message_listener.env", _env_file_encoding="utf-8"
+    )
+
+    simple_storage_settings = SimpleStorageSettings(
+        _env_file="simple_storage.env", _env_file_encoding="utf-8"
     )
