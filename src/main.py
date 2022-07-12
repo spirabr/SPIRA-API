@@ -9,6 +9,7 @@ from core.ports.message_service_port import MessageServicePort
 
 from adapters.routers.app import run_app
 from adapters.listener.message_listener import run_listener
+from core.ports.simple_storage_port import SimpleStoragePort
 from settings import (
     Settings,
 )
@@ -40,6 +41,7 @@ def configure_ports():
             Settings.message_service_settings.nats_conn_url,
         )
     )
+    ports["simple_storage_port"] = SimpleStoragePort()
     return ports
 
 

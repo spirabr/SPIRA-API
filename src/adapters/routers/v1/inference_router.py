@@ -22,11 +22,13 @@ from core.model.token import Token
 from core.model.inference import Inference, InferenceCreationForm, InferenceFiles
 from core.model.exception import LogicException
 from core.ports.message_service_port import MessageServicePort
+from core.ports.simple_storage_port import SimpleStoragePort
 from core.services.inference_service import create_new_inference, get_by_id, get_list
 from core.services.result_service import create_inference_result
 
 
 def create_inference_router(
+    simple_storage_port: SimpleStoragePort,
     message_service_port: MessageServicePort,
     authentication_port: AuthenticationPort,
     database_port: DatabasePort,
@@ -72,11 +74,13 @@ def create_inference_router(
     ):
         try:
             inference_id = await create_new_inference(
+                simple_storage_port,
                 message_service_port,
                 authentication_port,
                 database_port,
                 user_id,
                 inference_form,
+                inference_files,
                 Token(content=token_content),
             )
 

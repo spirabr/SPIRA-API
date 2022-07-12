@@ -6,7 +6,12 @@ from core.model.token import Token
 from core.ports.authentication_port import AuthenticationPort
 
 from core.ports.database_port import DatabasePort
-from core.model.inference import Inference, InferenceCreation, InferenceCreationForm
+from core.model.inference import (
+    Inference,
+    InferenceCreation,
+    InferenceCreationForm,
+    InferenceFiles,
+)
 from core.model.exception import DefaultExceptions, LogicException
 from core.ports.message_service_port import MessageServicePort
 from core.ports.simple_storage_port import SimpleStoragePort
@@ -84,13 +89,14 @@ def _validate_new_inference(
         raise LogicException("model not found", status.HTTP_404_NOT_FOUND)
 
 
-def _save_audios(
-    simple_storage_port: SimpleStoragePort, files: dict, inference_id: str
+def _store_files(
+    simple_storage_port: SimpleStoragePort, files: InferenceFiles, inference_id: str
 ):
-    directory = "/" + inference_id
-    audio_types = ["A", "B", "C"]
-    for type in audio_types:
-        simple_storage_port.save_file(directory + "/" + type)
+    file_types = InferenceFiles.__fields__.keys()
+    for file_type in file_types:
+        simple_storage_port.store_file(
+            inference_id, file_type, getattr(files, file_type)
+        )
 
 
 async def create_new_inference(
@@ -100,7 +106,7 @@ async def create_new_inference(
     database_port: DatabasePort,
     user_id: str,
     inference_form: InferenceCreationForm,
-    files: dict,
+    inference_files: InferenceFiles,
     token: Token,
 ):
     try:
@@ -131,7 +137,7 @@ async def create_new_inference(
             authentication_port, database_port, inference_form.model_id, token
         )
 
-        _save_audios(simple_storage_port, files, new_id)
+        _store_files(simple_storage_port, inference_files, new_id)
 
         await message_service_port.send_message(
             RequestLetter(
