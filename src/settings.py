@@ -31,6 +31,8 @@ class MessageListenerSettings(BaseSettings):
 class SimpleStorageSettings(BaseSettings):
     minio_conn_url: str
     bucket_name: str
+    minio_access_key: str
+    minio_secret_key: str
 
 
 class Settings:
