@@ -145,8 +145,7 @@ async def create_new_inference(
             )
         )
 
-    except Exception as e:
-        print(e, flush=True)
+    except:
         raise LogicException(
             "cound not create new inference", status.HTTP_500_INTERNAL_SERVER_ERROR
         )
