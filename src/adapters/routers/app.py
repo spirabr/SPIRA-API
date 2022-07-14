@@ -15,6 +15,7 @@ def create_app(ports: dict) -> FastAPI:
 
     app.include_router(
         create_inference_router(
+            ports["simple_storage_port"],
             ports["message_service_port"],
             ports["authentication_port"],
             ports["database_port"],

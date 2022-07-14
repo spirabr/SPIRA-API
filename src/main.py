@@ -2,6 +2,7 @@ from threading import Thread
 from adapters.authentication.authentication_adapter import AuthenticationAdapter
 from adapters.database.mongo_adapter import MongoAdapter
 from adapters.message_service.nats_adapter import NATSAdapter
+from adapters.simple_storage.minio_adapter import MinioAdapter
 
 from core.ports.authentication_port import AuthenticationPort
 from core.ports.database_port import DatabasePort
@@ -9,6 +10,7 @@ from core.ports.message_service_port import MessageServicePort
 
 from adapters.routers.app import run_app
 from adapters.listener.message_listener import run_listener
+from core.ports.simple_storage_port import SimpleStoragePort
 from settings import (
     Settings,
 )
@@ -38,6 +40,14 @@ def configure_ports():
     ports["message_service_port"] = MessageServicePort(
         NATSAdapter(
             Settings.message_service_settings.nats_conn_url,
+        )
+    )
+    ports["simple_storage_port"] = SimpleStoragePort(
+        MinioAdapter(
+            Settings.simple_storage_settings.minio_conn_url,
+            Settings.simple_storage_settings.minio_access_key,
+            Settings.simple_storage_settings.minio_secret_key,
+            Settings.simple_storage_settings.bucket_name,
         )
     )
     return ports

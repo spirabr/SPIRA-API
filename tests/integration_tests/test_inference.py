@@ -4,6 +4,7 @@ from adapters.message_service.nats_adapter import NATSAdapter
 from core.ports.message_service_port import MessageServicePort
 
 from adapters.routers.app import create_app
+import os
 
 from tests.config import (
     configure_ports_without_auth,
@@ -80,13 +81,20 @@ def test_post_create_inference_success(client_with_auth: TestClient):
         "age": 23,
         "model_id": "629f992d45cda830033cf4cd",
     }
+
+    dir = os.path.dirname(__file__)
+    fake_files = {
+        "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
+        "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),
+        "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
+    }
     response = client_with_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",
         headers={
             "Authorization": "Bearer mock_token",
-            "Content-Type": "application/json",
         },
-        json=fake_inference,
+        data=fake_inference,
+        files=fake_files,
     )
     assert response.json() == {"message": "inference registered!"}
     assert response.status_code == 200
@@ -100,13 +108,18 @@ def test_post_create_inference_with_invalid_model_id_exception(
         "age": 23,
         "model_id": "invalid_id",
     }
+    fake_files = {
+        "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
+        "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),
+        "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
+    }
     response = client_with_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",
         headers={
-            "Content-Type": "application/json",
             "Authorization": "Bearer mock_token",
         },
-        json=fake_inference,
+        data=fake_inference,
+        files=fake_files,
     )
     assert response.status_code == 422
     assert response.json() == {"detail": "model id is not valid"}
@@ -120,13 +133,18 @@ def test_post_create_inference_with_inexistent_model_exception(
         "age": 23,
         "model_id": "507f191e810c19729de860ea",
     }
+    fake_files = {
+        "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
+        "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),
+        "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
+    }
     response = client_with_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",
         headers={
-            "Content-Type": "application/json",
             "Authorization": "Bearer mock_token",
         },
-        json=fake_inference,
+        data=fake_inference,
+        files=fake_files,
     )
     assert response.status_code == 404
     assert response.json() == {"detail": "model not found"}
@@ -138,13 +156,18 @@ def test_post_create_inference_for_another_user_exception(client_with_auth: Test
         "age": 23,
         "model_id": "invalid_id",
     }
+    fake_files = {
+        "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
+        "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),
+        "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
+    }
     response = client_with_auth.post(
         "/v1/users/629d34d2663c15eb2ed15494/inferences",
         headers={
-            "Content-Type": "application/json",
             "Authorization": "Bearer mock_token",
         },
-        json=fake_inference,
+        data=fake_inference,
+        files=fake_files,
     )
     assert response.json() == {"detail": "Forbidden operation"}
     assert response.status_code == 403
@@ -206,13 +229,18 @@ def test_post_create_inference_unauthorized(client_without_auth: TestClient):
         "age": 23,
         "model_id": "629f992d45cda830033cf4cd",
     }
+    fake_files = {
+        "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
+        "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),
+        "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
+    }
     response = client_without_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",
         headers={
-            "Content-Type": "application/json",
             "Authorization": "Bearer mock_token",
         },
-        json=fake_inference,
+        data=fake_inference,
+        files=fake_files,
     )
     assert response.json() == {"detail": "could not validate the credentials"}
     assert response.status_code == 401

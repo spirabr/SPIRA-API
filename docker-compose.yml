@@ -3,11 +3,13 @@ version: "3.5"
 services:
   api:
     build: .
+    restart: always
     env_file: 
       - envs/database.env
       - envs/authentication.env
       - envs/message_service.env
       - envs/message_listener.env
+      - envs/simple_storage.env
     image: api_image
     command: python3 main.py
     ports:
@@ -15,6 +17,7 @@ services:
     networks:
       - nats-network
       - mongo-network
+      - minio-network
       
   mongo:
     image: mongo
@@ -47,6 +50,21 @@ services:
     networks:
       - nats-network
 
+  minio:
+    image: minio/minio
+    restart: always
+    ports:
+      - 9000:9000
+      - 9001:9001
+    command: server /data --console-address ':9001' --address ':9000'
+    volumes:
+      - minio_data:/data
+    env_file:
+      - envs/minio.env
+    networks:
+      - minio-network
+
+
 networks:
   nats-network:
     driver: bridge
@@ -55,5 +73,11 @@ networks:
   mongo-network:
     name: mongo-bridge
 
+  minio-network:
+    driver: bridge
+    name: minio-bridge
+
+volumes:
+  minio_data:
 
   
