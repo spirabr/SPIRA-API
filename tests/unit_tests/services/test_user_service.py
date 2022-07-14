@@ -136,7 +136,7 @@ def test_user_validation_pre_existent_username_exception(database_port: Database
     user_form = UserCreationForm(
         **{
             "username": "test_username",
-            "email": "valid@gmail.com",
+            "email": "valid_2@gmail.com",
             "password": "123abcde_?()",
             "password_confirmation": "123abcde_?()",
         }
@@ -159,6 +159,40 @@ def test_user_validation_pre_existent_username_exception(database_port: Database
             assert e.message == expected_exception.message
             assert e.error_status == expected_exception.error_status
         mock_get_user_by_username.assert_called_once_with(user_form.username)
+
+
+def test_user_validation_pre_existent_email_exception(database_port: DatabasePort):
+    def fake_get_user_by_email(email):
+        return User(
+            **{"id": "fake_id", "username": "test_username", "email": "valid@gmail.com"}
+        )
+
+    user_form = UserCreationForm(
+        **{
+            "username": "test_username_2",
+            "email": "valid@gmail.com",
+            "password": "123abcde_?()",
+            "password_confirmation": "123abcde_?()",
+        }
+    )
+
+    with patch.object(
+        database_port,
+        "get_user_by_email",
+        MagicMock(side_effect=fake_get_user_by_email),
+    ) as mock_get_user_by_email:
+        try:
+            _validate_new_user(database_port, user_form)
+            assert False
+        except LogicException as e:
+            assert True
+            expected_exception = LogicException(
+                "email is already registered",
+                status.HTTP_400_BAD_REQUEST,
+            )
+            assert e.message == expected_exception.message
+            assert e.error_status == expected_exception.error_status
+        mock_get_user_by_email.assert_called_once_with(user_form.email)
 
 
 def test_user_validation_invalid_email_exception_1(database_port: DatabasePort):
