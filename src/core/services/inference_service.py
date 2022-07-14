@@ -94,7 +94,7 @@ def _store_files(
 ):
     file_types = InferenceFiles.__fields__.keys()
     for file_type in file_types:
-        simple_storage_port.store_file(
+        simple_storage_port.store_inference_file(
             inference_id, file_type, getattr(files, file_type)
         )
 

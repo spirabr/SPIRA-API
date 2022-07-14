@@ -13,7 +13,7 @@ class MinioAdapter:
         if not self._client.bucket_exists(bucket_name):
             self._client.make_bucket(bucket_name)
 
-    def store_file(self, inference_id: str, file_type: str, file: UploadFile):
+    def store_inference_file(self, inference_id: str, file_type: str, file: UploadFile):
         raw_file = io.BytesIO(file.file.read())
         length = raw_file.getbuffer().nbytes
         _, file_extension = os.path.splitext(file.filename)
