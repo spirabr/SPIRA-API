@@ -1,12 +1,9 @@
 from fastapi.testclient import TestClient
 import pytest
-from unittest.mock import patch, MagicMock
 
 from adapters.routers.app import create_app
 
 from core.ports.database_port import DatabasePort
-from core.model.inference import InferenceCreation
-from core.model.result import ResultCreation
 
 from tests.mocks.mongo_mock import MongoMock
 

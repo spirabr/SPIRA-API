@@ -1,10 +1,6 @@
 from fastapi.testclient import TestClient
 import pytest
-from adapters.message_service.nats_adapter import NATSAdapter
-from core.ports.message_service_port import MessageServicePort
-
 from adapters.routers.app import create_app
-import os
 
 from tests.config import (
     configure_ports_without_auth,
@@ -81,8 +77,6 @@ def test_post_create_inference_success(client_with_auth: TestClient):
         "age": 23,
         "model_id": "629f992d45cda830033cf4cd",
     }
-
-    dir = os.path.dirname(__file__)
     fake_files = {
         "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
         "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),

@@ -1,7 +1,5 @@
 from fastapi.testclient import TestClient
 import pytest
-from adapters.message_service.nats_adapter import NATSAdapter
-from core.ports.message_service_port import MessageServicePort
 
 from adapters.routers.app import create_app
 

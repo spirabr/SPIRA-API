@@ -44,7 +44,7 @@ def test_user_validation_success_1(database_port: DatabasePort):
         mock_get_user_by_username.assert_called_once_with("test_username")
 
 
-def test_user_validation_invalid_email_success_2(database_port: DatabasePort):
+def test_user_validation_success_2(database_port: DatabasePort):
     def fake_get_user_by_username(username):
         return None
 
@@ -69,7 +69,7 @@ def test_user_validation_invalid_email_success_2(database_port: DatabasePort):
             assert False
 
 
-def test_user_validation_invalid_email_success_3(database_port: DatabasePort):
+def test_user_validation_success_3(database_port: DatabasePort):
     def fake_get_user_by_username(username):
         return None
 
