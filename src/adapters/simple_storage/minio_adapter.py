@@ -2,6 +2,7 @@ import os
 import io
 from fastapi import UploadFile
 from minio import Minio
+from minio.deleteobjects import DeleteObject
 
 
 class MinioAdapter:
@@ -23,3 +24,12 @@ class MinioAdapter:
             raw_file,
             length,
         )
+
+    def remove_inference_directory(self, inference_id: str):
+        delete_object_list = map(
+            lambda x: DeleteObject(x.object_name),
+            self._client.list_objects(self._bucket_name, inference_id, recursive=True),
+        )
+        errors = self._client.remove_objects(self._bucket_name, delete_object_list)
+        for error in errors:
+            print("error occured when deleting object", error, flush=True)

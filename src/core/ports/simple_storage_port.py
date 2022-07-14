@@ -11,3 +11,6 @@ class SimpleStoragePort:
         self._simples_storage_adapter.store_inference_file(
             inference_id, file_type, file
         )
+
+    def remove_inference_directory(self, inference_id: str) -> None:
+        self._simples_storage_adapter.remove_inference_directory(inference_id)
