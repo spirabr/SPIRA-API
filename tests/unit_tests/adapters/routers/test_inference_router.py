@@ -190,21 +190,28 @@ def test_post_create_inference_and_result_success(client_with_auth: TestClient):
         MagicMock(side_effect=fake_insert_result),
     ) as fake_result_insert:
         mock_create_inference.return_value = "fake_inference_id"
+
         fake_inference = {
             "sex": "F",
             "age": 23,
             "model_id": "629f992d45cda830033cf4cd",
         }
+        fake_files = {
+            "vogal_sustentada": None,
+            "parlenda_ritmada": None,
+            "frase": None,
+        }
         response = client_with_auth.post(
             "/v1/users/507f191e810c19729de860ea/inferences",
             headers={
                 "Authorization": "Bearer mock_token",
-                "Content-Type": "application/json",
             },
-            json=fake_inference,
+            data=fake_inference,
+            files=fake_files,
         )
 
         mock_create_inference.assert_called_once_with(
+            ANY,
             ANY,
             ANY,
             ANY,
@@ -216,6 +223,7 @@ def test_post_create_inference_and_result_success(client_with_auth: TestClient):
                     "model_id": "629f992d45cda830033cf4cd",
                 }
             ),
+            ANY,
             Token(content="mock_token"),
         )
         fake_result_insert.assert_called_once_with(
@@ -236,36 +244,24 @@ def test_post_create_inference_exception(client_with_auth: TestClient):
         mock_create_inference.side_effect = LogicException(
             "cound not create new inference", status.HTTP_500_INTERNAL_SERVER_ERROR
         )
-        fake_user = {
-            "username": "teste",
-            "email": "teste@gmail.com",
-            "password": "abcde",
-            "password_confirmation": "abcde",
-        }
-        response = client_with_auth.post(
-            "/v1/users/",
-            headers={
-                "Authorization": "Bearer mock_token",
-                "Content-Type": "application/json",
-            },
-            json=fake_user,
-        )
 
-        fake_inference = {
-            "sex": "F",
-            "age": 23,
-            "model_id": "629f992d45cda830033cf4cd",
+        fake_inference = {"sex": "F", "age": 23, "model_id": "629f992d45cda830033cf4cd"}
+        fake_files = {
+            "vogal_sustentada": None,
+            "parlenda_ritmada": None,
+            "frase": None,
         }
         response = client_with_auth.post(
             "/v1/users/507f191e810c19729de860ea/inferences",
             headers={
                 "Authorization": "Bearer mock_token",
-                "Content-Type": "application/json",
             },
-            json=fake_inference,
+            data=fake_inference,
+            files=fake_files,
         )
 
         mock_create_inference.assert_called_once_with(
+            ANY,
             ANY,
             ANY,
             ANY,
@@ -277,6 +273,7 @@ def test_post_create_inference_exception(client_with_auth: TestClient):
                     "model_id": "629f992d45cda830033cf4cd",
                 }
             ),
+            ANY,
             Token(content="mock_token"),
         )
         assert response.status_code == 500
@@ -300,10 +297,15 @@ def test_post_create_inference_no_token_header(client_without_auth: TestClient):
         "age": 23,
         "model_id": "629f992d45cda830033cf4cd",
     }
+    fake_files = {
+        "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
+        "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),
+        "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
+    }
     response = client_without_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",
-        headers={"Content-Type": "application/json"},
-        json=fake_inference,
+        data=fake_inference,
+        files=fake_files,
     )
     assert response.json() == {"detail": "Not authenticated"}
     assert response.status_code == 401

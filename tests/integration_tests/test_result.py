@@ -67,14 +67,19 @@ def test_post_create_result_with_inference_success(client_with_auth: TestClient)
         "age": 23,
         "model_id": "629f992d45cda830033cf4cd",
     }
+    fake_files = {
+        "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
+        "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),
+        "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
+    }
 
     response = client_with_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",
         headers={
             "Authorization": "Bearer mock_token",
-            "Content-Type": "application/json",
         },
-        json=fake_inference,
+        data=fake_inference,
+        files=fake_files,
     )
     assert response.json() == {"message": "inference registered!"}
     assert response.status_code == 200
