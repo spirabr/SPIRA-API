@@ -82,6 +82,12 @@ def _validate_new_user(
             "username is already registered",
             status.HTTP_400_BAD_REQUEST,
         )
+    existent_user = database_port.get_user_by_email(user_form.email)
+    if existent_user is not None:
+        raise LogicException(
+            "email is already registered",
+            status.HTTP_400_BAD_REQUEST,
+        )
     if not re.match(r"[^@]+@[^@]+\.[^@]+", user_form.email):
         raise LogicException(
             "email format is invalid",
