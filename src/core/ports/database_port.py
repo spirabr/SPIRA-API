@@ -35,6 +35,18 @@ class DatabasePort:
             }
         )
 
+    def get_user_by_email(self, email: str) -> Optional[User]:
+        user = self._database_adapter.get_user_by_email(email)
+        if user == None:
+            return None
+        return User(
+            **{
+                "id": str(user["_id"]),
+                "username": user["username"],
+                "email": user["email"],
+            }
+        )
+
     def get_user_by_username_with_password(
         self, username: str
     ) -> Optional[UserWithPassword]:

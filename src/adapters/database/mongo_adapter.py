@@ -31,6 +31,9 @@ class MongoAdapter:
     def get_user_by_username(self, username: str):
         return self._users.find_one({"username": username})
 
+    def get_user_by_email(self, email: str):
+        return self._users.find_one({"email": email})
+
     def insert_user(self, new_user: UserCreation):
         self._users.insert_one(new_user.dict())
 
