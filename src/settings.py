@@ -56,12 +56,12 @@ class MessageListenerSettings(BaseSettings):
     """Settings holding the environment variables for the message listener process
 
     Attributes:
-        loop_interval (int) : time interval between loop iterations
+        loop_interval (float) : time interval between loop iterations
         central_channel (str) : message service channel used to receive update messages
 
     """
 
-    loop_interval: int
+    loop_interval: float
     central_channel: str
 
 
