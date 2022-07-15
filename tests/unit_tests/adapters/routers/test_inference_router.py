@@ -197,9 +197,9 @@ def test_post_create_inference_and_result_success(client_with_auth: TestClient):
             "model_id": "629f992d45cda830033cf4cd",
         }
         fake_files = {
-            "vogal_sustentada": None,
-            "parlenda_ritmada": None,
-            "frase": None,
+            "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
+            "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),
+            "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
         }
         response = client_with_auth.post(
             "/v1/users/507f191e810c19729de860ea/inferences",
@@ -247,9 +247,9 @@ def test_post_create_inference_exception(client_with_auth: TestClient):
 
         fake_inference = {"sex": "F", "age": 23, "model_id": "629f992d45cda830033cf4cd"}
         fake_files = {
-            "vogal_sustentada": None,
-            "parlenda_ritmada": None,
-            "frase": None,
+            "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
+            "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),
+            "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
         }
         response = client_with_auth.post(
             "/v1/users/507f191e810c19729de860ea/inferences",
