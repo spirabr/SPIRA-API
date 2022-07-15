@@ -1,4 +1,3 @@
-from typing import Any
 from pydantic import BaseModel
 
 
@@ -22,7 +21,12 @@ class InferenceCreation(InferenceCreationForm):
     user_id: str
 
 
+class UploadAudio(BaseModel):
+    content: bytes
+    filename: str
+
+
 class InferenceFiles(BaseModel):
-    vogal_sustentada: Any
-    parlenda_ritmada: Any
-    frase: Any
+    vogal_sustentada: UploadAudio
+    parlenda_ritmada: UploadAudio
+    frase: UploadAudio
