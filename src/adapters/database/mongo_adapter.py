@@ -21,14 +21,14 @@ class MongoAdapter:
 
     def __init__(
         self,
-        conn_url,
-        database_name,
-        user_collection_name,
-        inference_collection_name,
-        model_collection_name,
-        result_collection_name,
+        conn_url: str,
+        database_name: str,
+        user_collection_name: str,
+        inference_collection_name: str,
+        model_collection_name: str,
+        result_collection_name: str,
     ):
-        self._conn = MongoClient(conn_url)
+        self._conn: MongoClient = MongoClient(conn_url)
         self._db = getattr(self._conn, database_name)
         self._users = getattr(self._db, user_collection_name)
         self._inferences = getattr(self._db, inference_collection_name)

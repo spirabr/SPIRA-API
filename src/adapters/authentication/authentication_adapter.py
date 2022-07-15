@@ -20,7 +20,12 @@ class AuthenticationAdapter:
     """
 
     def __init__(
-        self, expire_time: int, key: str, algorithm, context_scheme, deprecated
+        self,
+        expire_time: int,
+        key: str,
+        algorithm: str,
+        context_scheme: str,
+        deprecated: str,
     ):
         self._pwd_context = CryptContext(
             schemes=[context_scheme], deprecated=deprecated
