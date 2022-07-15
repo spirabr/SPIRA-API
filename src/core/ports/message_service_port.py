@@ -5,6 +5,13 @@ from core.model.result import ResultUpdate
 
 
 class MessageServicePort:
+    """Port for the message service
+
+    Args:
+        message_service_adapter (Adapter Class) : message service adapter instance
+
+    """
+
     def __init__(self, message_service_adapter):
         self._message_service_adapter = message_service_adapter
 

@@ -4,6 +4,13 @@ from core.model.user import User
 
 
 class AuthenticationPort:
+    """Port for the authentication service
+
+    Args:
+        authentication_adapter (Adapter Class) : authentication adapter instance
+
+    """
+
     def __init__(self, authentication_adapter):
         self._authentication_adapter = authentication_adapter
 

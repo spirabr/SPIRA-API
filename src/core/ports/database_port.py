@@ -6,6 +6,13 @@ from core.model.inference import Inference, InferenceCreation
 
 
 class DatabasePort:
+    """Port for the database adapter
+
+    Args:
+        database_adapter (Adapter Class) : database adapter instance
+
+    """
+
     def __init__(self, database_adapter):
         self._database_adapter = database_adapter
 
