@@ -17,6 +17,17 @@ async def listen_for_messages_loop(
     message_service_port: MessageServicePort,
     database_port: DatabasePort,
 ):
+    """continuously listens for messages and updates the database
+
+    Args:
+        simple_storage_port (SimpleStoragePort) : port for simple storage
+        message_service_port (MessageServicePort) : port for message service
+        database_port (DatabasePort) : port for database
+
+    Returns:
+        None
+
+    """
     try:
         await subscribe_to_channel(
             message_service_port, Settings.message_listener_settings.central_channel
@@ -38,6 +49,15 @@ async def listen_for_messages_loop(
 
 
 def run_listener(ports: Ports):
+    """runs the listener process
+
+    Args:
+        ports (Ports) : ports object with all the instantiated ports
+
+    Returns:
+        None
+
+    """
     asyncio.new_event_loop().run_until_complete(
         listen_for_messages_loop(
             ports.simple_storage_port,
