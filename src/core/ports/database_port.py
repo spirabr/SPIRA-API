@@ -256,7 +256,7 @@ class DatabasePort:
         )
 
     def insert_result(self, new_result: ResultCreation):
-        """inserts a new result in the database
+        """inserts a new result object in the database
 
         Args:
             new_result (ResultCreation) : new result form
@@ -268,7 +268,7 @@ class DatabasePort:
         self._database_adapter.insert_result(new_result)
 
     def update_result(self, result_update: ResultCreation):
-        """updates a result in the database
+        """updates a result object in the database
 
         Args:
             result_update (ResultUpdate) : result update form
