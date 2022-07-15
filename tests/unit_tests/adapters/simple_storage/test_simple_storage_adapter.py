@@ -24,11 +24,12 @@ def test_store_inference_file(simple_storage_adapter: MinioAdapter):
         "put_object",
         MagicMock(side_effect=fake_put_object),
     ) as mock_method:
-        file = UploadFile("tests/mocks/audio_files/audio1.wav")
+        file = BytesIO(UploadFile("tests/mocks/audio_files/audio1.wav").file.read())
         try:
             simple_storage_adapter.store_inference_file(
                 "fake_inference_id",
                 "fake_file_type",
+                ".fake_extension",
                 file,
             )
             assert True
@@ -36,7 +37,7 @@ def test_store_inference_file(simple_storage_adapter: MinioAdapter):
             assert False
         mock_method.assert_called_once_with(
             "mock-bucket",
-            "fake_inference_id/fake_file_type.wav",
+            "fake_inference_id/fake_file_type.fake_extension",
             ANY,
             0,
         )

@@ -1,5 +1,5 @@
 from fastapi import File, Form, UploadFile
-from core.model.inference import InferenceCreationForm, InferenceFiles
+from core.model.inference import InferenceCreationForm, InferenceFiles, UploadAudio
 
 
 async def get_inference_form_model(age=Form(-1), sex=Form(""), model_id=Form("")):
@@ -12,7 +12,11 @@ async def get_inference_form_files(
     frase: UploadFile = File(None),
 ):
     return InferenceFiles(
-        vogal_sustentada=vogal_sustentada,
-        parlenda_ritmada=parlenda_ritmada,
-        frase=frase,
+        vogal_sustentada=UploadAudio(
+            content=vogal_sustentada.file.read(), filename=vogal_sustentada.filename
+        ),
+        parlenda_ritmada=UploadAudio(
+            content=parlenda_ritmada.file.read(), filename=parlenda_ritmada.filename
+        ),
+        frase=UploadAudio(content=frase.file.read(), filename=frase.filename),
     )

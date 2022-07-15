@@ -1,6 +1,8 @@
+from io import BytesIO
 from fastapi import UploadFile
-from mock import MagicMock, patch
+from mock import ANY, MagicMock, patch
 import pytest
+from core.model.inference import UploadAudio
 from core.ports.simple_storage_port import SimpleStoragePort
 
 from tests.mocks.minio_mock import MinioMock
@@ -15,10 +17,15 @@ def simple_storage_port():
 
 
 def test_store_inference_file(simple_storage_port: SimpleStoragePort):
-    def store_inference_file(inference_id, file_type, file) -> None:
+    def store_inference_file(
+        inference_id: str, file_type: str, extension: str, file: BytesIO
+    ) -> None:
         pass
 
-    file = UploadFile("tests/mocks/audio_files/audio1.wav")
+    file = UploadAudio(
+        content=UploadFile("tests/mocks/audio_files/audio1.wav").file.read(),
+        filename="tests/mocks/audio_files/audio1.wav",
+    )
 
     with patch.object(
         adapter_instance,
@@ -34,7 +41,8 @@ def test_store_inference_file(simple_storage_port: SimpleStoragePort):
         mock_store_inference_file.assert_called_once_with(
             "507f191e810c19729de860ea",
             "fake_file_type",
-            file,
+            ".wav",
+            ANY,
         )
 
 

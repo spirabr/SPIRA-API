@@ -2,7 +2,7 @@ from fastapi import UploadFile
 from h11 import Data
 from mock import MagicMock, patch, call
 import pytest
-from core.model.inference import InferenceFiles
+from core.model.inference import InferenceFiles, UploadAudio
 from core.ports.simple_storage_port import SimpleStoragePort
 from core.services.inference_service import _store_files
 from tests.mocks.minio_mock import MinioMock
@@ -23,10 +23,18 @@ def test_store_files_success(simple_storage_port: SimpleStoragePort):
         "store_inference_file",
         MagicMock(side_effect=fake_store_inference_file),
     ) as mock_store_inference_file:
+
+        vogal_sustentada = UploadFile("tests/mocks/audio_files/audio1.wav")
+        parlenda_ritmada = UploadFile("tests/mocks/audio_files/audio2.wav")
+        frase = UploadFile("tests/mocks/audio_files/audio3.wav")
         inference_files = InferenceFiles(
-            vogal_sustentada=UploadFile("tests/mocks/audio_files/audio1.wav"),
-            parlenda_ritmada=UploadFile("tests/mocks/audio_files/audio2.wav"),
-            frase=UploadFile("tests/mocks/audio_files/audio3.wav"),
+            vogal_sustentada=UploadAudio(
+                content=vogal_sustentada.file.read(), filename=vogal_sustentada.filename
+            ),
+            parlenda_ritmada=UploadAudio(
+                content=parlenda_ritmada.file.read(), filename=parlenda_ritmada.filename
+            ),
+            frase=UploadAudio(content=frase.file.read(), filename=frase.filename),
         )
         _store_files(simple_storage_port, inference_files, "fake_inference_id")
         calls = [
