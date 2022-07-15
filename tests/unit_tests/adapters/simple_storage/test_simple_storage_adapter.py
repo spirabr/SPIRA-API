@@ -25,11 +25,15 @@ def test_store_inference_file(simple_storage_adapter: MinioAdapter):
         MagicMock(side_effect=fake_put_object),
     ) as mock_method:
         file = UploadFile("tests/mocks/audio_files/audio1.wav")
-        simple_storage_adapter.store_inference_file(
-            "fake_inference_id",
-            "fake_file_type",
-            file,
-        )
+        try:
+            simple_storage_adapter.store_inference_file(
+                "fake_inference_id",
+                "fake_file_type",
+                file,
+            )
+            assert True
+        except:
+            assert False
         mock_method.assert_called_once_with(
             "mock-bucket",
             "fake_inference_id/fake_file_type.wav",
@@ -60,7 +64,11 @@ def test_remove_inference_directory(simple_storage_adapter: MinioAdapter):
         "remove_objects",
         MagicMock(side_effect=fake_remove_objects),
     ) as mock_remove_method:
-        simple_storage_adapter.remove_inference_directory("fake_inference_id")
+        try:
+            simple_storage_adapter.remove_inference_directory("fake_inference_id")
+            assert True
+        except:
+            assert False
         mock_list_method.assert_called_once_with(
             "mock-bucket", "fake_inference_id", recursive=True
         )
