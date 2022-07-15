@@ -17,7 +17,7 @@ class NATSAdapter:
         self._receiving_nc = Client()
         self._subs: dict = {}
 
-    async def send_message(self, message: dict, publishing_topic: str):
+    async def send_message(self, message: str, publishing_topic: str):
         """sends a message in the given topic
 
         Args:
@@ -33,9 +33,7 @@ class NATSAdapter:
             ping_interval=1,
             allow_reconnect=True,
         )
-        await self._nc.publish(
-            publishing_topic, str.encode(str(message), encoding="utf-8")
-        )
+        await self._nc.publish(publishing_topic, str.encode(message, encoding="utf-8"))
         await self._nc.close()
 
     async def subscribe(self, receiving_topic: str):
