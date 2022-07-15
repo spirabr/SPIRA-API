@@ -1,6 +1,5 @@
 from io import BytesIO
 import os
-from fastapi import UploadFile
 from minio import Minio
 from minio.deleteobjects import DeleteObject
 

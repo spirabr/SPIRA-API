@@ -2,12 +2,7 @@ from typing import List, Optional
 from fastapi import (
     APIRouter,
     Depends,
-    File,
     HTTPException,
-    File,
-    Form,
-    UploadFile,
-    status,
 )
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
