@@ -5,6 +5,16 @@ from core.ports.simple_storage_port import SimpleStoragePort
 
 
 class Ports:
+    """Object to store the project ports
+
+    Args:
+        database_port (DatabasePort) : database port instance
+        message_service_port (MessageServicePort) : message service port instance
+        authentication_port (AuthenticationPort) : authentication port instance
+        simple_storage_port (SimpleStoragePort) : simple storage port instance
+
+    """
+
     def __init__(
         self,
         database_port: DatabasePort,
