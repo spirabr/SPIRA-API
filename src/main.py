@@ -10,55 +10,57 @@ from core.ports.message_service_port import MessageServicePort
 
 from adapters.routers.app import run_app
 from adapters.listener.message_listener import run_listener
+from core.ports.ports import Ports
 from core.ports.simple_storage_port import SimpleStoragePort
 from settings import (
     Settings,
 )
 
 
-def configure_ports():
-    ports = {}
-    ports["database_port"] = DatabasePort(
-        MongoAdapter(
-            Settings.database_settings.mongo_conn_url,
-            Settings.database_settings.database_name,
-            Settings.database_settings.user_collection_name,
-            Settings.database_settings.inference_collection_name,
-            Settings.database_settings.model_collection_name,
-            Settings.database_settings.result_collection_name,
-        )
-    )
-    ports["authentication_port"] = AuthenticationPort(
-        AuthenticationAdapter(
-            Settings.authentication_settings.expire_time,
-            Settings.authentication_settings.key,
-            Settings.authentication_settings.algorithm,
-            Settings.authentication_settings.context_scheme,
-            Settings.authentication_settings.deprecated,
-        )
-    )
-    ports["message_service_port"] = MessageServicePort(
-        NATSAdapter(
-            Settings.message_service_settings.nats_conn_url,
-        )
-    )
-    ports["simple_storage_port"] = SimpleStoragePort(
-        MinioAdapter(
-            Settings.simple_storage_settings.minio_conn_url,
-            Settings.simple_storage_settings.minio_access_key,
-            Settings.simple_storage_settings.minio_secret_key,
-            Settings.simple_storage_settings.bucket_name,
-        )
+def configure_ports() -> Ports:
+    ports = Ports(
+        DatabasePort(
+            MongoAdapter(
+                Settings.database_settings.mongo_conn_url,
+                Settings.database_settings.database_name,
+                Settings.database_settings.user_collection_name,
+                Settings.database_settings.inference_collection_name,
+                Settings.database_settings.model_collection_name,
+                Settings.database_settings.result_collection_name,
+            )
+        ),
+        MessageServicePort(
+            NATSAdapter(
+                Settings.message_service_settings.nats_conn_url,
+            )
+        ),
+        AuthenticationPort(
+            AuthenticationAdapter(
+                Settings.authentication_settings.expire_time,
+                Settings.authentication_settings.key,
+                Settings.authentication_settings.algorithm,
+                Settings.authentication_settings.context_scheme,
+                Settings.authentication_settings.deprecated,
+            )
+        ),
+        SimpleStoragePort(
+            MinioAdapter(
+                Settings.simple_storage_settings.minio_conn_url,
+                Settings.simple_storage_settings.minio_access_key,
+                Settings.simple_storage_settings.minio_secret_key,
+                Settings.simple_storage_settings.bucket_name,
+            )
+        ),
     )
     return ports
 
 
-def create_app_process(ports: dict):
+def create_app_process(ports: Ports):
     app_process = Thread(target=run_app, args=(ports,))
     return app_process
 
 
-def create_listener_process(ports: dict):
+def create_listener_process(ports: Ports):
     listener_process = Thread(target=run_listener, args=(ports,))
     return listener_process
 

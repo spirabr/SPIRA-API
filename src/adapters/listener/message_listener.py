@@ -2,6 +2,7 @@ from asyncio import sleep, get_event_loop
 import asyncio
 from core.ports.database_port import DatabasePort
 from core.ports.message_service_port import MessageServicePort
+from core.ports.ports import Ports
 from core.ports.simple_storage_port import SimpleStoragePort
 
 from core.services.message_listener_service import (
@@ -32,11 +33,11 @@ async def listen_for_messages_loop(
             raise e
 
 
-def run_listener(ports: dict):
+def run_listener(ports: Ports):
     asyncio.new_event_loop().run_until_complete(
         listen_for_messages_loop(
-            ports["simple_storage_port"],
-            ports["message_service_port"],
-            ports["database_port"],
+            ports.simple_storage_port,
+            ports.message_service_port,
+            ports.database_port,
         )
     )

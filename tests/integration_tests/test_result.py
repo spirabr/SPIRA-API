@@ -18,7 +18,7 @@ database_port_instance = DatabasePort(MongoMock())
 @pytest.fixture()
 def client_with_auth():
     ports = configure_ports_with_auth()
-    ports["database_port"] = database_port_instance
+    ports.database_port = database_port_instance
     app = create_app(ports)
     yield TestClient(app)
 
