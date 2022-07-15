@@ -1,3 +1,5 @@
+from core.model.exception import LogicException
+from core.model.result import ResultUpdate
 from core.ports.database_port import DatabasePort
 from core.ports.message_service_port import MessageServicePort
 from core.ports.simple_storage_port import SimpleStoragePort
@@ -9,7 +11,10 @@ async def subscribe_to_channel(
     message_service_port: MessageServicePort,
     central_channel: str,
 ):
-    await message_service_port.subscribe(central_channel)
+    try:
+        await message_service_port.subscribe(central_channel)
+    except:
+        raise LogicException("cound not subscribe to channel")
 
 
 async def listen_for_messages_and_update(
@@ -20,10 +25,22 @@ async def listen_for_messages_and_update(
 ):
     try:
         result_update = await message_service_port.wait_for_message(central_channel)
+
+        _update_database(database_port, result_update)
+
+        simple_storage_port.remove_inference_directory(result_update.inference_id)
+
+    except LogicException:
+        raise
+    except:
+        raise LogicException("cound not create new inference")
+
+
+def _update_database(database_port: DatabasePort, result_update: ResultUpdate):
+    try:
         database_port.update_result(result_update)
         database_port.update_inference_status(
             result_update.inference_id, Status.completed_status
         )
-        simple_storage_port.remove_inference_directory(result_update.inference_id)
-    except Exception as e:
-        print(e, flush=True)
+    except:
+        raise LogicException("cound not update database")
