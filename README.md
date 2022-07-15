@@ -24,19 +24,19 @@ Dependency management is done with [`poetry`](https://python-poetry.org/docs/) a
 
 ## Running the project
 
-### Build the docker-compose:
+Build the docker-compose:
 
 ```
 docker-compose build
 ```
 
-### Run the docker-compose:
+Run the docker-compose:
 
 ```
 docker-compose up
 ```
 
-### Run the tests:
+Run the tests:
 
 ```
 make -f tests.mk
