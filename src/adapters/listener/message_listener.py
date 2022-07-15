@@ -17,9 +17,13 @@ async def listen_for_messages_loop(
     message_service_port: MessageServicePort,
     database_port: DatabasePort,
 ):
-    await subscribe_to_channel(
-        message_service_port, Settings.message_listener_settings.central_channel
-    )
+    try:
+        await subscribe_to_channel(
+            message_service_port, Settings.message_listener_settings.central_channel
+        )
+    except Exception as e:
+        print(e, flush=True)
+
     while True:
         await sleep(Settings.message_listener_settings.loop_interval)
         try:
@@ -30,7 +34,7 @@ async def listen_for_messages_loop(
                 Settings.message_listener_settings.central_channel,
             )
         except Exception as e:
-            raise e
+            print(e, flush=True)
 
 
 def run_listener(ports: Ports):

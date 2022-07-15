@@ -21,17 +21,18 @@ def get_inference_result(
         inference = inference_service.get_by_id(
             authentication_port, database_port, inference_id, user_id, token
         )
-    except LogicException as e:
-        raise e
-    result = database_port.get_result_by_inference_id(inference_id)
-    try:
+
         result = database_port.get_result_by_inference_id(inference_id)
+        if result is None:
+            raise LogicException("result not found", status.HTTP_404_NOT_FOUND)
+
+    except LogicException:
+        raise
     except:
         raise LogicException(
             "inference id is not valid", status.HTTP_422_UNPROCESSABLE_ENTITY
         )
-    if result is None:
-        raise LogicException("result not found", status.HTTP_404_NOT_FOUND)
+
     return inference, result
 
 
@@ -42,30 +43,47 @@ def create_inference_result(
     inference_id: str,
     token: Token,
 ):
-    try:
-        decoded_token_content = authentication_port.decode_token(token)
-        user = database_port.get_user_by_username(decoded_token_content.username)
-    except:
-        raise DefaultExceptions.credentials_exception
-
-    if user.id != user_id:
-        raise DefaultExceptions.forbidden_exception
 
     try:
+        _authenticate_user(authentication_port, database_port, user_id, token)
+
         new_result = ResultCreation(
             inference_id=inference_id, output=-1, diagnosis="not available"
         )
+        database_port.insert_result(new_result)
 
+    except LogicException:
+        raise
     except:
         raise LogicException(
             "cound not create new inference result",
             status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
-    database_port.insert_result(new_result)
 
 
 def update_inference_result(database_port: DatabasePort, result_update: ResultUpdate):
     try:
         database_port.update_result(result_update)
     except:
+        raise LogicException(
+            "cound not create new inference result",
+            status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
+
+def _authenticate_user(
+    authentication_port: AuthenticationPort,
+    database_port: DatabasePort,
+    user_id: str,
+    token: Token,
+):
+    try:
+        decoded_token_content = authentication_port.decode_token(token)
+        user = database_port.get_user_by_username(decoded_token_content.username)
+        if user.id != user_id:
+            raise DefaultExceptions.forbidden_exception
+
+    except LogicException:
         raise
+    except:
+        raise DefaultExceptions.credentials_exception

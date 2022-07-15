@@ -15,37 +15,22 @@ def get_by_id(
     user_id: str,
     token: Token,
 ) -> Union[User, LogicException]:
-    if not authentication_port.validate_token(token):
-        raise DefaultExceptions.credentials_exception
     try:
+        if not authentication_port.validate_token(token):
+            raise DefaultExceptions.credentials_exception
+
         user = database_port.get_user_by_id(user_id)
+
+        if user is None:
+            raise LogicException("user not found", status.HTTP_404_NOT_FOUND)
+
+    except LogicException:
+        raise
     except:
         raise LogicException(
             "user id is not valid", status.HTTP_422_UNPROCESSABLE_ENTITY
         )
-    if user is None:
-        raise LogicException("user not found", status.HTTP_404_NOT_FOUND)
-    return user
 
-
-def _authenticate_user(
-    authentication_port: AuthenticationPort,
-    database_port: DatabasePort,
-    username: str,
-    plain_password: str,
-) -> Optional[User]:
-    user_with_password: UserWithPassword = (
-        database_port.get_user_by_username_with_password(username)
-    )
-    if user_with_password is None or not authentication_port.verify_password(
-        plain_password, user_with_password.password
-    ):
-        raise
-    user: User = User(
-        id=user_with_password.id,
-        username=user_with_password.username,
-        email=user_with_password.email,
-    )
     return user
 
 
@@ -61,10 +46,43 @@ def authenticate_and_generate_token(
         )
         if user is None:
             raise
+
+        token = authentication_port.generate_token(
+            data=TokenData(username=user.username)
+        )
     except:
         raise DefaultExceptions.user_form_exception
-    token = authentication_port.generate_token(data=TokenData(username=user.username))
+
     return token
+
+
+def create_new_user(
+    authentication_port: AuthenticationPort,
+    database_port: DatabasePort,
+    user_form: UserCreationForm,
+    token: Token,
+):
+
+    try:
+        if not authentication_port.validate_token(token):
+            raise DefaultExceptions.credentials_exception
+
+        _validate_new_user(database_port, user_form)
+
+        new_user = UserCreation(
+            username=user_form.username,
+            email=user_form.email,
+            password=user_form.password,
+        )
+        new_user.password = authentication_port.get_password_hash(new_user.password)
+        database_port.insert_user(new_user)
+
+    except LogicException:
+        raise
+    except:
+        raise LogicException(
+            "cound not create new user", status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 
 def _validate_new_user(
@@ -95,27 +113,21 @@ def _validate_new_user(
         )
 
 
-def create_new_user(
+def _authenticate_user(
     authentication_port: AuthenticationPort,
     database_port: DatabasePort,
-    user_form: UserCreationForm,
-    token: Token,
-):
-    if not authentication_port.validate_token(token):
-        raise DefaultExceptions.credentials_exception
-    try:
-        _validate_new_user(database_port, user_form)
-    except LogicException as e:
-        raise e
-    try:
-        new_user = UserCreation(
-            username=user_form.username,
-            email=user_form.email,
-            password=user_form.password,
-        )
-        new_user.password = authentication_port.get_password_hash(new_user.password)
-        database_port.insert_user(new_user)
-    except:
-        raise LogicException(
-            "cound not create new user", status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+    username: str,
+    plain_password: str,
+) -> Optional[User]:
+    user_with_password = database_port.get_user_by_username_with_password(username)
+    if user_with_password is None or not authentication_port.verify_password(
+        plain_password, user_with_password.password
+    ):
+        raise
+
+    user: User = User(
+        id=user_with_password.id,
+        username=user_with_password.username,
+        email=user_with_password.email,
+    )
+    return user
