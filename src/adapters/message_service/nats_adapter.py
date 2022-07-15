@@ -22,7 +22,7 @@ class NATSAdapter:
         await self._nc.close()
 
     async def subscribe(self, receiving_channel: str):
-        self._receiving_nc = await nats.connect(
+        await self._receiving_nc.connect(
             self._conn_url,
             ping_interval=1,
             allow_reconnect=True,
