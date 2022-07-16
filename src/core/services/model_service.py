@@ -14,6 +14,23 @@ def get_by_id(
     model_id: str,
     token: Token,
 ) -> Union[Model, LogicException]:
+    """gets model by model id
+
+    Args:
+        authentication_port (AuthenticationPort) : authentication port
+        database_port (DatabasePort) : database port
+        model_id (str) : model id
+        token (Token) : authentication token
+
+    Returns:
+        model object
+
+    Raises:
+        unauthorized exception, if not authenticated
+        not found exception, if model was not found in database
+        unprocessable entity exception, if model id is not valid
+
+    """
     try:
         if not authentication_port.validate_token(token):
             raise DefaultExceptions.credentials_exception
@@ -38,6 +55,21 @@ def get_list(
     database_port: DatabasePort,
     token: Token,
 ) -> Union[List[Model], LogicException]:
+    """gets model list
+
+    Args:
+        authentication_port (AuthenticationPort) : authentication port
+        database_port (DatabasePort) : database port
+        token (Token): authentication token
+
+    Returns:
+        list of model objects
+
+    Raises:
+        unauthorized exception, if not authenticated
+        internal server error exception, if list could not be retrieved
+
+    """
     try:
         if not authentication_port.validate_token(token):
             raise DefaultExceptions.credentials_exception
