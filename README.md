@@ -12,11 +12,11 @@ The tests are contained in the `tests` directory.
 
 
 
-## Enviroment Variables
+## Environment Variables
 
 The file `docker-compose.yml` also specifies the necessary env files for the project, that should be contained in the `envs` directory.
 
-The variables of each env file are the same as the attributes of the classes declared in `src/settings.py`. The main application uses pydantic to directly bind the enviroment variables to the respective attributes of the Settings classes. Additional enviroment files for the services other than the main one are specified by their respective documentations and the files should also be contained in in the `envs` directory.
+The variables of each env file are the same as the attributes of the classes declared in `src/settings.py`. The main application uses pydantic to directly bind the environment variables to the respective attributes of the Settings classes. Additional environment files for the services other than the main one are specified by their respective documentations and the files should also be contained in in the `envs` directory.
 
 ## Dependencies
 

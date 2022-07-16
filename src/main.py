@@ -18,6 +18,15 @@ from settings import (
 
 
 def configure_ports() -> Ports:
+    """Instantiates Ports and Adapters of the services used in the application
+
+    Args:
+        None
+
+    Returns:
+        Ports object with port instances as attributes
+
+    """
     ports = Ports(
         DatabasePort(
             MongoAdapter(
@@ -55,12 +64,30 @@ def configure_ports() -> Ports:
     return ports
 
 
-def create_app_process(ports: Ports):
+def create_app_process(ports: Ports) -> Thread:
+    """Creates the thread for the API app process
+
+    Args:
+        ports (Ports): Ports object with ports instances
+
+    Returns:
+        Thread object with the app process
+
+    """
     app_process = Thread(target=run_app, args=(ports,))
     return app_process
 
 
 def create_listener_process(ports: Ports):
+    """Creates the thread for the message listener process
+
+    Args:
+        ports (Ports): Ports object with ports instances
+
+    Returns:
+        Thread object with the listener process
+
+    """
     listener_process = Thread(target=run_listener, args=(ports,))
     return listener_process
 

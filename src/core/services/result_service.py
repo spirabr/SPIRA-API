@@ -17,6 +17,27 @@ def get_inference_result(
     user_id: str,
     token: Token,
 ) -> Tuple[Inference, Result]:
+    """gets the result object of an inference from database
+
+    Args:
+        authentication_port (AuthenticationPort) : authentication port
+        database_port (DatabasePort) : database port
+        inference_id (str) : inference id
+        user_id (str) : user id
+        token (Token): authentication token
+
+    Returns:
+        A tuple where the first element is the inference whose id is given as
+        an argument and the correspondent inference result object
+
+    Raises:
+        unauthorized exception, if not authenticated
+        forbidden exception, if token does not match user in request
+        not found exception, if inference was not found in database
+        unprocessable entity exception, if inference id is not valid
+        not found exception, if result was not found in database
+
+    """
     try:
         inference = inference_service.get_by_id(
             authentication_port, database_port, inference_id, user_id, token
@@ -28,10 +49,6 @@ def get_inference_result(
 
     except LogicException:
         raise
-    except:
-        raise LogicException(
-            "inference id is not valid", status.HTTP_422_UNPROCESSABLE_ENTITY
-        )
 
     return inference, result
 
@@ -42,10 +59,29 @@ def create_inference_result(
     user_id: str,
     inference_id: str,
     token: Token,
-):
+) -> None:
+    """creates the result object of an inference and inserts it in database
 
+    Args:
+        authentication_port (AuthenticationPort) : authentication port
+        database_port (DatabasePort) : database port
+        user_id (str) : user id
+        inference_id (str) : inference id
+        token (Token): authentication token
+
+    Returns:
+        None
+
+    Raises:
+        unauthorized exception, if not authenticated
+        forbidden exception, if token does not match user in request
+        internal server exception, if there was an error creating result object
+
+    """
     try:
-        _authenticate_user(authentication_port, database_port, user_id, token)
+        inference_service._authenticate_user(
+            authentication_port, database_port, user_id, token
+        )
 
         new_result = ResultCreation(
             inference_id=inference_id, output=-1, diagnosis="not available"
@@ -61,7 +97,22 @@ def create_inference_result(
         )
 
 
-def update_inference_result(database_port: DatabasePort, result_update: ResultUpdate):
+def update_inference_result(
+    database_port: DatabasePort, result_update: ResultUpdate
+) -> None:
+    """updates the result object in database
+
+    Args:
+        database_port (DatabasePort) : database port
+        result_update (ResultUpdate) : result update form
+
+    Returns:
+        None
+
+    Raises:
+        internal server exception, if there was an error updating result object
+
+    """
     try:
         database_port.update_result(result_update)
     except:
@@ -69,21 +120,3 @@ def update_inference_result(database_port: DatabasePort, result_update: ResultUp
             "cound not create new inference result",
             status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
-
-
-def _authenticate_user(
-    authentication_port: AuthenticationPort,
-    database_port: DatabasePort,
-    user_id: str,
-    token: Token,
-):
-    try:
-        decoded_token_content = authentication_port.decode_token(token)
-        user = database_port.get_user_by_username(decoded_token_content.username)
-        if user.id != user_id:
-            raise DefaultExceptions.forbidden_exception
-
-    except LogicException:
-        raise
-    except:
-        raise DefaultExceptions.credentials_exception

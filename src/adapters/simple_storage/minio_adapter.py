@@ -5,7 +5,19 @@ from minio.deleteobjects import DeleteObject
 
 
 class MinioAdapter:
-    def __init__(self, conn_url, access_key, secret_key, bucket_name):
+    """Adapter for the minIO server
+
+    Args:
+        minio_conn_url (str) : connection url to minIO server container
+        bucket_name (str) : name of the bucket used by the app
+        minio_access_key (str) : minio access credentials
+        minio_secret_key (str) : minio credentials
+
+    """
+
+    def __init__(
+        self, conn_url: str, access_key: str, secret_key: str, bucket_name: str
+    ):
         self._client = Minio(
             conn_url, access_key=access_key, secret_key=secret_key, secure=False
         )
@@ -16,7 +28,18 @@ class MinioAdapter:
     def store_inference_file(
         self, inference_id: str, file_type: str, file_extension: str, raw_file: BytesIO
     ):
+        """stores the file in minIO server
 
+        Args:
+            inference_id (dict) : inference id
+            file_type (str) : type of the file being stored
+            file_extension (dict) : file extension
+            raw_file (BytesIO) : file stream
+
+        Returns:
+            None
+
+        """
         length = raw_file.getbuffer().nbytes
         self._client.put_object(
             self._bucket_name,
@@ -26,6 +49,15 @@ class MinioAdapter:
         )
 
     def remove_inference_directory(self, inference_id: str):
+        """removes the inference directory and files from minIO server
+
+        Args:
+            inference_id (dict) : inference id
+
+        Returns:
+            None
+
+        """
         delete_object_list = map(
             lambda x: DeleteObject(x.object_name),
             self._client.list_objects(self._bucket_name, inference_id, recursive=True),
