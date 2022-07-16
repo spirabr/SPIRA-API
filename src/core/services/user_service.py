@@ -15,6 +15,23 @@ def get_by_id(
     user_id: str,
     token: Token,
 ) -> Union[User, LogicException]:
+    """gets user by user id
+
+    Args:
+        authentication_port (AuthenticationPort) : authentication port
+        database_port (DatabasePort) : database port
+        user_id (str) : user id
+        token (Token) : authentication token
+
+    Returns:
+        user object
+
+    Raises:
+        unauthorized exception, if not authenticated
+        not found exception, if user was not found in database
+        unprocessable entity exception, if user id is not valid
+
+    """
     try:
         if not authentication_port.validate_token(token):
             raise DefaultExceptions.credentials_exception
@@ -40,6 +57,20 @@ def authenticate_and_generate_token(
     username: str,
     password: str,
 ) -> Token:
+    """validates user credentials and generates the token
+
+    Args:
+        authentication_port (AuthenticationPort) : authentication port
+        database_port (DatabasePort) : database port
+        username (str) : username
+        password (str) : plain password
+
+    Returns:
+        generated token
+
+    Raises:
+        invalid username or password exception, if so
+    """
     try:
         user: User = _authenticate_user(
             authentication_port, database_port, username, password
@@ -62,7 +93,23 @@ def create_new_user(
     user_form: UserCreationForm,
     token: Token,
 ):
+    """creates new user
 
+    Args:
+        authentication_port (AuthenticationPort) : authentication port
+        database_port (DatabasePort) : database port
+        user_form (UserCreationForm) : user creation form
+        token (Token) : authentication token
+
+    Returns:
+        None
+
+    Raises:
+        unauthorized exception, if not authenticated
+        invalid user form exception, if so
+        internal server error exception, if the server was unable to create the user
+
+    """
     try:
         if not authentication_port.validate_token(token):
             raise DefaultExceptions.credentials_exception
@@ -89,6 +136,21 @@ def _validate_new_user(
     database_port: DatabasePort,
     user_form: UserCreationForm,
 ):
+    """validates the new user
+
+    Args:
+        database_port (DatabasePort) : database port
+        user_form (UserCreationForm) : user creation form
+
+    Returns:
+        None
+
+    Raises:
+        bad request exception, if passwords don't match
+        bad request exception, if username is already registered
+        bad request exception, if email is already registered
+        bad request exception, if email is invalid
+    """
     if user_form.password != user_form.password_confirmation:
         raise LogicException(
             "password and password confirmation don't match",
@@ -119,6 +181,21 @@ def _authenticate_user(
     username: str,
     plain_password: str,
 ) -> Optional[User]:
+    """authenticates user with the given password
+
+    Args:
+        authentication_port (AuthenticationPort) : authentication port
+        database_port (DatabasePort) : database port
+        username (str) : username
+        plain_password (str) : plain password given in user form
+
+    Returns:
+        user object form database
+
+    Raises:
+        exception, if user was not on database or passwords don't match
+    """
+
     user_with_password = database_port.get_user_by_username_with_password(username)
     if user_with_password is None or not authentication_port.verify_password(
         plain_password, user_with_password.password
