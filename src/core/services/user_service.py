@@ -15,7 +15,7 @@ def get_by_id(
     user_id: str,
     token: Token,
 ) -> Union[User, LogicException]:
-    """gets user by user id
+    """gets user by user id from database
 
     Args:
         authentication_port (AuthenticationPort) : authentication port
@@ -93,7 +93,7 @@ def create_new_user(
     user_form: UserCreationForm,
     token: Token,
 ):
-    """creates new user
+    """creates new user and inserts it in database
 
     Args:
         authentication_port (AuthenticationPort) : authentication port

@@ -14,7 +14,7 @@ def get_by_id(
     model_id: str,
     token: Token,
 ) -> Union[Model, LogicException]:
-    """gets model by model id
+    """gets model by model id from database
 
     Args:
         authentication_port (AuthenticationPort) : authentication port
@@ -55,7 +55,7 @@ def get_list(
     database_port: DatabasePort,
     token: Token,
 ) -> Union[List[Model], LogicException]:
-    """gets model list
+    """gets model list from database
 
     Args:
         authentication_port (AuthenticationPort) : authentication port

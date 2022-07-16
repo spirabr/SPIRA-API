@@ -26,7 +26,7 @@ def get_by_id(
     user_id: str,
     token: Token,
 ) -> Union[Inference, LogicException]:
-    """gets inference by id
+    """gets inference by id from database
 
     Args:
         authentication_port (AuthenticationPort) : authentication port
@@ -67,7 +67,7 @@ def get_list(
     user_id: str,
     token: Token,
 ) -> Union[List[Inference], LogicException]:
-    """gets inference list
+    """gets inference list from database
 
     Args:
         authentication_port (AuthenticationPort) : authentication port
