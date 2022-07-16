@@ -10,7 +10,7 @@ from core.model.constants import Status
 async def subscribe_to_channel(
     message_service_port: MessageServicePort,
     central_channel: str,
-):
+) -> None:
     """subscribes the listener service to a channel in the message service
 
     Args:
@@ -35,7 +35,7 @@ async def listen_for_messages_and_update(
     message_service_port: MessageServicePort,
     database_port: DatabasePort,
     central_channel: str,
-):
+) -> None:
     """waits for a message to arrive at central channel in message service
         and updates the database with the received data
 
@@ -66,7 +66,7 @@ async def listen_for_messages_and_update(
         raise LogicException("an error occurred while waiting for the messages")
 
 
-def _update_database(database_port: DatabasePort, result_update: ResultUpdate):
+def _update_database(database_port: DatabasePort, result_update: ResultUpdate) -> None:
     """updates the database with the result update
 
     Args:

@@ -107,8 +107,8 @@ async def create_new_inference(
     inference_form: InferenceCreationForm,
     inference_files: InferenceFiles,
     token: Token,
-):
-    """creates new inference
+) -> str:
+    """creates new inference and inserts it in database
 
     Args:
         simple_storage_port (SimpleStoragePort) : simple storage port
@@ -168,7 +168,7 @@ def _authenticate_user(
     database_port: DatabasePort,
     user_id: str,
     token: Token,
-):
+) -> None:
     """authenticates requesting user
 
     Args:
@@ -200,7 +200,7 @@ def _authenticate_user(
 def _validate_new_inference(
     database_port: DatabasePort,
     inference_form: InferenceCreationForm,
-):
+) -> None:
     """validates inference form data
 
     Args:
@@ -230,8 +230,8 @@ def _validate_new_inference(
 
 def _store_files(
     simple_storage_port: SimpleStoragePort, files: InferenceFiles, inference_id: str
-):
-    """store inference files in simple storage
+) -> None:
+    """stores inference files in simple storage
 
     Args:
         simple_storage_port (SimpleStoragePort) : simple storage port

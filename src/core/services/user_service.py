@@ -92,7 +92,7 @@ def create_new_user(
     database_port: DatabasePort,
     user_form: UserCreationForm,
     token: Token,
-):
+) -> None:
     """creates new user and inserts it in database
 
     Args:
