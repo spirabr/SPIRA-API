@@ -26,7 +26,25 @@ def get_by_id(
     user_id: str,
     token: Token,
 ) -> Union[Inference, LogicException]:
+    """gets inference by id
 
+    Args:
+        authentication_port (AuthenticationPort) : authentication port
+        database_port (DatabasePort) : database port
+        inference_id (str) : inference id
+        user_id (str) : user id
+        token (Token): authentication token
+
+    Returns:
+        inference object
+
+    Raises:
+        unauthorized exception, if not authenticated
+        forbidden exception, if token does not match user in request
+        not found exception, if inference was not found in database
+        unprocessable entity exception, if inference id is not valid
+
+    """
     try:
         _authenticate_user(authentication_port, database_port, user_id, token)
         inference = database_port.get_inference_by_id(inference_id, user_id)
@@ -49,7 +67,23 @@ def get_list(
     user_id: str,
     token: Token,
 ) -> Union[List[Inference], LogicException]:
+    """gets inference list
 
+    Args:
+        authentication_port (AuthenticationPort) : authentication port
+        database_port (DatabasePort) : database port
+        user_id (str) : user id
+        token (Token): authentication token
+
+    Returns:
+        list of inference objects
+
+    Raises:
+        unauthorized exception, if not authenticated
+        forbidden exception, if token does not match user in request
+        internal server error exception, if list could not be retrieved
+
+    """
     try:
         _authenticate_user(authentication_port, database_port, user_id, token)
         inference_list = database_port.get_inference_list(user_id)
@@ -74,9 +108,30 @@ async def create_new_inference(
     inference_files: InferenceFiles,
     token: Token,
 ):
+    """creates new inference
+
+    Args:
+        simple_storage_port (SimpleStoragePort) : simple storage port
+        message_service_port (MessageServicePort): message service port
+        authentication_port (AuthenticationPort) : authentication port
+        database_port (DatabasePort) : database port
+        user_id (str) : user id
+        inference_form (InferenceCreationForm) : new inference form
+        inference_files (InferenceFiles) : inference request files
+        token (Token): authentication token
+
+    Returns:
+        new inference id
+
+    Raises:
+        unauthorized exception, if not authenticated
+        forbidden exception, if token does not match user in request
+        internal server error exception, if inference could not be created
+
+    """
     try:
         _authenticate_user(authentication_port, database_port, user_id, token)
-        _validate_new_inference(authentication_port, database_port, inference_form)
+        _validate_new_inference(database_port, inference_form)
 
         new_inference = InferenceCreation(
             age=inference_form.age,
@@ -114,6 +169,22 @@ def _authenticate_user(
     user_id: str,
     token: Token,
 ):
+    """authenticates requesting user
+
+    Args:
+        authentication_port (AuthenticationPort) : authentication port
+        database_port (DatabasePort) : database port
+        user_id (str) : user id
+        token (Token): authentication token
+
+    Returns:
+        None
+
+    Raises:
+        unauthorized exception, if not authenticated
+        forbidden exception, if token does not match user in request
+
+    """
     try:
         decoded_token_content = authentication_port.decode_token(token)
         user = database_port.get_user_by_username(decoded_token_content.username)
@@ -127,10 +198,23 @@ def _authenticate_user(
 
 
 def _validate_new_inference(
-    authentication_port: AuthenticationPort,
     database_port: DatabasePort,
     inference_form: InferenceCreationForm,
 ):
+    """validates inference form data
+
+    Args:
+        database_port (DatabasePort) : database port
+        inference_form (InferenceCreationForm) : inference creation form
+
+    Returns:
+        None
+
+    Raises:
+        model not found exception, if inference form model is not in database
+        model id not valid exception, if inference form model id is not valid
+
+    """
     try:
         model = database_port.get_model_by_id(inference_form.model_id)
         if model is None:
@@ -147,6 +231,20 @@ def _validate_new_inference(
 def _store_files(
     simple_storage_port: SimpleStoragePort, files: InferenceFiles, inference_id: str
 ):
+    """store inference files in simple storage
+
+    Args:
+        simple_storage_port (SimpleStoragePort) : simple storage port
+        inference_files (InferenceFiles) : inference request files
+        inference_id (str) : inference id
+
+    Returns:
+        None
+
+    Raises:
+        internal server error exception, if inference could not be created
+
+    """
     try:
         file_types = InferenceFiles.__fields__.keys()
         for file_type in file_types:
