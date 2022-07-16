@@ -108,7 +108,8 @@ async def create_new_inference(
     inference_files: InferenceFiles,
     token: Token,
 ) -> str:
-    """creates new inference and inserts it in database
+    """creates new inference, inserts it in database,
+     stores inference files in simple storage and sends inference message to message service
 
     Args:
         simple_storage_port (SimpleStoragePort) : simple storage port
