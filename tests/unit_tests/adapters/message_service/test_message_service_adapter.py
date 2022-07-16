@@ -1,3 +1,4 @@
+import json
 from mock import ANY, MagicMock, call, patch
 from pydantic import BaseModel
 from adapters.message_service.nats_adapter import NATSAdapter
@@ -28,11 +29,13 @@ def test_send_message(message_service_adapter: NATSAdapter):
         try:
             asyncio.run(
                 message_service_adapter.send_message(
-                    {
-                        "anything": 123,
-                        "model_id": "fake_model_id",
-                        "inference_id": "fake_inference_id",
-                    },
+                    json.dumps(
+                        {
+                            "anything": 123,
+                            "model_id": "fake_model_id",
+                            "inference_id": "fake_inference_id",
+                        }
+                    ),
                     "fake_topic",
                 )
             )
@@ -41,16 +44,7 @@ def test_send_message(message_service_adapter: NATSAdapter):
             assert False
         mock_method.assert_called_once_with(
             "fake_topic",
-            str.encode(
-                str(
-                    {
-                        "anything": 123,
-                        "model_id": "fake_model_id",
-                        "inference_id": "fake_inference_id",
-                    }
-                ),
-                encoding="utf-8",
-            ),
+            b'{"anything": 123, "model_id": "fake_model_id", "inference_id": "fake_inference_id"}',
         )
 
 

@@ -21,7 +21,7 @@ class NATSAdapter:
         """sends a message in the given topic
 
         Args:
-            message (dict) : message to be sent
+            message (str) : message to be sent
             publishing_topic (str) : publishing topic
 
         Returns:
