@@ -3,19 +3,14 @@ from typing import Optional
 from typing import Literal
 
 sex_type = Literal["F", "M"]
-mask_use_type = Literal["unmasked", "light", "heavy"]
 
 
 class InferenceCreationForm(BaseModel):
+    rgh: str
     age: int
     sex: sex_type
-    mask_use: mask_use_type
-    SPO2: int
-    BPM: int
-    respiratory_frequency: int
-    tested_positive_covid_before: Optional[bool]
-    is_hospitalized: bool
-    IDC: Optional[int]
+    covid_status: str
+    mask_type: str
     model_id: str
 
 
