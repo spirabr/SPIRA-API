@@ -35,6 +35,9 @@ def test_send_message(message_service_port: MessageServicePort):
                     content=InferenceCreation(
                         age=30,
                         sex="M",
+                        rgh="fake_rgh",
+                        covid_status="Sim",
+                        mask_type="None",
                         model_id="fake_model_id",
                         status=Status.processing_status,
                         user_id="fake_user_id",
@@ -46,8 +49,11 @@ def test_send_message(message_service_port: MessageServicePort):
         mock_method.assert_called_once_with(
             json.dumps(
                 {
+                    "rgh": "fake_rgh",
                     "age": 30,
                     "sex": "M",
+                    "covid_status": "Sim",
+                    "mask_type": "None",
                     "model_id": "fake_model_id",
                     "status": Status.processing_status,
                     "user_id": "fake_user_id",

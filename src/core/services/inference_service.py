@@ -137,6 +137,9 @@ async def create_new_inference(
             age=inference_form.age,
             sex=inference_form.sex,
             user_id=user_id,
+            rgh=inference_form.rgh,
+            covid_status=inference_form.covid_status,
+            mask_type=inference_form.mask_type,
             model_id=inference_form.model_id,
             status=Status.processing_status,
         )

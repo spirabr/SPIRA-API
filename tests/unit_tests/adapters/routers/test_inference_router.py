@@ -44,6 +44,9 @@ def test_get_inference_by_id_success(client_with_auth: TestClient):
                 "id": "629f815d6abaa3c5e6cf7c16",
                 "sex": "M",
                 "age": 23,
+                "rgh": "fake_rgh",
+                "covid_status": "Sim",
+                "mask_type": "None",
                 "user_id": "507f191e810c19729de860ea",
                 "model_id": "629f992d45cda830033cf4cd",
                 "status": "processing",
@@ -66,6 +69,9 @@ def test_get_inference_by_id_success(client_with_auth: TestClient):
             "id": "629f815d6abaa3c5e6cf7c16",
             "sex": "M",
             "age": 23,
+            "rgh": "fake_rgh",
+            "covid_status": "Sim",
+            "mask_type": "None",
             "user_id": "507f191e810c19729de860ea",
             "model_id": "629f992d45cda830033cf4cd",
             "status": "processing",
@@ -106,6 +112,9 @@ def test_get_inference_list_success(client_with_auth: TestClient):
                     "id": "629f815d6abaa3c5e6cf7c16",
                     "sex": "M",
                     "age": 23,
+                    "rgh": "fake_rgh",
+                    "covid_status": "Sim",
+                    "mask_type": "None",
                     "user_id": "507f191e810c19729de860ea",
                     "model_id": "629f992d45cda830033cf4cd",
                     "status": "processing",
@@ -116,6 +125,9 @@ def test_get_inference_list_success(client_with_auth: TestClient):
                     "id": "629f81986abaa3c5e6cf7c17",
                     "sex": "F",
                     "age": 32,
+                    "rgh": "fake_rgh",
+                    "covid_status": "Sim",
+                    "mask_type": "None",
                     "user_id": "507f191e810c19729de860ea",
                     "model_id": "629f994245cda830033cf4cf",
                     "status": "processing",
@@ -140,6 +152,9 @@ def test_get_inference_list_success(client_with_auth: TestClient):
                     "id": "629f815d6abaa3c5e6cf7c16",
                     "sex": "M",
                     "age": 23,
+                    "rgh": "fake_rgh",
+                    "covid_status": "Sim",
+                    "mask_type": "None",
                     "user_id": "507f191e810c19729de860ea",
                     "model_id": "629f992d45cda830033cf4cd",
                     "status": "processing",
@@ -148,6 +163,9 @@ def test_get_inference_list_success(client_with_auth: TestClient):
                     "id": "629f81986abaa3c5e6cf7c17",
                     "sex": "F",
                     "age": 32,
+                    "rgh": "fake_rgh",
+                    "covid_status": "Sim",
+                    "mask_type": "None",
                     "user_id": "507f191e810c19729de860ea",
                     "model_id": "629f994245cda830033cf4cf",
                     "status": "processing",
@@ -194,6 +212,9 @@ def test_post_create_inference_and_result_success(client_with_auth: TestClient):
         fake_inference = {
             "sex": "F",
             "age": 23,
+            "rgh": "fake_rgh",
+            "covid_status": "Sim",
+            "mask_type": "None",
             "model_id": "629f992d45cda830033cf4cd",
         }
         fake_files = {
@@ -220,6 +241,9 @@ def test_post_create_inference_and_result_success(client_with_auth: TestClient):
                 **{
                     "sex": "F",
                     "age": 23,
+                    "rgh": "fake_rgh",
+                    "covid_status": "Sim",
+                    "mask_type": "None",
                     "model_id": "629f992d45cda830033cf4cd",
                 }
             ),
@@ -245,7 +269,14 @@ def test_post_create_inference_exception(client_with_auth: TestClient):
             "cound not create new inference", status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
-        fake_inference = {"sex": "F", "age": 23, "model_id": "629f992d45cda830033cf4cd"}
+        fake_inference = {
+            "sex": "F",
+            "age": 23,
+            "rgh": "fake_rgh",
+            "covid_status": "Sim",
+            "mask_type": "None",
+            "model_id": "629f992d45cda830033cf4cd",
+        }
         fake_files = {
             "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
             "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),
@@ -270,6 +301,9 @@ def test_post_create_inference_exception(client_with_auth: TestClient):
                 **{
                     "sex": "F",
                     "age": 23,
+                    "rgh": "fake_rgh",
+                    "covid_status": "Sim",
+                    "mask_type": "None",
                     "model_id": "629f992d45cda830033cf4cd",
                 }
             ),
@@ -295,6 +329,9 @@ def test_post_create_inference_no_token_header(client_without_auth: TestClient):
     fake_inference = {
         "sex": "F",
         "age": 23,
+        "rgh": "fake_rgh",
+        "covid_status": "Sim",
+        "mask_type": "None",
         "model_id": "629f992d45cda830033cf4cd",
     }
     fake_files = {

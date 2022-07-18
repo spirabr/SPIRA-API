@@ -43,6 +43,9 @@ def test_get_result_by_inference_id_success(client_with_auth: TestClient):
             "id": "629f815d6abaa3c5e6cf7c16",
             "sex": "M",
             "age": 23,
+            "rgh": "fake_rgh",
+            "covid_status": "Sim",
+            "mask_type": "None",
             "user_id": "507f191e810c19729de860ea",
             "model_id": "629f992d45cda830033cf4cd",
             "status": "processing",
@@ -62,6 +65,9 @@ def test_post_create_result_with_inference_success(client_with_auth: TestClient)
     fake_inference = {
         "sex": "F",
         "age": 23,
+        "rgh": "fake_rgh",
+        "covid_status": "Sim",
+        "mask_type": "None",
         "model_id": "629f992d45cda830033cf4cd",
     }
     fake_files = {

@@ -10,7 +10,7 @@ class InferenceCreationForm(BaseModel):
     age: int
     sex: sex_type
     covid_status: str
-    mask_type: str
+    mask_type: Optional[str]
     model_id: str
 
 
