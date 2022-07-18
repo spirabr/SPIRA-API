@@ -49,6 +49,7 @@ def test_get_result_by_inference_id_success(client_with_auth: TestClient):
             "user_id": "507f191e810c19729de860ea",
             "model_id": "629f992d45cda830033cf4cd",
             "status": "processing",
+            "created_in": "2022-07-18 17:07:16.954632",
         },
         "result": {
             "id": "62abf2cd154f18493d74fcd2",

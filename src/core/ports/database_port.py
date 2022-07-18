@@ -151,6 +151,7 @@ class DatabasePort:
                 "user_id": inference["user_id"],
                 "model_id": inference["model_id"],
                 "status": inference["status"],
+                "created_in": inference["created_in"],
             }
         )
 
@@ -177,6 +178,7 @@ class DatabasePort:
                     "user_id": inference["user_id"],
                     "model_id": inference["model_id"],
                     "status": inference["status"],
+                    "created_in": inference["created_in"],
                 }
             )
             for inference in inference_list

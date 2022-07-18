@@ -125,6 +125,7 @@ def test_get_inference_by_id(database_port: DatabasePort):
             "user_id": "507f191e810c19729de860ea",
             "model_id": "629f992d45cda830033cf4cd",
             "status": "processing",
+            "created_in": "2022-07-18 17:07:16.954632",
         }
 
     with patch.object(
@@ -151,6 +152,7 @@ def test_get_inference_by_id(database_port: DatabasePort):
                 "user_id": "507f191e810c19729de860ea",
                 "model_id": "629f992d45cda830033cf4cd",
                 "status": "processing",
+                "created_in": "2022-07-18 17:07:16.954632",
             },
         )
 
@@ -168,6 +170,7 @@ def test_get_inference_list(database_port: DatabasePort):
                 "user_id": "507f191e810c19729de860ea",
                 "model_id": "629f992d45cda830033cf4cd",
                 "status": "processing",
+                "created_in": "2022-07-18 17:07:16.954632",
             },
             {
                 "_id": ObjectId("629f81986abaa3c5e6cf7c17"),
@@ -179,6 +182,7 @@ def test_get_inference_list(database_port: DatabasePort):
                 "user_id": "507f191e810c19729de860ea",
                 "model_id": "629f994245cda830033cf4cf",
                 "status": "processing",
+                "created_in": "2022-07-18 17:07:16.954632",
             },
         ]
 
@@ -202,6 +206,7 @@ def test_get_inference_list(database_port: DatabasePort):
                     "user_id": "507f191e810c19729de860ea",
                     "model_id": "629f992d45cda830033cf4cd",
                     "status": "processing",
+                    "created_in": "2022-07-18 17:07:16.954632",
                 },
             ),
             Inference(
@@ -215,6 +220,7 @@ def test_get_inference_list(database_port: DatabasePort):
                     "user_id": "507f191e810c19729de860ea",
                     "model_id": "629f994245cda830033cf4cf",
                     "status": "processing",
+                    "created_in": "2022-07-18 17:07:16.954632",
                 }
             ),
         ]
@@ -233,6 +239,7 @@ def test_insert_inference(database_port: DatabasePort):
         mask_type="None",
         model_id="629f994245cda830033cf4cf",
         status="processing",
+        created_in="2022-07-18 17:07:16.954632",
     )
 
     with patch.object(

@@ -1,5 +1,6 @@
 from typing import List, Union
 from fastapi import status
+import datetime
 from core.model.constants import Status
 from core.model.message_service import RequestLetter
 from core.model.token import Token
@@ -142,6 +143,7 @@ async def create_new_inference(
             mask_type=inference_form.mask_type,
             model_id=inference_form.model_id,
             status=Status.processing_status,
+            created_in=str(datetime.datetime.now()),
         )
         new_id = database_port.insert_inference(new_inference)
 

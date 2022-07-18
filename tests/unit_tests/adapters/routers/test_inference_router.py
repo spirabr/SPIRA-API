@@ -50,6 +50,7 @@ def test_get_inference_by_id_success(client_with_auth: TestClient):
                 "user_id": "507f191e810c19729de860ea",
                 "model_id": "629f992d45cda830033cf4cd",
                 "status": "processing",
+                "created_in": "2022-07-18 17:07:16.954632",
             }
         )
         headers = {"Authorization": "Bearer mock_token"}
@@ -75,6 +76,7 @@ def test_get_inference_by_id_success(client_with_auth: TestClient):
             "user_id": "507f191e810c19729de860ea",
             "model_id": "629f992d45cda830033cf4cd",
             "status": "processing",
+            "created_in": "2022-07-18 17:07:16.954632",
         }
         assert response.status_code == 200
 
@@ -118,6 +120,7 @@ def test_get_inference_list_success(client_with_auth: TestClient):
                     "user_id": "507f191e810c19729de860ea",
                     "model_id": "629f992d45cda830033cf4cd",
                     "status": "processing",
+                    "created_in": "2022-07-18 17:07:16.954632",
                 }
             ),
             Inference(
@@ -131,6 +134,7 @@ def test_get_inference_list_success(client_with_auth: TestClient):
                     "user_id": "507f191e810c19729de860ea",
                     "model_id": "629f994245cda830033cf4cf",
                     "status": "processing",
+                    "created_in": "2022-07-18 17:07:16.954632",
                 }
             ),
         ]
@@ -158,6 +162,7 @@ def test_get_inference_list_success(client_with_auth: TestClient):
                     "user_id": "507f191e810c19729de860ea",
                     "model_id": "629f992d45cda830033cf4cd",
                     "status": "processing",
+                    "created_in": "2022-07-18 17:07:16.954632",
                 },
                 {
                     "id": "629f81986abaa3c5e6cf7c17",
@@ -169,6 +174,7 @@ def test_get_inference_list_success(client_with_auth: TestClient):
                     "user_id": "507f191e810c19729de860ea",
                     "model_id": "629f994245cda830033cf4cf",
                     "status": "processing",
+                    "created_in": "2022-07-18 17:07:16.954632",
                 },
             ]
         }

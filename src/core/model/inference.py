@@ -17,6 +17,7 @@ class InferenceCreationForm(BaseModel):
 class InferenceCreation(InferenceCreationForm):
     status: str
     user_id: str
+    created_in: str
 
 
 class UploadAudio(BaseModel):
