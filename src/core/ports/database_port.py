@@ -145,9 +145,13 @@ class DatabasePort:
                 "id": str(inference["_id"]),
                 "age": inference["age"],
                 "sex": inference["sex"],
+                "rgh": inference["rgh"],
+                "covid_status": inference["covid_status"],
+                "mask_type": inference["mask_type"],
                 "user_id": inference["user_id"],
                 "model_id": inference["model_id"],
                 "status": inference["status"],
+                "created_in": inference["created_in"],
             }
         )
 
@@ -168,9 +172,13 @@ class DatabasePort:
                     "id": str(inference["_id"]),
                     "age": inference["age"],
                     "sex": inference["sex"],
+                    "rgh": inference["rgh"],
+                    "covid_status": inference["covid_status"],
+                    "mask_type": inference["mask_type"],
                     "user_id": inference["user_id"],
                     "model_id": inference["model_id"],
                     "status": inference["status"],
+                    "created_in": inference["created_in"],
                 }
             )
             for inference in inference_list

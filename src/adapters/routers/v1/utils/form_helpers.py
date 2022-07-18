@@ -1,9 +1,24 @@
+from calendar import c
 from fastapi import File, Form, UploadFile
 from core.model.inference import InferenceCreationForm, InferenceFiles, UploadAudio
 
 
-async def get_inference_form_model(age=Form(-1), sex=Form(""), model_id=Form("")):
-    return InferenceCreationForm(age=age, sex=sex, model_id=model_id)
+async def get_inference_form_model(
+    age=Form(-1),
+    sex=Form(""),
+    model_id=Form(""),
+    rgh=Form(""),
+    covid_status=Form(""),
+    mask_type=Form(None),
+):
+    return InferenceCreationForm(
+        age=age,
+        sex=sex,
+        model_id=model_id,
+        rgh=rgh,
+        covid_status=covid_status,
+        mask_type=mask_type,
+    )
 
 
 async def get_inference_form_files(

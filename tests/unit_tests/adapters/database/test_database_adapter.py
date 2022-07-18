@@ -1,5 +1,6 @@
 import pytest
 from bson import ObjectId
+import datetime
 from adapters.database.mongo_adapter import MongoAdapter
 from core.model.inference import InferenceCreation
 from core.model.result import ResultCreation, ResultUpdate
@@ -59,9 +60,13 @@ def test_get_inference_by_id(database_adapter: MongoAdapter):
         "_id": ObjectId("629f815d6abaa3c5e6cf7c16"),
         "sex": "M",
         "age": 23,
+        "rgh": "fake_rgh",
+        "covid_status": "Sim",
+        "mask_type": "None",
         "user_id": "507f191e810c19729de860ea",
         "model_id": "629f992d45cda830033cf4cd",
         "status": "processing",
+        "created_in": "2022-07-18 17:07:16.954632",
     }
 
 
@@ -73,17 +78,25 @@ def test_get_inference_list(database_adapter: MongoAdapter):
             "_id": ObjectId("629f815d6abaa3c5e6cf7c16"),
             "sex": "M",
             "age": 23,
+            "rgh": "fake_rgh",
+            "covid_status": "Sim",
+            "mask_type": "None",
             "user_id": "507f191e810c19729de860ea",
             "model_id": "629f992d45cda830033cf4cd",
             "status": "processing",
+            "created_in": "2022-07-18 17:07:16.954632",
         },
         {
             "_id": ObjectId("629f81986abaa3c5e6cf7c17"),
             "sex": "F",
             "age": 32,
+            "rgh": "fake_rgh",
+            "covid_status": "Sim",
+            "mask_type": "None",
             "user_id": "507f191e810c19729de860ea",
             "model_id": "629f994245cda830033cf4cf",
             "status": "processing",
+            "created_in": "2022-07-18 17:07:16.954632",
         },
     ]
 
@@ -94,9 +107,13 @@ def test_insert_inference(database_adapter: MongoAdapter):
             InferenceCreation(
                 age=20,
                 sex="F",
+                rgh="fake_rgh",
+                covid_status="Sim",
+                mask_type="None",
                 user_id="507f191e810c19729de860ea",
                 model_id="629f994245cda830033cf4cf",
                 status="processing",
+                created_in=str(datetime.datetime.now()),
             )
         )
     except:

@@ -119,9 +119,13 @@ def test_get_inference_by_id(database_port: DatabasePort):
             "_id": ObjectId("629f815d6abaa3c5e6cf7c16"),
             "sex": "M",
             "age": 23,
+            "rgh": "fake_rgh",
+            "covid_status": "Sim",
+            "mask_type": "None",
             "user_id": "507f191e810c19729de860ea",
             "model_id": "629f992d45cda830033cf4cd",
             "status": "processing",
+            "created_in": "2022-07-18 17:07:16.954632",
         }
 
     with patch.object(
@@ -142,9 +146,13 @@ def test_get_inference_by_id(database_port: DatabasePort):
                 "id": "629f815d6abaa3c5e6cf7c16",
                 "sex": "M",
                 "age": 23,
+                "rgh": "fake_rgh",
+                "covid_status": "Sim",
+                "mask_type": "None",
                 "user_id": "507f191e810c19729de860ea",
                 "model_id": "629f992d45cda830033cf4cd",
                 "status": "processing",
+                "created_in": "2022-07-18 17:07:16.954632",
             },
         )
 
@@ -156,17 +164,25 @@ def test_get_inference_list(database_port: DatabasePort):
                 "_id": ObjectId("629f815d6abaa3c5e6cf7c16"),
                 "sex": "M",
                 "age": 23,
+                "rgh": "fake_rgh",
+                "covid_status": "Sim",
+                "mask_type": "None",
                 "user_id": "507f191e810c19729de860ea",
                 "model_id": "629f992d45cda830033cf4cd",
                 "status": "processing",
+                "created_in": "2022-07-18 17:07:16.954632",
             },
             {
                 "_id": ObjectId("629f81986abaa3c5e6cf7c17"),
                 "sex": "F",
                 "age": 32,
+                "rgh": "fake_rgh",
+                "covid_status": "Sim",
+                "mask_type": "None",
                 "user_id": "507f191e810c19729de860ea",
                 "model_id": "629f994245cda830033cf4cf",
                 "status": "processing",
+                "created_in": "2022-07-18 17:07:16.954632",
             },
         ]
 
@@ -184,9 +200,13 @@ def test_get_inference_list(database_port: DatabasePort):
                     "id": "629f815d6abaa3c5e6cf7c16",
                     "sex": "M",
                     "age": 23,
+                    "rgh": "fake_rgh",
+                    "covid_status": "Sim",
+                    "mask_type": "None",
                     "user_id": "507f191e810c19729de860ea",
                     "model_id": "629f992d45cda830033cf4cd",
                     "status": "processing",
+                    "created_in": "2022-07-18 17:07:16.954632",
                 },
             ),
             Inference(
@@ -194,9 +214,13 @@ def test_get_inference_list(database_port: DatabasePort):
                     "id": "629f81986abaa3c5e6cf7c17",
                     "sex": "F",
                     "age": 32,
+                    "rgh": "fake_rgh",
+                    "covid_status": "Sim",
+                    "mask_type": "None",
                     "user_id": "507f191e810c19729de860ea",
                     "model_id": "629f994245cda830033cf4cf",
                     "status": "processing",
+                    "created_in": "2022-07-18 17:07:16.954632",
                 }
             ),
         ]
@@ -210,8 +234,12 @@ def test_insert_inference(database_port: DatabasePort):
         age=20,
         sex="F",
         user_id="507f191e810c19729de860ea",
+        rgh="fake_rgh",
+        covid_status="Sim",
+        mask_type="None",
         model_id="629f994245cda830033cf4cf",
         status="processing",
+        created_in="2022-07-18 17:07:16.954632",
     )
 
     with patch.object(

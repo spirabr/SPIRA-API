@@ -33,9 +33,13 @@ def test_get_inference_by_id_success(client_with_auth: TestClient):
         "id": "629f815d6abaa3c5e6cf7c16",
         "sex": "M",
         "age": 23,
+        "rgh": "fake_rgh",
+        "covid_status": "Sim",
+        "mask_type": "None",
         "user_id": "507f191e810c19729de860ea",
         "model_id": "629f992d45cda830033cf4cd",
         "status": "processing",
+        "created_in": "2022-07-18 17:07:16.954632",
     }
     assert response.status_code == 200
 
@@ -75,6 +79,9 @@ def test_post_create_inference_success(client_with_auth: TestClient):
     fake_inference = {
         "sex": "F",
         "age": 23,
+        "rgh": "fake_rgh",
+        "covid_status": "Sim",
+        "mask_type": "None",
         "model_id": "629f992d45cda830033cf4cd",
     }
     fake_files = {
@@ -100,6 +107,9 @@ def test_post_create_inference_with_invalid_model_id_exception(
     fake_inference = {
         "sex": "F",
         "age": 23,
+        "rgh": "fake_rgh",
+        "covid_status": "Sim",
+        "mask_type": "None",
         "model_id": "invalid_id",
     }
     fake_files = {
@@ -125,6 +135,9 @@ def test_post_create_inference_with_inexistent_model_exception(
     fake_inference = {
         "sex": "F",
         "age": 23,
+        "rgh": "fake_rgh",
+        "covid_status": "Sim",
+        "mask_type": "None",
         "model_id": "507f191e810c19729de860ea",
     }
     fake_files = {
@@ -148,6 +161,9 @@ def test_post_create_inference_for_another_user_exception(client_with_auth: Test
     fake_inference = {
         "sex": "F",
         "age": 23,
+        "rgh": "fake_rgh",
+        "covid_status": "Sim",
+        "mask_type": "None",
         "model_id": "invalid_id",
     }
     fake_files = {
@@ -179,17 +195,25 @@ def test_get_inference_list_success(client_with_auth: TestClient):
                 "id": "629f815d6abaa3c5e6cf7c16",
                 "sex": "M",
                 "age": 23,
+                "rgh": "fake_rgh",
+                "covid_status": "Sim",
+                "mask_type": "None",
                 "user_id": "507f191e810c19729de860ea",
                 "model_id": "629f992d45cda830033cf4cd",
                 "status": "processing",
+                "created_in": "2022-07-18 17:07:16.954632",
             },
             {
                 "id": "629f81986abaa3c5e6cf7c17",
                 "sex": "F",
                 "age": 32,
+                "rgh": "fake_rgh",
+                "covid_status": "Sim",
+                "mask_type": "None",
                 "user_id": "507f191e810c19729de860ea",
                 "model_id": "629f994245cda830033cf4cf",
                 "status": "processing",
+                "created_in": "2022-07-18 17:07:16.954632",
             },
         ]
     }
