@@ -26,6 +26,7 @@ class UploadAudio(BaseModel):
 
 
 class InferenceFiles(BaseModel):
+    aceite: UploadAudio
     vogal_sustentada: UploadAudio
     parlenda_ritmada: UploadAudio
     frase: UploadAudio

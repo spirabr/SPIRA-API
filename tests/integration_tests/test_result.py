@@ -72,6 +72,7 @@ def test_post_create_result_with_inference_success(client_with_auth: TestClient)
         "model_id": "629f992d45cda830033cf4cd",
     }
     fake_files = {
+        "aceite": open("tests/mocks/audio_files/audio4.wav", "rb"),
         "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
         "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),
         "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
