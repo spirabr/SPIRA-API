@@ -85,6 +85,7 @@ def test_post_create_inference_success(client_with_auth: TestClient):
         "model_id": "629f992d45cda830033cf4cd",
     }
     fake_files = {
+        "aceite": open("tests/mocks/audio_files/audio4.wav", "rb"),
         "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
         "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),
         "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
@@ -113,6 +114,7 @@ def test_post_create_inference_with_invalid_model_id_exception(
         "model_id": "invalid_id",
     }
     fake_files = {
+        "aceite": open("tests/mocks/audio_files/audio4.wav", "rb"),
         "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
         "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),
         "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
@@ -141,6 +143,7 @@ def test_post_create_inference_with_inexistent_model_exception(
         "model_id": "507f191e810c19729de860ea",
     }
     fake_files = {
+        "aceite": open("tests/mocks/audio_files/audio4.wav", "rb"),
         "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
         "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),
         "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
@@ -167,6 +170,7 @@ def test_post_create_inference_for_another_user_exception(client_with_auth: Test
         "model_id": "invalid_id",
     }
     fake_files = {
+        "aceite": open("tests/mocks/audio_files/audio4.wav", "rb"),
         "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
         "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),
         "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
@@ -248,6 +252,7 @@ def test_post_create_inference_unauthorized(client_without_auth: TestClient):
         "model_id": "629f992d45cda830033cf4cd",
     }
     fake_files = {
+        "aceite": open("tests/mocks/audio_files/audio4.wav", "rb"),
         "vogal_sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
         "parlenda_ritmada": open("tests/mocks/audio_files/audio2.wav", "rb"),
         "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),

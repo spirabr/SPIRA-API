@@ -27,7 +27,10 @@ def test_store_files_success(simple_storage_port: SimpleStoragePort):
         vogal_sustentada = UploadFile("tests/mocks/audio_files/audio1.wav")
         parlenda_ritmada = UploadFile("tests/mocks/audio_files/audio2.wav")
         frase = UploadFile("tests/mocks/audio_files/audio3.wav")
+        aceite = UploadFile("tests/mocks/audio_files/audio4.wav")
+
         inference_files = InferenceFiles(
+            aceite=UploadAudio(content=aceite.file.read(), filename=aceite.filename),
             vogal_sustentada=UploadAudio(
                 content=vogal_sustentada.file.read(), filename=vogal_sustentada.filename
             ),
@@ -38,6 +41,11 @@ def test_store_files_success(simple_storage_port: SimpleStoragePort):
         )
         _store_files(simple_storage_port, inference_files, "fake_inference_id")
         calls = [
+            call(
+                "fake_inference_id",
+                "aceite",
+                inference_files.aceite,
+            ),
             call(
                 "fake_inference_id",
                 "vogal_sustentada",

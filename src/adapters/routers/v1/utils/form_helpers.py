@@ -22,11 +22,13 @@ async def get_inference_form_model(
 
 
 async def get_inference_form_files(
+    aceite: UploadFile = File(None),
     vogal_sustentada: UploadFile = File(None),
     parlenda_ritmada: UploadFile = File(None),
     frase: UploadFile = File(None),
 ):
     return InferenceFiles(
+        aceite=UploadAudio(content=aceite.file.read(), filename=aceite.filename),
         vogal_sustentada=UploadAudio(
             content=vogal_sustentada.file.read(), filename=vogal_sustentada.filename
         ),
