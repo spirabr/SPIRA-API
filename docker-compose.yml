@@ -1,8 +1,12 @@
-version: "3.5"
+version: "3.9"
  
 services:
   api:
-    build: .
+    build:
+      context: .
+      target: prod
+    profiles:
+      - production
     restart: always
     env_file: 
       - envs/database.env
@@ -10,7 +14,6 @@ services:
       - envs/message_service.env
       - envs/message_listener.env
       - envs/simple_storage.env
-    image: api_image
     command: python3 main.py
     ports:
       - 3000:8000 
@@ -19,11 +22,31 @@ services:
       - mongo-network
       - minio-network
       
+  tester:
+    build:
+      context: .
+      target: dev
+    profiles:
+      - test
+    env_file: 
+      - envs/database.env
+      - envs/authentication.env
+      - envs/message_service.env
+      - envs/message_listener.env
+      - envs/simple_storage.env
+    command: make -f tests.mk
+    ports:
+      - 3001:8000 
+    networks:
+      - nats-network
+      - mongo-network
+      - minio-network
+
   mongo:
     image: mongo
+    restart: always
     env_file:
       - envs/mongo.env
-    restart: always
     logging:
       driver: "none"
     networks:
@@ -31,9 +54,11 @@ services:
 
   mongo-express:
     image: mongo-express
+    restart: always
+    profiles:
+      - production
     env_file:
       - envs/mongo.env
-    restart: always
     logging:
       driver: "none"
     ports:
@@ -64,7 +89,6 @@ services:
     networks:
       - minio-network
 
-
 networks:
   nats-network:
     driver: bridge
@@ -76,6 +100,7 @@ networks:
   minio-network:
     driver: bridge
     name: minio-bridge
+
 
 volumes:
   minio_data:

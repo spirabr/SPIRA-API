@@ -1,0 +1,13 @@
+.git
+.github
+.gitignore
+.gitattributes
+LICENSE
+README.md
+
+docker-compose.yml
+
+env/
+.vscode/
+.mypy_cache/
+.pytest_cache/
