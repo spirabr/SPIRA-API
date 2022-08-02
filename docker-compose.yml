@@ -16,7 +16,7 @@ services:
       - envs/simple_storage.env
     command: python3 main.py
     ports:
-      - 3000:8000 
+      - 3001:8000 
     networks:
       - nats-network
       - mongo-network
@@ -36,7 +36,7 @@ services:
       - envs/simple_storage.env
     command: make -f tests.mk
     ports:
-      - 3001:8000 
+      - 3000:8000 
     networks:
       - nats-network
       - mongo-network
@@ -45,6 +45,9 @@ services:
   mongo:
     image: mongo
     restart: always
+    profiles:
+      - production
+      - test
     env_file:
       - envs/mongo.env
     logging:
@@ -69,6 +72,9 @@ services:
   nats-server:
     image: nats:2.8.4
     restart: always
+    profiles:
+      - production
+      - test
     ports:
       - 4222:4222
       - 8222:8222
@@ -78,6 +84,9 @@ services:
   minio:
     image: minio/minio
     restart: always
+    profiles:
+      - production
+      - test
     ports:
       - 9000:9000
       - 9001:9001
