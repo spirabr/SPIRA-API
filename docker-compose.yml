@@ -16,7 +16,7 @@ services:
       - envs/simple_storage.env
     command: python3 main.py
     ports:
-      - 3001:8000 
+      - 3000:8000 
     networks:
       - nats-network
       - mongo-network
@@ -28,13 +28,17 @@ services:
       target: dev
     profiles:
       - test
+    depends_on:
+      - mongo
+      - minio
+      - nats-server
     env_file: 
       - envs/database.env
       - envs/authentication.env
       - envs/message_service.env
       - envs/message_listener.env
       - envs/simple_storage.env
-    command: make -f tests.mk
+    entrypoint: python3 -m py.test
     ports:
       - 3000:8000 
     networks:
