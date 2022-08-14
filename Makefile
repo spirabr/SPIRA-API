@@ -26,15 +26,18 @@ endef
 
 adapter-unit-tests:
 	@$(call warn,"running unit tests for adapters")
-	python3 -m py.test tests/unit_tests/adapters
+	docker compose --profile test run --rm tester tests/unit_tests/adapters
+	
 
 port-unit-tests:
 	@$(call warn,"running unit tests for ports")
-	python3 -m py.test tests/unit_tests/ports
+	docker compose --profile test run 	 tester tests/unit_tests/ports
+	
 
 service-unit-tests:
 	@$(call warn,"running unit tests for services")
-	python3 -m py.test tests/unit_tests/services
+	docker compose --profile test run --rm tester tests/unit_tests/services
+	
 
 all-unit-tests:
 	@$(MAKE) adapter-unit-tests	
@@ -44,19 +47,20 @@ all-unit-tests:
 
 endpoint-integration-tests:
 	@$(call warn,"running integration tests for endpoints")
-	python3 -m py.test tests/integration_tests/endpoints
+	docker compose --profile test run --rm tester tests/integration_tests/endpoints
+	
 
 connection-integration-tests:
 	@$(call warn,"running integration tests for connections")
-	docker compose build tester
 	docker compose --profile test run --rm tester tests/integration_tests/connections
-	docker compose stop
+	
 
 all-integration-tests:
 	@$(MAKE) endpoint-integration-tests
 	@$(MAKE) connection-integration-tests
 
 all-tests:
+	docker compose build tester
 	@$(MAKE) all-unit-tests
 	@$(MAKE) all-integration-tests
 
