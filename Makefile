@@ -35,14 +35,17 @@ RUN-CONTAINERS := docker compose --profile test run --rm tester
 
 adapter-unit-tests:
 	$(call warn,"running unit tests for adapters")
+	$(BUILD-API-IMAGE)
 	$(RUN-CONTAINERS) tests/unit_tests/adapters
 
 port-unit-tests:
 	$(call warn,"running unit tests for ports")
+	$(BUILD-API-IMAGE)
 	$(RUN-CONTAINERS) tests/unit_tests/ports
 	
 service-unit-tests:
 	$(call warn,"running unit tests for services")
+	$(BUILD-API-IMAGE)
 	$(RUN-CONTAINERS) tests/unit_tests/services
 	
 
@@ -58,23 +61,30 @@ all-unit-tests:
 
 endpoint-integration-tests:
 	$(call warn,"running integration tests for endpoints")
+	$(BUILD-API-IMAGE)
 	$(RUN-CONTAINERS) tests/integration_tests/endpoints
 	
-connection-integration-tests:
-	$(call warn,"running integration tests for connections")
-	$(RUN-CONTAINERS) tests/integration_tests/connections
+database-connection-tests:
+	$(call warn,"running connection tests for database")
+	$(BUILD-API-IMAGE)
+	$(RUN-CONTAINERS) tests/integration_tests/connections/database
+
+message-service-connection-tests:
+	$(call warn,"running connection tests for message service")
+	$(BUILD-API-IMAGE)
+	$(RUN-CONTAINERS) tests/integration_tests/connections/message_service
 	
 
 all-integration-tests:
 	$(MAKE) endpoint-integration-tests
-	$(MAKE) connection-integration-tests
+	$(MAKE) database-connection-tests
+	$(MAKE) message-service-connection-tests
 
 # --- INTEGRATION TESTS --- #
 
 
 # --- RUN ALL TESTS --- #
 all-tests:
-	$(BUILD-API-IMAGE)
 	$(MAKE) all-unit-tests
 	$(MAKE) all-integration-tests
 
