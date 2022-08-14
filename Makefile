@@ -23,45 +23,47 @@ define failure
 (printf "${RED}%s${RESTORE}\n" $(strip $1); exit 1)
 endef
 
+BUILD-API-IMAGE := docker compose build tester
+RUN-CONTAINERS := docker compose --profile test run --rm tester
 
 adapter-unit-tests:
-	@$(call warn,"running unit tests for adapters")
-	docker compose --profile test run --rm tester tests/unit_tests/adapters
+	$(call warn,"running unit tests for adapters")
+	$(RUN-CONTAINERS) tests/unit_tests/adapters
 	
 
 port-unit-tests:
-	@$(call warn,"running unit tests for ports")
-	docker compose --profile test run 	 tester tests/unit_tests/ports
+	$(call warn,"running unit tests for ports")
+	$(RUN-CONTAINERS) tests/unit_tests/ports
 	
 
 service-unit-tests:
-	@$(call warn,"running unit tests for services")
-	docker compose --profile test run --rm tester tests/unit_tests/services
+	$(call warn,"running unit tests for services")
+	$(RUN-CONTAINERS) tests/unit_tests/services
 	
 
 all-unit-tests:
-	@$(MAKE) adapter-unit-tests	
-	@$(MAKE) port-unit-tests	
-	@$(MAKE) service-unit-tests
+	$(MAKE) adapter-unit-tests	
+	$(MAKE) port-unit-tests	
+	$(MAKE) service-unit-tests
 
 
 endpoint-integration-tests:
-	@$(call warn,"running integration tests for endpoints")
-	docker compose --profile test run --rm tester tests/integration_tests/endpoints
+	$(call warn,"running integration tests for endpoints")
+	$(RUN-CONTAINERS) tests/integration_tests/endpoints
 	
 
 connection-integration-tests:
-	@$(call warn,"running integration tests for connections")
-	docker compose --profile test run --rm tester tests/integration_tests/connections
+	$(call warn,"running integration tests for connections")
+	$(RUN-CONTAINERS) tests/integration_tests/connections
 	
 
 all-integration-tests:
-	@$(MAKE) endpoint-integration-tests
-	@$(MAKE) connection-integration-tests
+	$(MAKE) endpoint-integration-tests
+	$(MAKE) connection-integration-tests
 
 all-tests:
-	docker compose build tester
-	@$(MAKE) all-unit-tests
-	@$(MAKE) all-integration-tests
+	$(BUILD-API-IMAGE)
+	$(MAKE) all-unit-tests
+	$(MAKE) all-integration-tests
 
 	
