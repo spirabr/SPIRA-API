@@ -8,6 +8,8 @@ services:
     profiles:
       - production
     restart: always
+    image: api
+    container_name: spira-api-api-1
     env_file: 
       - envs/database.env
       - envs/authentication.env
@@ -27,6 +29,7 @@ services:
       context: .
       target: dev
     image: tester
+    container_name: spira-api-tester-1
     profiles:
       - test
     depends_on:

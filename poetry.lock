@@ -201,14 +201,6 @@ optional = false
 python-versions = "*"
 
 [[package]]
-name = "inject"
-version = "4.3.1"
-description = "Python dependency injection framework"
-category = "main"
-optional = false
-python-versions = "*"
-
-[[package]]
 name = "marshmallow"
 version = "3.16.0"
 description = "A lightweight library for converting complex datatypes to and from native Python datatypes."
@@ -618,7 +610,7 @@ standard = ["websockets (>=10.0)", "httptools (>=0.4.0)", "watchgod (>=0.6)", "p
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "3c2e215c5fd262186de3df2fd62746a2b30ff4e76e5f6c76ad5994f13c3effab"
+content-hash = "10a13b2627af95ec42cfd02ed82ba6836d34a77e000aaa399a35de4cd5016f0d"
 
 [metadata.files]
 anyio = [
@@ -773,9 +765,6 @@ idna = [
 iniconfig = [
     {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
     {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"},
-]
-inject = [
-    {file = "Inject-4.3.1.tar.gz", hash = "sha256:7f996f2c9ed2082af776ddf6b528d97036898ac63040385feb1d12286a73c3cc"},
 ]
 marshmallow = [
     {file = "marshmallow-3.16.0-py3-none-any.whl", hash = "sha256:53a1e0ee69f79e1f3e80d17393b25cfc917eda52f859e8183b4af72c3390c1f1"},
