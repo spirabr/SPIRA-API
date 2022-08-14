@@ -50,29 +50,32 @@ async def test_subscribe(message_service_adapter: NATSAdapter):
 
 @pytest.mark.asyncio
 async def test_wait_for_message(message_service_adapter: NATSAdapter):
-    await message_service_adapter.subscribe(
-        "fake_topic_2",
-    )
-    await message_service_adapter.send_message(
-        json.dumps(
+    try:
+        await message_service_adapter.subscribe(
+            "fake_topic_2",
+        )
+        await message_service_adapter.send_message(
+            json.dumps(
+                {
+                    "anything": 123,
+                    "model_id": "fake_model_id",
+                    "inference_id": "fake_inference_id",
+                }
+            ),
+            "fake_topic_2",
+        )
+
+        received_message = await message_service_adapter.wait_for_message(
+            "fake_topic_2",
+        )
+
+        expected_message = json.dumps(
             {
                 "anything": 123,
                 "model_id": "fake_model_id",
                 "inference_id": "fake_inference_id",
             }
-        ),
-        "fake_topic_2",
-    )
-
-    received_message = await message_service_adapter.wait_for_message(
-        "fake_topic_2",
-    )
-
-    expected_message = json.dumps(
-        {
-            "anything": 123,
-            "model_id": "fake_model_id",
-            "inference_id": "fake_inference_id",
-        }
-    )
-    assert received_message == expected_message
+        )
+        assert received_message == expected_message
+    except:
+        assert False
