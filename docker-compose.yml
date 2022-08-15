@@ -7,6 +7,10 @@ services:
       target: prod
     profiles:
       - production
+    depends_on:
+      - mongo
+      - minio
+      - nats-server
     restart: always
     image: api
     container_name: spira-api-api-1
