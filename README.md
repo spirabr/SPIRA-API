@@ -24,20 +24,25 @@ Dependency management is done with [`poetry`](https://python-poetry.org/docs/) a
 
 ## Running the project
 
-Build the docker-compose:
+Build the project:
 
 ```
-docker-compose build
+docker compose build api
 ```
 
-Run the docker-compose:
+Run the project:
 
 ```
-docker-compose up
+docker compose up
 ```
 
-Run the tests:
+Run tests:
 
 ```
-make -f tests.mk
+make all-tests
+```
+
+The Makefile divides the tests in sections. To run a specific test section:
+```
+make {test-section}
 ```

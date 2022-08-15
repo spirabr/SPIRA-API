@@ -1,16 +1,25 @@
-version: "3.5"
+version: "3.9"
  
 services:
   api:
-    build: .
+    build:
+      context: .
+      target: prod
+    profiles:
+      - production
+    depends_on:
+      - mongo
+      - minio
+      - nats-server
     restart: always
+    image: api
+    container_name: spira-api-api-1
     env_file: 
       - envs/database.env
       - envs/authentication.env
       - envs/message_service.env
       - envs/message_listener.env
       - envs/simple_storage.env
-    image: api_image
     command: python3 main.py
     ports:
       - 3000:8000 
@@ -19,11 +28,40 @@ services:
       - mongo-network
       - minio-network
       
+  tester:
+    build:
+      context: .
+      target: dev
+    image: tester
+    container_name: spira-api-tester-1
+    profiles:
+      - test
+    depends_on:
+      - mongo
+      - minio
+      - nats-server
+    env_file: 
+      - envs/database.env
+      - envs/authentication.env
+      - envs/message_service.env
+      - envs/message_listener.env
+      - envs/simple_storage.env
+    entrypoint: python3 -m py.test
+    ports:
+      - 3000:8000 
+    networks:
+      - nats-network
+      - mongo-network
+      - minio-network
+
   mongo:
     image: mongo
+    restart: always
+    profiles:
+      - production
+      - test
     env_file:
       - envs/mongo.env
-    restart: always
     logging:
       driver: "none"
     networks:
@@ -31,9 +69,11 @@ services:
 
   mongo-express:
     image: mongo-express
+    restart: always
+    profiles:
+      - production
     env_file:
       - envs/mongo.env
-    restart: always
     logging:
       driver: "none"
     ports:
@@ -44,6 +84,9 @@ services:
   nats-server:
     image: nats:2.8.4
     restart: always
+    profiles:
+      - production
+      - test
     ports:
       - 4222:4222
       - 8222:8222
@@ -53,6 +96,9 @@ services:
   minio:
     image: minio/minio
     restart: always
+    profiles:
+      - production
+      - test
     ports:
       - 9000:9000
       - 9001:9001
@@ -63,7 +109,6 @@ services:
       - envs/minio.env
     networks:
       - minio-network
-
 
 networks:
   nats-network:
@@ -76,6 +121,7 @@ networks:
   minio-network:
     driver: bridge
     name: minio-bridge
+
 
 volumes:
   minio_data:

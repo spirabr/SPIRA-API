@@ -33,6 +33,7 @@ class NATSAdapter:
             ping_interval=1,
             allow_reconnect=True,
         )
+
         await self._nc.publish(publishing_topic, str.encode(message, encoding="utf-8"))
         await self._nc.close()
 
