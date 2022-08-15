@@ -21,7 +21,6 @@ def client():
             lambda x: DeleteObject(x.object_name),
             minio_client.list_objects("test-bucket", recursive=True),
         )
-        print([obj for obj in minio_client.list_objects("test-bucket", recursive=True)])
         errors = minio_client.remove_objects("test-bucket", delete_object_list)
         for error in errors:
             print("error occured when deleting object", error, flush=True)
@@ -29,16 +28,15 @@ def client():
 
     yield minio_client
 
-    """if minio_client.bucket_exists("test-bucket"):
+    if minio_client.bucket_exists("test-bucket"):
         delete_object_list = map(
             lambda x: DeleteObject(x.object_name),
             minio_client.list_objects("test-bucket", recursive=True),
         )
-        print([obj for obj in minio_client.list_objects("test-bucket", recursive=True)])
         errors = minio_client.remove_objects("test-bucket", delete_object_list)
         for error in errors:
             print("error occured when deleting object", error, flush=True)
-        minio_client.remove_bucket("test-bucket")"""
+        minio_client.remove_bucket("test-bucket")
 
 
 def test_bucket_creation(client: Minio):
