@@ -1,5 +1,3 @@
-from fastapi import UploadFile
-from h11 import Data
 from mock import MagicMock, patch, call
 import pytest
 from core.model.inference import InferenceFiles, UploadAudio
@@ -24,20 +22,20 @@ def test_store_files_success(simple_storage_port: SimpleStoragePort):
         MagicMock(side_effect=fake_store_inference_file),
     ) as mock_store_inference_file:
 
-        vogal_sustentada = UploadFile("tests/mocks/audio_files/audio1.wav")
-        parlenda_ritmada = UploadFile("tests/mocks/audio_files/audio2.wav")
-        frase = UploadFile("tests/mocks/audio_files/audio3.wav")
-        aceite = UploadFile("tests/mocks/audio_files/audio4.wav")
+        vogal_sustentada = open("tests/mocks/audio_files/audio1.wav", "rb")
+        parlenda_ritmada = open("tests/mocks/audio_files/audio2.wav", "rb")
+        frase = open("tests/mocks/audio_files/audio3.wav", "rb")
+        aceite = open("tests/mocks/audio_files/audio4.wav", "rb")
 
         inference_files = InferenceFiles(
-            aceite=UploadAudio(content=aceite.file.read(), filename=aceite.filename),
+            aceite=UploadAudio(content=aceite.read(), filename="aceite.wav"),
             vogal_sustentada=UploadAudio(
-                content=vogal_sustentada.file.read(), filename=vogal_sustentada.filename
+                content=vogal_sustentada.read(), filename="vogal_sustentada.wav"
             ),
             parlenda_ritmada=UploadAudio(
-                content=parlenda_ritmada.file.read(), filename=parlenda_ritmada.filename
+                content=parlenda_ritmada.read(), filename="parlenda_ritmada.wav"
             ),
-            frase=UploadAudio(content=frase.file.read(), filename=frase.filename),
+            frase=UploadAudio(content=frase.read(), filename="frase.wav"),
         )
         _store_files(simple_storage_port, inference_files, "fake_inference_id")
         calls = [

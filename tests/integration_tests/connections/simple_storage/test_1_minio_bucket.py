@@ -1,11 +1,9 @@
 from io import BytesIO
 import os
-import wave
 from settings import Settings
 from minio import Minio
 from minio.deleteobjects import DeleteObject
 import pytest
-from fastapi import UploadFile
 
 
 @pytest.fixture()
