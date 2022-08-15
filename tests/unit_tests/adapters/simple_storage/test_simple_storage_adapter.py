@@ -38,7 +38,7 @@ def test_store_inference_file(simple_storage_adapter: MinioAdapter):
             "mock-bucket",
             "fake_inference_id/fake_file_type.fake_extension",
             ANY,
-            0,
+            565292,
         )
 
 
