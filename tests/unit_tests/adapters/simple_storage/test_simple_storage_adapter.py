@@ -1,6 +1,5 @@
 from io import BytesIO
 from typing import Iterable
-from fastapi import UploadFile
 from mock import ANY, MagicMock, patch
 from pydantic import BaseModel
 import pytest
@@ -24,7 +23,7 @@ def test_store_inference_file(simple_storage_adapter: MinioAdapter):
         "put_object",
         MagicMock(side_effect=fake_put_object),
     ) as mock_method:
-        file = BytesIO(UploadFile("tests/mocks/audio_files/audio1.wav").file.read())
+        file = BytesIO(open("tests/mocks/audio_files/audio1.wav", "rb").read())
         try:
             simple_storage_adapter.store_inference_file(
                 "fake_inference_id",
@@ -39,7 +38,7 @@ def test_store_inference_file(simple_storage_adapter: MinioAdapter):
             "mock-bucket",
             "fake_inference_id/fake_file_type.fake_extension",
             ANY,
-            0,
+            565292,
         )
 
 

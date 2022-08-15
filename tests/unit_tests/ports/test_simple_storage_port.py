@@ -1,5 +1,4 @@
 from io import BytesIO
-from fastapi import UploadFile
 from mock import ANY, MagicMock, patch
 import pytest
 from core.model.inference import UploadAudio
@@ -23,7 +22,7 @@ def test_store_inference_file(simple_storage_port: SimpleStoragePort):
         pass
 
     file = UploadAudio(
-        content=UploadFile("tests/mocks/audio_files/audio1.wav").file.read(),
+        content=open("tests/mocks/audio_files/audio1.wav", "rb").read(),
         filename="tests/mocks/audio_files/audio1.wav",
     )
 
