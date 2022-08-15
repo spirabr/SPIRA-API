@@ -9,5 +9,13 @@ docker-compose.yml
 
 env/
 .vscode/
+
 .mypy_cache/
+.dmypy.json
+dmypy.json
+
 .pytest_cache/
+
+__pycache__/
+*.py[cod]
+*$py.class
