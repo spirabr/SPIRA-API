@@ -148,6 +148,19 @@ async def create_new_inference(
         )
         new_id = database_port.insert_inference(new_inference)
 
+        new_inserted_inference = Inference(
+            id=new_id,
+            age=inference_form.age,
+            sex=inference_form.sex,
+            user_id=user_id,
+            rgh=inference_form.rgh,
+            covid_status=inference_form.covid_status,
+            mask_type=inference_form.mask_type,
+            model_id=inference_form.model_id,
+            status=Status.processing_status,
+            created_in=str(datetime.datetime.now()),
+        )
+
         model = model_service.get_by_id(
             authentication_port, database_port, inference_form.model_id, token
         )
@@ -156,7 +169,8 @@ async def create_new_inference(
 
         await message_service_port.send_message(
             RequestLetter(
-                content=new_inference, publishing_channel=model.receiving_channel
+                content=new_inserted_inference,
+                publishing_channel=model.receiving_channel,
             )
         )
     except LogicException:

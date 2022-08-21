@@ -1,10 +1,8 @@
 import datetime
 import json
 from mock import ANY, MagicMock, call, patch
-from pydantic import BaseModel
-from adapters.message_service.nats_adapter import NATSAdapter
 from core.model.constants import Status
-from core.model.inference import InferenceCreation
+from core.model.inference import Inference
 from core.model.message_service import RequestLetter
 from core.model.result import ResultUpdate
 from core.ports.message_service_port import MessageServicePort
@@ -33,7 +31,8 @@ def test_send_message(message_service_port: MessageServicePort):
         asyncio.run(
             message_service_port.send_message(
                 RequestLetter(
-                    content=InferenceCreation(
+                    content=Inference(
+                        id="fake_inference_id",
                         age=30,
                         sex="M",
                         rgh="fake_rgh",
@@ -60,6 +59,7 @@ def test_send_message(message_service_port: MessageServicePort):
                     "status": Status.processing_status,
                     "user_id": "fake_user_id",
                     "created_in": "2022-07-18 17:07:16.954632",
+                    "id": "fake_inference_id",
                 }
             ),
             "fake_topic",
