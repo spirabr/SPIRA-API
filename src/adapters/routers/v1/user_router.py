@@ -38,7 +38,7 @@ def create_user_router(
         form_data: OAuth2PasswordRequestForm = Depends(),
     ):
         try:
-            access_token = authenticate_and_generate_token(
+            user_id, access_token = authenticate_and_generate_token(
                 authentication_port,
                 database_port,
                 form_data.username,
@@ -46,7 +46,11 @@ def create_user_router(
             )
         except LogicException as e:
             raise HTTPException(e.error_status, e.message)
-        return {"access_token": access_token.content, "token_type": "bearer"}
+        return {
+            "id": user_id,
+            "access_token": access_token.content,
+            "token_type": "bearer",
+        }
 
     @router.post("/")
     def create_user(

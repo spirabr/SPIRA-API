@@ -22,19 +22,17 @@ def test_store_files_success(simple_storage_port: SimpleStoragePort):
         MagicMock(side_effect=fake_store_inference_file),
     ) as mock_store_inference_file:
 
-        vogal_sustentada = open("tests/mocks/audio_files/audio1.wav", "rb")
-        parlenda_ritmada = open("tests/mocks/audio_files/audio2.wav", "rb")
+        sustentada = open("tests/mocks/audio_files/audio1.wav", "rb")
+        parlenda = open("tests/mocks/audio_files/audio2.wav", "rb")
         frase = open("tests/mocks/audio_files/audio3.wav", "rb")
         aceite = open("tests/mocks/audio_files/audio4.wav", "rb")
 
         inference_files = InferenceFiles(
             aceite=UploadAudio(content=aceite.read(), filename="aceite.wav"),
-            vogal_sustentada=UploadAudio(
-                content=vogal_sustentada.read(), filename="vogal_sustentada.wav"
+            sustentada=UploadAudio(
+                content=sustentada.read(), filename="sustentada.wav"
             ),
-            parlenda_ritmada=UploadAudio(
-                content=parlenda_ritmada.read(), filename="parlenda_ritmada.wav"
-            ),
+            parlenda=UploadAudio(content=parlenda.read(), filename="parlenda.wav"),
             frase=UploadAudio(content=frase.read(), filename="frase.wav"),
         )
         _store_files(simple_storage_port, inference_files, "fake_inference_id")
@@ -46,13 +44,13 @@ def test_store_files_success(simple_storage_port: SimpleStoragePort):
             ),
             call(
                 "fake_inference_id",
-                "vogal_sustentada",
-                inference_files.vogal_sustentada,
+                "sustentada",
+                inference_files.sustentada,
             ),
             call(
                 "fake_inference_id",
-                "parlenda_ritmada",
-                inference_files.parlenda_ritmada,
+                "parlenda",
+                inference_files.parlenda,
             ),
             call("fake_inference_id", "frase", inference_files.frase),
         ]

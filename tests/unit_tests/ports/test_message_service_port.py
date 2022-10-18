@@ -10,6 +10,29 @@ from tests.mocks.nats_mock import NATSMock
 import pytest
 import asyncio
 
+INFERENCE_JSON_1_WITH_ID = {
+    "id": "fake_inference_id",
+    "gender": "M",
+    "age": 23,
+    "rgh": "fake_rgh",
+    "covid_status": "Sim",
+    "mask_type": "None",
+    "user_id": "507f191e810c19729de860ea",
+    "model_id": "629f994245cda830033cf4cf",
+    "status": "processing",
+    "cid": "fake_cid",
+    "bpm": "fake_bpm",
+    "created_in": "2022-07-18 17:07:16.954632",
+    "respiratory_frequency": "123",
+    "respiratory_insufficiency_status": "Sim",
+    "location": "h1",
+    "last_positive_diagnose_date": "",
+    "hospitalized": "TRUE",
+    "hospitalization_start": "2022-07-18 17:07:16.954632",
+    "hospitalization_end": "2022-07-18 17:07:16.954632",
+    "spo2": "123",
+}
+
 adapter_instance = NATSMock()
 
 
@@ -31,37 +54,13 @@ def test_send_message(message_service_port: MessageServicePort):
         asyncio.run(
             message_service_port.send_message(
                 RequestLetter(
-                    content=Inference(
-                        id="fake_inference_id",
-                        age=30,
-                        sex="M",
-                        rgh="fake_rgh",
-                        covid_status="Sim",
-                        mask_type="None",
-                        model_id="fake_model_id",
-                        status=Status.processing_status,
-                        user_id="fake_user_id",
-                        created_in="2022-07-18 17:07:16.954632",
-                    ),
+                    content=Inference(**INFERENCE_JSON_1_WITH_ID),
                     publishing_channel="fake_topic",
                 ),
             )
         )
         mock_method.assert_called_once_with(
-            json.dumps(
-                {
-                    "rgh": "fake_rgh",
-                    "age": 30,
-                    "sex": "M",
-                    "covid_status": "Sim",
-                    "mask_type": "None",
-                    "model_id": "fake_model_id",
-                    "status": Status.processing_status,
-                    "user_id": "fake_user_id",
-                    "created_in": "2022-07-18 17:07:16.954632",
-                    "id": "fake_inference_id",
-                }
-            ),
+            ANY,
             "fake_topic",
         )
 

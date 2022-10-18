@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional, Tuple, Union
 from fastapi import status
 import re
 
@@ -56,7 +56,7 @@ def authenticate_and_generate_token(
     database_port: DatabasePort,
     username: str,
     password: str,
-) -> Token:
+) -> Tuple[str, Token]:
     """validates user credentials and generates the token
 
     Args:
@@ -84,7 +84,7 @@ def authenticate_and_generate_token(
     except:
         raise DefaultExceptions.user_form_exception
 
-    return token
+    return user.id, token
 
 
 def create_new_user(

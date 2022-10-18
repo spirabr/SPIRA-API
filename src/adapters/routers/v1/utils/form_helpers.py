@@ -4,36 +4,54 @@ from core.model.inference import InferenceCreationForm, InferenceFiles, UploadAu
 
 
 async def get_inference_form_model(
-    age=Form(-1),
-    sex=Form(""),
+    age=Form(0),
+    gender=Form(""),
     model_id=Form(""),
     rgh=Form(""),
     covid_status=Form(""),
     mask_type=Form(None),
+    cid=Form(None),
+    bpm=Form(None),
+    respiratory_frequency=Form(None),
+    respiratory_insufficiency_status=Form(None),
+    location=Form(None),
+    last_positive_diagnose_date=Form(None),
+    hospitalized=Form(None),
+    hospitalization_start=Form(None),
+    hospitalization_end=Form(None),
+    spo2=Form(None),
 ):
     return InferenceCreationForm(
-        age=age,
-        sex=sex,
+        age=int(age),
+        gender=gender,
         model_id=model_id,
         rgh=rgh,
         covid_status=covid_status,
         mask_type=mask_type,
+        cid=cid,
+        bpm=bpm,
+        respiratory_frequency=respiratory_frequency,
+        respiratory_insufficiency_status=respiratory_insufficiency_status,
+        location=location,
+        last_positive_diagnose_date=last_positive_diagnose_date,
+        hospitalized=hospitalized,
+        hospitalization_start=hospitalization_start,
+        hospitalization_end=hospitalization_end,
+        spo2=spo2,
     )
 
 
 async def get_inference_form_files(
     aceite: UploadFile = File(None),
-    vogal_sustentada: UploadFile = File(None),
-    parlenda_ritmada: UploadFile = File(None),
+    sustentada: UploadFile = File(None),
+    parlenda: UploadFile = File(None),
     frase: UploadFile = File(None),
 ):
     return InferenceFiles(
         aceite=UploadAudio(content=aceite.file.read(), filename=aceite.filename),
-        vogal_sustentada=UploadAudio(
-            content=vogal_sustentada.file.read(), filename=vogal_sustentada.filename
+        sustentada=UploadAudio(
+            content=sustentada.file.read(), filename=sustentada.filename
         ),
-        parlenda_ritmada=UploadAudio(
-            content=parlenda_ritmada.file.read(), filename=parlenda_ritmada.filename
-        ),
+        parlenda=UploadAudio(content=parlenda.file.read(), filename=parlenda.filename),
         frase=UploadAudio(content=frase.file.read(), filename=frase.filename),
     )
