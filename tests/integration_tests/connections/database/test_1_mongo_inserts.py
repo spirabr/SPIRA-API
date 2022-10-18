@@ -74,7 +74,7 @@ def test_insert_inferences(database_adapter: MongoAdapter):
             [
                 {
                     "_id": ObjectId(),
-                    "sex": "M",
+                    "gender": "M",
                     "age": 23,
                     "rgh": "fake_rgh",
                     "covid_status": "Sim",
@@ -96,7 +96,7 @@ def test_insert_inferences(database_adapter: MongoAdapter):
                 },
                 {
                     "_id": ObjectId(),
-                    "sex": "F",
+                    "gender": "F",
                     "age": 32,
                     "rgh": "fake_rgh",
                     "covid_status": "Sim",
@@ -118,7 +118,7 @@ def test_insert_inferences(database_adapter: MongoAdapter):
                 },
                 {
                     "_id": ObjectId(),
-                    "sex": "F",
+                    "gender": "F",
                     "age": 22,
                     "rgh": "fake_rgh",
                     "covid_status": "Sim",
