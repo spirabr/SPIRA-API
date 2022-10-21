@@ -88,10 +88,12 @@ def get_list(
     try:
         _authenticate_user(authentication_port, database_port, user_id, token)
         inference_list = database_port.get_inference_list(user_id)
+        print([i for i in inference_list], flush=True)
 
     except LogicException:
         raise
-    except:
+    except Exception as e:
+        print(e, flush=True)
         raise LogicException(
             "cound not retrieve inference list", status.HTTP_500_INTERNAL_SERVER_ERROR
         )
@@ -137,28 +139,48 @@ async def create_new_inference(
 
         new_inference = InferenceCreation(
             age=inference_form.age,
-            sex=inference_form.sex,
+            gender=inference_form.gender,
             user_id=user_id,
             rgh=inference_form.rgh,
             covid_status=inference_form.covid_status,
             mask_type=inference_form.mask_type,
+            cid=inference_form.cid,
+            bpm=inference_form.bpm,
             model_id=inference_form.model_id,
             status=Status.processing_status,
             created_in=str(datetime.datetime.now()),
+            respiratory_frequency=inference_form.respiratory_frequency,
+            respiratory_insufficiency_status=inference_form.respiratory_insufficiency_status,
+            location=inference_form.location,
+            last_positive_diagnose_date=inference_form.last_positive_diagnose_date,
+            hospitalized=inference_form.hospitalized,
+            hospitalization_start=inference_form.hospitalization_start,
+            hospitalization_end=inference_form.hospitalization_end,
+            spo2=inference_form.spo2,
         )
         new_id = database_port.insert_inference(new_inference)
 
         new_inserted_inference = Inference(
             id=new_id,
             age=inference_form.age,
-            sex=inference_form.sex,
+            gender=inference_form.gender,
             user_id=user_id,
             rgh=inference_form.rgh,
             covid_status=inference_form.covid_status,
             mask_type=inference_form.mask_type,
+            cid=inference_form.cid,
+            bpm=inference_form.bpm,
             model_id=inference_form.model_id,
             status=Status.processing_status,
             created_in=str(datetime.datetime.now()),
+            respiratory_frequency=inference_form.respiratory_frequency,
+            respiratory_insufficiency_status=inference_form.respiratory_insufficiency_status,
+            location=inference_form.location,
+            last_positive_diagnose_date=inference_form.last_positive_diagnose_date,
+            hospitalized=inference_form.hospitalized,
+            hospitalization_start=inference_form.hospitalization_start,
+            hospitalization_end=inference_form.hospitalization_end,
+            spo2=inference_form.spo2,
         )
 
         model = model_service.get_by_id(

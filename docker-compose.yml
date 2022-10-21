@@ -13,7 +13,6 @@ services:
       - nats-server
     restart: always
     image: api
-    container_name: spira-api-api-1
     env_file: 
       - envs/database.env
       - envs/authentication.env
@@ -21,6 +20,8 @@ services:
       - envs/message_listener.env
       - envs/simple_storage.env
     command: python main.py
+    volumes:
+      - "./src:/app/"
     ports:
       - 3000:8000 
     networks:

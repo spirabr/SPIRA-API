@@ -7,6 +7,74 @@ from core.model.result import ResultCreation, ResultUpdate
 from core.model.user import UserCreation
 from tests.mocks.mongo_mock import MongoMock
 
+INFERENCE_CREATION_JSON_1 = {
+    "gender": "M",
+    "age": 23,
+    "rgh": "fake_rgh",
+    "covid_status": "Sim",
+    "mask_type": "None",
+    "user_id": "507f191e810c19729de860ea",
+    "model_id": "629f992d45cda830033cf4cd",
+    "status": "processing",
+    "cid": "fake_cid",
+    "bpm": "fake_bpm",
+    "created_in": "2022-07-18 17:07:16.954632",
+    "respiratory_frequency": "123",
+    "respiratory_insufficiency_status": "Sim",
+    "location": "h1",
+    "last_positive_diagnose_date": "",
+    "hospitalized": "TRUE",
+    "hospitalization_start": "2022-07-18 17:07:16.954632",
+    "hospitalization_end": "2022-07-18 17:07:16.954632",
+    "spo2": "123",
+}
+
+INFERENCE_JSON_1 = {
+    "_id": ObjectId("629f815d6abaa3c5e6cf7c16"),
+    "gender": "M",
+    "age": 23,
+    "rgh": "fake_rgh",
+    "covid_status": "Sim",
+    "mask_type": "None",
+    "user_id": "507f191e810c19729de860ea",
+    "model_id": "629f992d45cda830033cf4cd",
+    "status": "processing",
+    "cid": "fake_cid",
+    "bpm": "fake_bpm",
+    "created_in": "2022-07-18 17:07:16.954632",
+    "respiratory_frequency": "123",
+    "respiratory_insufficiency_status": "Sim",
+    "location": "h1",
+    "last_positive_diagnose_date": "",
+    "hospitalized": "TRUE",
+    "hospitalization_start": "2022-07-18 17:07:16.954632",
+    "hospitalization_end": "2022-07-18 17:07:16.954632",
+    "spo2": "123",
+}
+
+INFERENCE_JSON_2 = {
+    "_id": ObjectId("629f81986abaa3c5e6cf7c17"),
+    "gender": "F",
+    "age": 32,
+    "rgh": "fake_rgh",
+    "covid_status": "Sim",
+    "mask_type": "None",
+    "user_id": "507f191e810c19729de860ea",
+    "model_id": "629f994245cda830033cf4cf",
+    "status": "processing",
+    "cid": "fake_cid",
+    "bpm": "fake_bpm",
+    "created_in": "2022-07-18 17:07:16.954632",
+    "respiratory_frequency": "123",
+    "respiratory_insufficiency_status": "Sim",
+    "location": "h1",
+    "last_positive_diagnose_date": "",
+    "hospitalized": "TRUE",
+    "hospitalization_start": "2022-07-18 17:07:16.954632",
+    "hospitalization_end": "2022-07-18 17:07:16.954632",
+    "spo2": "123",
+}
+
 
 @pytest.fixture()
 def database_adapter():
@@ -56,65 +124,22 @@ def test_get_inference_by_id(database_adapter: MongoAdapter):
         "629f815d6abaa3c5e6cf7c16", "507f191e810c19729de860ea"
     )
 
-    assert inference == {
-        "_id": ObjectId("629f815d6abaa3c5e6cf7c16"),
-        "sex": "M",
-        "age": 23,
-        "rgh": "fake_rgh",
-        "covid_status": "Sim",
-        "mask_type": "None",
-        "user_id": "507f191e810c19729de860ea",
-        "model_id": "629f992d45cda830033cf4cd",
-        "status": "processing",
-        "created_in": "2022-07-18 17:07:16.954632",
-    }
+    assert inference == INFERENCE_JSON_1
 
 
 def test_get_inference_list(database_adapter: MongoAdapter):
     inferences = database_adapter.get_inference_list("507f191e810c19729de860ea")
 
     assert list(inferences) == [
-        {
-            "_id": ObjectId("629f815d6abaa3c5e6cf7c16"),
-            "sex": "M",
-            "age": 23,
-            "rgh": "fake_rgh",
-            "covid_status": "Sim",
-            "mask_type": "None",
-            "user_id": "507f191e810c19729de860ea",
-            "model_id": "629f992d45cda830033cf4cd",
-            "status": "processing",
-            "created_in": "2022-07-18 17:07:16.954632",
-        },
-        {
-            "_id": ObjectId("629f81986abaa3c5e6cf7c17"),
-            "sex": "F",
-            "age": 32,
-            "rgh": "fake_rgh",
-            "covid_status": "Sim",
-            "mask_type": "None",
-            "user_id": "507f191e810c19729de860ea",
-            "model_id": "629f994245cda830033cf4cf",
-            "status": "processing",
-            "created_in": "2022-07-18 17:07:16.954632",
-        },
+        INFERENCE_JSON_1,
+        INFERENCE_JSON_2,
     ]
 
 
 def test_insert_inference(database_adapter: MongoAdapter):
     try:
         database_adapter.insert_inference(
-            InferenceCreation(
-                age=20,
-                sex="F",
-                rgh="fake_rgh",
-                covid_status="Sim",
-                mask_type="None",
-                user_id="507f191e810c19729de860ea",
-                model_id="629f994245cda830033cf4cf",
-                status="processing",
-                created_in=str(datetime.datetime.now()),
-            )
+            InferenceCreation(**INFERENCE_CREATION_JSON_1),
         )
     except:
         pytest.fail("test_insert_inference failed")

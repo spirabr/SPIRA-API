@@ -144,14 +144,26 @@ class DatabasePort:
             **{
                 "id": str(inference["_id"]),
                 "age": inference["age"],
-                "sex": inference["sex"],
+                "gender": inference["gender"],
                 "rgh": inference["rgh"],
                 "covid_status": inference["covid_status"],
                 "mask_type": inference["mask_type"],
+                "cid": inference["cid"],
+                "bpm": inference["bpm"],
                 "user_id": inference["user_id"],
                 "model_id": inference["model_id"],
                 "status": inference["status"],
                 "created_in": inference["created_in"],
+                "respiratory_frequency": inference["respiratory_frequency"],
+                "respiratory_insufficiency_status": inference[
+                    "respiratory_insufficiency_status"
+                ],
+                "location": inference["location"],
+                "last_positive_diagnose_date": inference["last_positive_diagnose_date"],
+                "hospitalized": inference["hospitalized"],
+                "hospitalization_start": inference["hospitalization_start"],
+                "hospitalization_end": inference["hospitalization_end"],
+                "spo2": inference["spo2"],
             }
         )
 
@@ -171,14 +183,28 @@ class DatabasePort:
                 **{
                     "id": str(inference["_id"]),
                     "age": inference["age"],
-                    "sex": inference["sex"],
+                    "gender": inference["gender"],
                     "rgh": inference["rgh"],
                     "covid_status": inference["covid_status"],
                     "mask_type": inference["mask_type"],
+                    "cid": inference["cid"],
+                    "bpm": inference["bpm"],
                     "user_id": inference["user_id"],
                     "model_id": inference["model_id"],
                     "status": inference["status"],
                     "created_in": inference["created_in"],
+                    "respiratory_frequency": inference["respiratory_frequency"],
+                    "respiratory_insufficiency_status": inference[
+                        "respiratory_insufficiency_status"
+                    ],
+                    "location": inference["location"],
+                    "last_positive_diagnose_date": inference[
+                        "last_positive_diagnose_date"
+                    ],
+                    "hospitalized": inference["hospitalized"],
+                    "hospitalization_start": inference["hospitalization_start"],
+                    "hospitalization_end": inference["hospitalization_end"],
+                    "spo2": inference["spo2"],
                 }
             )
             for inference in inference_list
