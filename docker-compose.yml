@@ -8,7 +8,7 @@ services:
     profiles:
       - production
     restart: always
-    image: daitamae/spira-api:version1.5.test
+    image: ${API_IMAGE}
     env_file: 
       - envs/database.env
       - envs/authentication.env
