@@ -58,6 +58,7 @@ def configure_ports() -> Ports:
                 Settings.simple_storage_settings.minio_access_key,
                 Settings.simple_storage_settings.minio_secret_key,
                 Settings.simple_storage_settings.bucket_name,
+                Settings.simple_storage_settings.file_extension,
             )
         ),
     )

@@ -122,7 +122,7 @@ class MongoMock(MongoAdapter):
             {
                 "_id": ObjectId("62abf2cd154f18493d74fcd2"),
                 "inference_id": "629f815d6abaa3c5e6cf7c16",
-                "output": 0.98765,
+                "output": [0.98765],
                 "diagnosis": "positive",
             }
         )

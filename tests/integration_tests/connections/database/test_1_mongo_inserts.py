@@ -151,7 +151,7 @@ def test_insert_result(database_adapter: MongoAdapter):
             {
                 "_id": ObjectId(),
                 "inference_id": "629f815d6abaa3c5e6cf7c16",
-                "output": 0.98765,
+                "output": [0.98765],
                 "diagnosis": "positive",
             }
         )

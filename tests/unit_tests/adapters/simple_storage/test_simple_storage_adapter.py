@@ -28,7 +28,6 @@ def test_store_inference_file(simple_storage_adapter: MinioAdapter):
             simple_storage_adapter.store_inference_file(
                 "fake_inference_id",
                 "fake_file_type",
-                ".fake_extension",
                 file,
             )
             assert True
@@ -36,7 +35,7 @@ def test_store_inference_file(simple_storage_adapter: MinioAdapter):
             assert False
         mock_method.assert_called_once_with(
             "mock-bucket",
-            "fake_inference_id/fake_file_type.fake_extension",
+            "fake_inference_id/fake_file_type.wav",
             ANY,
             565292,
         )

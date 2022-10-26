@@ -16,9 +16,7 @@ def simple_storage_port():
 
 
 def test_store_inference_file(simple_storage_port: SimpleStoragePort):
-    def store_inference_file(
-        inference_id: str, file_type: str, extension: str, file: BytesIO
-    ) -> None:
+    def store_inference_file(inference_id: str, file_type: str, file: BytesIO) -> None:
         pass
 
     file = UploadAudio(
@@ -40,7 +38,6 @@ def test_store_inference_file(simple_storage_port: SimpleStoragePort):
         mock_store_inference_file.assert_called_once_with(
             "507f191e810c19729de860ea",
             "fake_file_type",
-            ".wav",
             ANY,
         )
 

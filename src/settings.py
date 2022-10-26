@@ -73,6 +73,7 @@ class SimpleStorageSettings(BaseSettings):
         bucket_name (str) : name of the bucket used by the app
         minio_access_key (str) : minio access credentials
         minio_secret_key (str) : minio credentials
+        file_extension (str) : default files extension
 
     """
 
@@ -80,6 +81,7 @@ class SimpleStorageSettings(BaseSettings):
     bucket_name: str
     minio_access_key: str
     minio_secret_key: str
+    file_extension: str
 
 
 class Settings:

@@ -1,16 +1,14 @@
 # SPIRA-API
 
 ## Project Overview
-This is a multi-container project used to serve inference requests to ML models and register their predictions in the context of the research project [SPIRA](https://spira.ime.usp.br/coleta/).
 
+This is a multi-container project used to serve inference requests to ML models and register their predictions in the context of the research project [SPIRA](https://spira.ime.usp.br/coleta/).
 
 The source code is contained in the directory `src`.
 
-The containers used in this project and their connections are configured in the file  `docker-compose.yml`.
+The containers used in this project and their connections are configured in the file `docker-compose.yml`.
 
 The tests are contained in the `tests` directory.
-
-
 
 ## Environment Variables
 
@@ -20,7 +18,7 @@ The variables of each env file are the same as the attributes of the classes dec
 
 ## Dependencies
 
-Dependency management is done with [`poetry`](https://python-poetry.org/docs/) and they are configured in the file `poetry.lock`. Dependencies can be added and removed using the poetry cli. 
+Dependency management is done with [`poetry`](https://python-poetry.org/docs/) and they are configured in the file `poetry.lock`. Dependencies can be added and removed using the poetry cli.
 
 ## Running the project
 
@@ -33,7 +31,7 @@ docker compose build api
 Run the project:
 
 ```
-docker compose up
+docker compose --profile production up
 ```
 
 Run tests:
@@ -43,6 +41,7 @@ make all-tests
 ```
 
 The Makefile divides the tests in sections. To run a specific test section:
+
 ```
 make {test-section}
 ```

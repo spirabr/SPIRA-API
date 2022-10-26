@@ -84,7 +84,7 @@ def create_inference_result(
         )
 
         new_result = ResultCreation(
-            inference_id=inference_id, output=-1, diagnosis="not available"
+            inference_id=inference_id, output=[-1], diagnosis="not available"
         )
         database_port.insert_result(new_result)
 

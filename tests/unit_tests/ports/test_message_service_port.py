@@ -83,7 +83,7 @@ def test_wait_for_message(message_service_port: MessageServicePort):
         return json.dumps(
             {
                 "inference_id": "fake_inference_id",
-                "output": 0.777,
+                "output": [0.777],
                 "diagnosis": "positive",
             }
         )
@@ -97,7 +97,7 @@ def test_wait_for_message(message_service_port: MessageServicePort):
         assert return_value == ResultUpdate(
             **{
                 "inference_id": "fake_inference_id",
-                "output": 0.777,
+                "output": [0.777],
                 "diagnosis": "positive",
             }
         )

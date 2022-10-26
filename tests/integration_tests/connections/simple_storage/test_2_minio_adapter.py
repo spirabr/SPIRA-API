@@ -17,6 +17,7 @@ def simple_storage_adapter():
         Settings.simple_storage_settings.minio_access_key,
         Settings.simple_storage_settings.minio_secret_key,
         "test-bucket",
+        Settings.simple_storage_settings.file_extension,
     )
     yield adapter
 
@@ -43,7 +44,6 @@ def test_store_inference_file(simple_storage_adapter: MinioAdapter):
     simple_storage_adapter.store_inference_file(
         "fake_inference_id",
         "fake_file_type",
-        ".fake_extension",
         file,
     )
 
@@ -56,7 +56,7 @@ def test_store_inference_file(simple_storage_adapter: MinioAdapter):
 
     response = minio_client.get_object(
         "test-bucket",
-        "fake_inference_id" + os.sep + "fake_file_type" + ".fake_extension",
+        "fake_inference_id" + os.sep + "fake_file_type" + ".wav",
     )
 
     assert response != None
@@ -74,7 +74,6 @@ def test_remove_inference_directory(simple_storage_adapter: MinioAdapter):
     simple_storage_adapter.store_inference_file(
         "fake_inference_id",
         "fake_file_type",
-        ".fake_extension",
         file,
     )
 

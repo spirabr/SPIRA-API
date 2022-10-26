@@ -120,7 +120,7 @@ def database_adapter():
         {
             "_id": ObjectId("629d34d2663c15eb2ed15495"),
             "inference_id": "629f815d6abaa3c5e6cf7c16",
-            "output": 0.98765,
+            "output": [0.98765],
             "diagnosis": "positive",
         }
     )
@@ -212,7 +212,7 @@ def test_find_result(database_adapter: MongoAdapter):
         assert result == {
             "_id": ObjectId("629d34d2663c15eb2ed15495"),
             "inference_id": "629f815d6abaa3c5e6cf7c16",
-            "output": 0.98765,
+            "output": [0.98765],
             "diagnosis": "positive",
         }
     except:
