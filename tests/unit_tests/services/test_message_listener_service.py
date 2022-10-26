@@ -38,7 +38,7 @@ def test_listen_for_messages_and_update(
 ):
     async def fake_wait_for_message(central_channel: str):
         return ResultUpdate(
-            inference_id="fake_inference_id", output=0.999, diagnosis="positive"
+            inference_id="fake_inference_id", output=[0.999], diagnosis="positive"
         )
 
     def fake_remove_inference_directory(inference_id: str):
@@ -78,7 +78,7 @@ def test_listen_for_messages_and_update(
         mock_wait_for_message.assert_called_once_with("fake_central_channel")
         mock_update_result.assert_called_once_with(
             ResultUpdate(
-                inference_id="fake_inference_id", output=0.999, diagnosis="positive"
+                inference_id="fake_inference_id", output=[0.999], diagnosis="positive"
             )
         )
         mock_update_inference_status.assert_called_once_with(

@@ -8,3 +8,4 @@ class MinioMock(MinioAdapter):
         self._client: Minio = Mock(spec=Minio)
         self._bucket_name = "mock-bucket"
         self._client.make_bucket(self._bucket_name)
+        self._file_extension = ".wav"

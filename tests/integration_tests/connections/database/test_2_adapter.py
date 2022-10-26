@@ -136,7 +136,7 @@ def database_adapter():
         {
             "_id": ObjectId("62abf2cd154f18493d74fcd2"),
             "inference_id": "629f815d6abaa3c5e6cf7c16",
-            "output": 0.98765,
+            "output": [0.98765],
             "diagnosis": "positive",
         }
     )
@@ -317,7 +317,7 @@ def test_get_result_by_inference_id(database_adapter: MongoAdapter):
     assert result == {
         "_id": ObjectId("62abf2cd154f18493d74fcd2"),
         "inference_id": "629f815d6abaa3c5e6cf7c16",
-        "output": 0.98765,
+        "output": [0.98765],
         "diagnosis": "positive",
     }
 
@@ -327,7 +327,7 @@ def test_insert_result(database_adapter: MongoAdapter):
         database_adapter.insert_result(
             ResultCreation(
                 inference_id="629f815d6abaa3c5e6cf7c16",
-                output=-1,
+                output=[-1],
                 diagnosis="not available",
             )
         )
@@ -340,7 +340,7 @@ def test_update_result(database_adapter: MongoAdapter):
         database_adapter.update_result(
             ResultUpdate(
                 inference_id="629f815d6abaa3c5e6cf7c16",
-                output=0.987,
+                output=[0.987],
                 diagnosis="positive",
             )
         )

@@ -29,9 +29,8 @@ class SimpleStoragePort:
             None
 
         """
-        _, file_extension = os.path.splitext(audio_file.filename)
         self._simples_storage_adapter.store_inference_file(
-            inference_id, file_type, file_extension, BytesIO(audio_file.content)
+            inference_id, file_type, BytesIO(audio_file.content)
         )
 
     def remove_inference_directory(self, inference_id: str) -> None:

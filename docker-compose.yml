@@ -7,12 +7,8 @@ services:
       target: prod
     profiles:
       - production
-    depends_on:
-      - mongo
-      - minio
-      - nats-server
     restart: always
-    image: api
+    image: daitamae/spira-api:version1.5.test
     env_file: 
       - envs/database.env
       - envs/authentication.env
@@ -124,7 +120,6 @@ networks:
   minio-network:
     driver: bridge
     name: minio-bridge
-
 
 volumes:
   minio_data:

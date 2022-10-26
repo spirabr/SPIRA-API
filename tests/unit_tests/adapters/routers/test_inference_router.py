@@ -262,7 +262,7 @@ def test_post_create_inference_and_result_success(client_with_auth: TestClient):
         fake_result_insert.assert_called_once_with(
             ResultCreation(
                 inference_id="fake_inference_id",
-                output=-1,
+                output=[-1],
                 diagnosis="not available",
             )
         )
