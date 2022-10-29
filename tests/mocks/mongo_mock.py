@@ -106,13 +106,11 @@ class MongoMock(MongoAdapter):
                 {
                     "_id": ObjectId("629f992d45cda830033cf4cd"),
                     "name": "fake_model",
-                    "receiving_channel": "fake_channel_1",
                     "publishing_channel": "fake_channel_2",
                 },
                 {
                     "_id": ObjectId("629f994245cda830033cf4cf"),
                     "name": "fake_model_2",
-                    "receiving_channel": "fake_channel_3",
                     "publishing_channel": "fake_channel_4",
                 },
             ]

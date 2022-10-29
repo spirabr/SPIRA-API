@@ -2,6 +2,7 @@ from pymongo import MongoClient
 from bson import ObjectId
 
 from core.model.inference import InferenceCreation
+from core.model.model import ModelCreationForm
 from core.model.result import ResultCreation, ResultUpdate
 from core.model.user import UserCreation
 
@@ -114,6 +115,32 @@ class MongoAdapter:
 
         """
         return self._models.find()
+
+    def insert_model(self, new_model: ModelCreationForm):
+        """inserts a new model document in the models collection
+
+        Args:
+            new_model (ModelCreationForm) : new model form
+
+        Returns:
+            None
+
+        """
+        self._models.insert_one(new_model.dict())
+
+    def get_model_by_attribute(self, attribute, attribute_name: str):
+        """gets the model document by the attribute
+
+        Args:
+            attribute
+            attribute_name (str)
+
+        Returns:
+            model document.
+            if no model is found, None is returned.
+
+        """
+        return self._models.find_one({attribute_name: attribute})
 
     # inference methods
 

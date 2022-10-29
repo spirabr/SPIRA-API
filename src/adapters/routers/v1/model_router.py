@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordBearer
+from core.model.model import ModelCreationForm
 
 from core.model.token import Token
 from core.model.user import User
-from core.services.model_service import get_by_id, get_list
+from core.services.model_service import create_new_model, get_by_id, get_list
 from core.model.exception import LogicException
 from core.ports.authentication_port import AuthenticationPort
 from core.ports.database_port import DatabasePort
@@ -39,5 +40,20 @@ def create_model_router(
         except LogicException as e:
             raise HTTPException(e.error_status, e.message)
         return {"models": jsonable_encoder(model_list)}
+
+    @router.post("/")
+    def create_model(
+        model_form: ModelCreationForm, token_content: str = Depends(oauth2_scheme)
+    ):
+        try:
+            create_new_model(
+                authentication_port,
+                database_port,
+                model_form,
+                Token(content=token_content),
+            )
+        except LogicException as e:
+            raise HTTPException(e.error_status, e.message)
+        return {"message": "model registered!"}
 
     return router

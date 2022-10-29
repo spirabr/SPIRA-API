@@ -1,5 +1,5 @@
 from typing import Optional, List
-from core.model.model import Model
+from core.model.model import Model, ModelCreationForm
 from core.model.result import Result, ResultCreation
 from core.model.user import User, UserCreation, UserWithPassword
 from core.model.inference import Inference, InferenceCreation
@@ -255,7 +255,6 @@ class DatabasePort:
             **{
                 "id": str(model["_id"]),
                 "name": model["name"],
-                "receiving_channel": model["receiving_channel"],
                 "publishing_channel": model["publishing_channel"],
             }
         )
@@ -276,12 +275,45 @@ class DatabasePort:
                 **{
                     "id": str(model["_id"]),
                     "name": model["name"],
-                    "receiving_channel": model["receiving_channel"],
                     "publishing_channel": model["publishing_channel"],
                 }
             )
             for model in model_list
         ]
+
+    def insert_model(self, new_model: ModelCreationForm):
+        """inserts a new model in the database
+
+        Args:
+            new_model (ModelCreation) : new model form
+
+        Returns:
+            None
+
+        """
+        self._database_adapter.insert_model(new_model)
+
+    def get_model_by_attribute(self, attribute, attribute_name: str):
+        """gets model by attribute name
+
+        Args:
+            attribute
+            attribute_name : str
+
+        Returns:
+            model object
+
+        """
+        model = self._database_adapter.get_model_by_attribute(attribute, attribute_name)
+        if model == None:
+            return None
+        return Model(
+            **{
+                "id": str(model["_id"]),
+                "name": model["name"],
+                "publishing_channel": model["publishing_channel"],
+            }
+        )
 
     # result methods
 
