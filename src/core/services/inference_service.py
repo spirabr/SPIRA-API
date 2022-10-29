@@ -159,6 +159,8 @@ async def create_new_inference(
             spo2=inference_form.spo2,
         )
         new_id = database_port.insert_inference(new_inference)
+        
+        logging.info("inference inserted in database.")
 
         new_inserted_inference = Inference(
             id=new_id,
@@ -188,6 +190,7 @@ async def create_new_inference(
         )
 
         _store_files(simple_storage_port, inference_files, new_id)
+        logging.info("inference audios stored.")
 
         await message_service_port.send_message(
             RequestLetter(
@@ -195,6 +198,7 @@ async def create_new_inference(
                 publishing_channel=model.publishing_channel,
             )
         )
+        logging.info("inference message sent.")
     except LogicException:
         raise
     except:
