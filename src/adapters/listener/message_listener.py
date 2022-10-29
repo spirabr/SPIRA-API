@@ -1,5 +1,6 @@
 from asyncio import sleep, get_event_loop
 import asyncio
+import logging
 from core.ports.database_port import DatabasePort
 from core.ports.message_service_port import MessageServicePort
 from core.ports.ports import Ports
@@ -28,17 +29,15 @@ async def listen_for_messages_loop(
         None
 
     """
-    print("entered listener loop", flush=True)
     try:
         await subscribe_to_channel(
             message_service_port, Settings.message_listener_settings.central_channel
         )
     except Exception as e:
-        print(e, flush=True)
+        logging.error(e)
 
-    print(
-        "subscribed to " + Settings.message_listener_settings.central_channel,
-        flush=True,
+    logging.info(
+        "subscribed to " + Settings.message_listener_settings.central_channel
     )
 
     while True:
@@ -51,7 +50,7 @@ async def listen_for_messages_loop(
                 Settings.message_listener_settings.central_channel,
             )
         except Exception as e:
-            print(e, flush=True)
+            logging.error(e)
 
 
 def run_listener(ports: Ports):
@@ -64,7 +63,7 @@ def run_listener(ports: Ports):
         None
 
     """
-    print("entered listener", flush=True)
+    logging.info("entered in listener loop.")
     asyncio.new_event_loop().run_until_complete(
         listen_for_messages_loop(
             ports.simple_storage_port,

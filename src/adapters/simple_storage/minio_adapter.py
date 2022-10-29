@@ -1,4 +1,5 @@
 from io import BytesIO
+import logging
 import os
 from minio import Minio
 from minio.deleteobjects import DeleteObject
@@ -70,4 +71,4 @@ class MinioAdapter:
         )
         errors = self._client.remove_objects(self._bucket_name, delete_object_list)
         for error in errors:
-            print("error occured when deleting object", error, flush=True)
+            logging.error("error occured when deleting object", error, flush=True)

@@ -1,3 +1,4 @@
+import logging
 from typing import List, Union
 from fastapi import status
 import datetime
@@ -88,12 +89,11 @@ def get_list(
     try:
         _authenticate_user(authentication_port, database_port, user_id, token)
         inference_list = database_port.get_inference_list(user_id)
-        print([i for i in inference_list], flush=True)
 
     except LogicException:
         raise
     except Exception as e:
-        print(e, flush=True)
+        logging.error(e)
         raise LogicException(
             "cound not retrieve inference list", status.HTTP_500_INTERNAL_SERVER_ERROR
         )
@@ -159,6 +159,8 @@ async def create_new_inference(
             spo2=inference_form.spo2,
         )
         new_id = database_port.insert_inference(new_inference)
+        
+        logging.info("inference inserted in database.")
 
         new_inserted_inference = Inference(
             id=new_id,
@@ -188,6 +190,7 @@ async def create_new_inference(
         )
 
         _store_files(simple_storage_port, inference_files, new_id)
+        logging.info("inference audios stored.")
 
         await message_service_port.send_message(
             RequestLetter(
@@ -195,6 +198,7 @@ async def create_new_inference(
                 publishing_channel=model.publishing_channel,
             )
         )
+        logging.info("inference message sent.")
     except LogicException:
         raise
     except:

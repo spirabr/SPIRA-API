@@ -1,3 +1,4 @@
+import logging
 from threading import Thread
 from adapters.authentication.authentication_adapter import AuthenticationAdapter
 from adapters.database.mongo_adapter import MongoAdapter
@@ -95,7 +96,7 @@ def create_listener_process(ports: Ports):
 
 if __name__ == "__main__":
     ports = configure_ports()
-    print("starting both processes...", flush=True)
+    logging.info("starting both processes...")
     app_process = create_app_process(ports)
     listener_process = create_listener_process(ports)
 

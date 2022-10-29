@@ -1,3 +1,4 @@
+import logging
 from core.model.exception import LogicException
 from core.model.result import ResultUpdate
 from core.ports.database_port import DatabasePort
@@ -54,10 +55,10 @@ async def listen_for_messages_and_update(
 
     """
     try:
-        print("waiting for updates")
+        logging.info("waiting for updates...")
         result_update = await message_service_port.wait_for_message(central_channel)
 
-        print("update:", result_update)
+        logging.info("update received.")
         _update_database(database_port, result_update)
 
         simple_storage_port.remove_inference_directory(result_update.inference_id)
