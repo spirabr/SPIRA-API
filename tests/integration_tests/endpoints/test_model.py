@@ -32,7 +32,6 @@ def test_get_model_by_id_success(client_with_auth: TestClient):
     assert response.json() == {
         "id": "629f992d45cda830033cf4cd",
         "name": "fake_model",
-        "receiving_channel": "fake_channel_1",
         "publishing_channel": "fake_channel_2",
     }
     assert response.status_code == 200
@@ -62,19 +61,32 @@ def test_get_model_list_success(client_with_auth: TestClient):
             {
                 "id": "629f992d45cda830033cf4cd",
                 "name": "fake_model",
-                "receiving_channel": "fake_channel_1",
                 "publishing_channel": "fake_channel_2",
             },
             {
                 "id": "629f994245cda830033cf4cf",
                 "name": "fake_model_2",
-                "receiving_channel": "fake_channel_3",
                 "publishing_channel": "fake_channel_4",
             },
         ]
     }
     assert response.status_code == 200
 
+def test_post_create_model_success(client_with_auth: TestClient):
+    fake_model = {
+        "name": "teste",
+        "publishing_channel": "test_channel"
+    }
+    response = client_with_auth.post(
+        "/v1/models/",
+        headers={
+            "Authorization": "Bearer mock_token",
+            "Content-Type": "application/json",
+        },
+        json=fake_model,
+    )
+    assert response.status_code == 200
+    assert response.json() == {"message": "model registered!"}
 
 # tests without authentication
 
@@ -91,5 +103,21 @@ def test_get_model_by_id_unauthorized(client_without_auth: TestClient):
 def test_get_models_list_unauthorized(client_without_auth: TestClient):
     headers = {"Authorization": "Bearer mock_token"}
     response = client_without_auth.get("/v1/models", headers=headers)
+    assert response.json() == {"detail": "could not validate the credentials"}
+    assert response.status_code == 401
+
+def test_post_create_model_unauthorized(client_without_auth: TestClient):
+    fake_model = {
+        "name": "teste",
+        "publishing_channel": "test_channel"
+    }
+    response = client_without_auth.post(
+        "/v1/models/",
+        headers={
+            "Authorization": "Bearer mock_token",
+            "Content-Type": "application/json",
+        },
+        json=fake_model,
+    )
     assert response.json() == {"detail": "could not validate the credentials"}
     assert response.status_code == 401

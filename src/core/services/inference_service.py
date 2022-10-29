@@ -192,7 +192,7 @@ async def create_new_inference(
         await message_service_port.send_message(
             RequestLetter(
                 content=new_inserted_inference,
-                publishing_channel=model.receiving_channel,
+                publishing_channel=model.publishing_channel,
             )
         )
     except LogicException:

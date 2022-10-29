@@ -51,13 +51,11 @@ def test_insert_models(database_adapter: MongoAdapter):
                 {
                     "_id": ObjectId(),
                     "name": "fake_model",
-                    "receiving_channel": "fake_channel_1",
                     "publishing_channel": "fake_channel_2",
                 },
                 {
                     "_id": ObjectId(),
                     "name": "fake_model_2",
-                    "receiving_channel": "fake_channel_3",
                     "publishing_channel": "fake_channel_4",
                 },
             ]

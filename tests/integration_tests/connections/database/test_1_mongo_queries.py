@@ -35,13 +35,11 @@ def database_adapter():
             {
                 "_id": ObjectId("629d34d2663c15eb2ed15490"),
                 "name": "fake_model",
-                "receiving_channel": "fake_channel_1",
                 "publishing_channel": "fake_channel_2",
             },
             {
                 "_id": ObjectId("629d34d2663c15eb2ed15491"),
                 "name": "fake_model_2",
-                "receiving_channel": "fake_channel_3",
                 "publishing_channel": "fake_channel_4",
             },
         ]
@@ -195,7 +193,6 @@ def test_find_model(database_adapter: MongoAdapter):
         assert model == {
             "_id": ObjectId("629d34d2663c15eb2ed15490"),
             "name": "fake_model",
-            "receiving_channel": "fake_channel_1",
             "publishing_channel": "fake_channel_2",
         }
     except:
