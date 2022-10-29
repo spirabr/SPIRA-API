@@ -1,3 +1,4 @@
+import logging
 from typing import List, Union
 from fastapi import status
 import datetime
@@ -88,12 +89,11 @@ def get_list(
     try:
         _authenticate_user(authentication_port, database_port, user_id, token)
         inference_list = database_port.get_inference_list(user_id)
-        print([i for i in inference_list], flush=True)
 
     except LogicException:
         raise
     except Exception as e:
-        print(e, flush=True)
+        logging.error(e)
         raise LogicException(
             "cound not retrieve inference list", status.HTTP_500_INTERNAL_SERVER_ERROR
         )
