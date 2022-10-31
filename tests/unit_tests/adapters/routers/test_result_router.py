@@ -12,110 +12,12 @@ from core.model.inference import Inference, InferenceCreation
 from core.model.result import Result, ResultCreation
 
 from tests.mocks.mongo_mock import MongoMock
+from tests.mocks.constants import Constants
 
 from tests.config import (
     configure_ports_without_auth,
     configure_ports_with_auth,
 )
-
-
-INFERENCE_JSON_1_WITH_ID = {
-    "id": "629f815d6abaa3c5e6cf7c16",
-    "gender": "M",
-    "age": 23,
-    "rgh": "fake_rgh",
-    "covid_status": "Sim",
-    "mask_type": "None",
-    "user_id": "507f191e810c19729de860ea",
-    "model_id": "629f994245cda830033cf4cf",
-    "status": "processing",
-    "cid": "fake_cid",
-    "bpm": "fake_bpm",
-    "created_in": "2022-07-18 17:07:16.954632",
-    "respiratory_frequency": "123",
-    "respiratory_insufficiency_status": "Sim",
-    "location": "h1",
-    "last_positive_diagnose_date": "",
-    "hospitalized": "TRUE",
-    "hospitalization_start": "2022-07-18 17:07:16.954632",
-    "hospitalization_end": "2022-07-18 17:07:16.954632",
-    "spo2": "123",
-}
-
-INFERENCE_JSON_2_WITH_ID = {
-    "id": "629f81986abaa3c5e6cf7c17",
-    "gender": "F",
-    "age": 32,
-    "rgh": "fake_rgh",
-    "covid_status": "Sim",
-    "mask_type": "None",
-    "cid": "fake_cid",
-    "bpm": "fake_bpm",
-    "user_id": "507f191e810c19729de860ea",
-    "model_id": "629f994245cda830033cf4cf",
-    "status": "processing",
-    "cid": "fake_cid",
-    "bpm": "fake_bpm",
-    "created_in": "2022-07-18 17:07:16.954632",
-    "respiratory_frequency": "123",
-    "respiratory_insufficiency_status": "Sim",
-    "location": "h1",
-    "last_positive_diagnose_date": "",
-    "hospitalized": "TRUE",
-    "hospitalization_start": "2022-07-18 17:07:16.954632",
-    "hospitalization_end": "2022-07-18 17:07:16.954632",
-    "spo2": "123",
-}
-
-INFERENCE_JSON_2 = {
-    "gender": "F",
-    "age": 32,
-    "rgh": "fake_rgh",
-    "covid_status": "Sim",
-    "mask_type": "None",
-    "cid": "fake_cid",
-    "bpm": "fake_bpm",
-    "user_id": "507f191e810c19729de860ea",
-    "model_id": "629f994245cda830033cf4cf",
-    "status": "processing",
-    "cid": "fake_cid",
-    "bpm": "fake_bpm",
-    "created_in": "2022-07-18 17:07:16.954632",
-    "respiratory_frequency": "123",
-    "respiratory_insufficiency_status": "Sim",
-    "location": "h1",
-    "last_positive_diagnose_date": "",
-    "hospitalized": "TRUE",
-    "hospitalization_start": "2022-07-18 17:07:16.954632",
-    "hospitalization_end": "2022-07-18 17:07:16.954632",
-    "spo2": "123",
-}
-
-FAKE_INFERENCE = {
-    "gender": "F",
-    "age": 23,
-    "rgh": "fake_rgh",
-    "covid_status": "Sim",
-    "mask_type": "None",
-    "cid": "fake_cid",
-    "bpm": "fake_bpm",
-    "model_id": "629f994245cda830033cf4cf",
-    "respiratory_frequency": "123",
-    "respiratory_insufficiency_status": "Sim",
-    "location": "h1",
-    "last_positive_diagnose_date": "",
-    "hospitalized": "TRUE",
-    "hospitalization_start": "2022-07-18 17:07:16.954632",
-    "hospitalization_end": "2022-07-18 17:07:16.954632",
-    "spo2": "123",
-}
-
-FAKE_FILES = {
-    "aceite": open("tests/mocks/audio_files/audio4.wav", "rb"),
-    "sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
-    "parlenda": open("tests/mocks/audio_files/audio2.wav", "rb"),
-    "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
-}
 
 database_port_instance = DatabasePort(MongoMock())
 
@@ -142,7 +44,9 @@ def test_get_result_by_inference_id_success(client_with_auth: TestClient):
     with patch(
         "adapters.routers.v1.result_router.get_inference_result"
     ) as mock_get_by_id:
-        mock_get_by_id.return_value = Inference(**INFERENCE_JSON_1_WITH_ID), Result(
+        mock_get_by_id.return_value = Inference(
+            **Constants.INFERENCE_JSON_1_WITH_ID
+        ), Result(
             **{
                 "id": "62abf2cd154f18493d74fcd2",
                 "inference_id": "629f815d6abaa3c5e6cf7c16",
@@ -165,7 +69,7 @@ def test_get_result_by_inference_id_success(client_with_auth: TestClient):
         )
         assert sorted(response.json()) == sorted(
             {
-                "inference": INFERENCE_JSON_1_WITH_ID,
+                "inference": Constants.INFERENCE_JSON_1_WITH_ID,
                 "result": {
                     "id": "62abf2cd154f18493d74fcd2",
                     "inference_id": "629f815d6abaa3c5e6cf7c16",

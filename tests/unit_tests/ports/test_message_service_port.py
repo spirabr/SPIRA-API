@@ -1,3 +1,4 @@
+import pytest
 import datetime
 import json
 from mock import ANY, MagicMock, call, patch
@@ -7,31 +8,9 @@ from core.model.message_service import RequestLetter
 from core.model.result import ResultUpdate
 from core.ports.message_service_port import MessageServicePort
 from tests.mocks.nats_mock import NATSMock
-import pytest
 import asyncio
 
-INFERENCE_JSON_1_WITH_ID = {
-    "id": "fake_inference_id",
-    "gender": "M",
-    "age": 23,
-    "rgh": "fake_rgh",
-    "covid_status": "Sim",
-    "mask_type": "None",
-    "user_id": "507f191e810c19729de860ea",
-    "model_id": "629f994245cda830033cf4cf",
-    "status": "processing",
-    "cid": "fake_cid",
-    "bpm": "fake_bpm",
-    "created_in": "2022-07-18 17:07:16.954632",
-    "respiratory_frequency": "123",
-    "respiratory_insufficiency_status": "Sim",
-    "location": "h1",
-    "last_positive_diagnose_date": "",
-    "hospitalized": "TRUE",
-    "hospitalization_start": "2022-07-18 17:07:16.954632",
-    "hospitalization_end": "2022-07-18 17:07:16.954632",
-    "spo2": "123",
-}
+from tests.mocks.constants import Constants
 
 adapter_instance = NATSMock()
 
@@ -54,7 +33,7 @@ def test_send_message(message_service_port: MessageServicePort):
         asyncio.run(
             message_service_port.send_message(
                 RequestLetter(
-                    content=Inference(**INFERENCE_JSON_1_WITH_ID),
+                    content=Inference(**Constants.INFERENCE_JSON_1_WITH_ID),
                     publishing_channel="fake_topic",
                 ),
             )

@@ -4,6 +4,7 @@ from pymongo import MongoClient
 
 from adapters.database.mongo_adapter import MongoAdapter
 from src.settings import Settings
+from tests.mocks.constants import Constants
 
 
 @pytest.fixture()
@@ -46,72 +47,9 @@ def database_adapter():
     )
     adapter._inferences.insert_many(
         [
-            {
-                "_id": ObjectId("629d34d2663c15eb2ed15492"),
-                "gender": "M",
-                "age": 23,
-                "rgh": "fake_rgh",
-                "covid_status": "Sim",
-                "mask_type": "None",
-                "user_id": "507f191e810c19729de860ea",
-                "model_id": "629f992d45cda830033cf4cd",
-                "status": "processing",
-                "cid": "fake_cid",
-                "bpm": "fake_bpm",
-                "created_in": "2022-07-18 17:07:16.954632",
-                "respiratory_frequency": "123",
-                "respiratory_insufficiency_status": "Sim",
-                "location": "h1",
-                "last_positive_diagnose_date": "",
-                "hospitalized": "TRUE",
-                "hospitalization_start": "2022-07-18 17:07:16.954632",
-                "hospitalization_end": "2022-07-18 17:07:16.954632",
-                "spo2": "123",
-            },
-            {
-                "_id": ObjectId("629d34d2663c15eb2ed15493"),
-                "gender": "F",
-                "age": 32,
-                "rgh": "fake_rgh",
-                "covid_status": "Sim",
-                "mask_type": "None",
-                "user_id": "507f191e810c19729de860ea",
-                "model_id": "629f994245cda830033cf4cf",
-                "status": "processing",
-                "cid": "fake_cid",
-                "bpm": "fake_bpm",
-                "created_in": "2022-07-18 17:07:16.954632",
-                "respiratory_frequency": "123",
-                "respiratory_insufficiency_status": "Sim",
-                "location": "h1",
-                "last_positive_diagnose_date": "",
-                "hospitalized": "TRUE",
-                "hospitalization_start": "2022-07-18 17:07:16.954632",
-                "hospitalization_end": "2022-07-18 17:07:16.954632",
-                "spo2": "123",
-            },
-            {
-                "_id": ObjectId("629d34d2663c15eb2ed15494"),
-                "gender": "F",
-                "age": 22,
-                "rgh": "fake_rgh",
-                "covid_status": "Sim",
-                "mask_type": "None",
-                "user_id": "629d34d2663c15eb2ed15494",
-                "model_id": "629f994245cda830033cf4cf",
-                "status": "processing",
-                "cid": "fake_cid",
-                "bpm": "fake_bpm",
-                "created_in": "2022-07-18 17:07:16.954632",
-                "respiratory_frequency": "123",
-                "respiratory_insufficiency_status": "Sim",
-                "location": "h1",
-                "last_positive_diagnose_date": "",
-                "hospitalized": "TRUE",
-                "hospitalization_start": "2022-07-18 17:07:16.954632",
-                "hospitalization_end": "2022-07-18 17:07:16.954632",
-                "spo2": "123",
-            },
+            Constants.MONGO_INFERENCE_JSON_1,
+            Constants.MONGO_INFERENCE_JSON_2,
+            Constants.MONGO_INFERENCE_JSON_3,
         ]
     )
     adapter._results.insert_one(
@@ -154,30 +92,7 @@ def test_find_inference(database_adapter: MongoAdapter):
                 "age": 23,
             },
         )
-        assert inference == {
-            "_id": ObjectId("629d34d2663c15eb2ed15492"),
-            "gender": "M",
-            "age": 23,
-            "rgh": "fake_rgh",
-            "covid_status": "Sim",
-            "mask_type": "None",
-            "user_id": "507f191e810c19729de860ea",
-            "model_id": "629f992d45cda830033cf4cd",
-            "status": "processing",
-            "cid": "fake_cid",
-            "bpm": "fake_bpm",
-            "cid": "fake_cid",
-            "bpm": "fake_bpm",
-            "created_in": "2022-07-18 17:07:16.954632",
-            "respiratory_frequency": "123",
-            "respiratory_insufficiency_status": "Sim",
-            "location": "h1",
-            "last_positive_diagnose_date": "",
-            "hospitalized": "TRUE",
-            "hospitalization_start": "2022-07-18 17:07:16.954632",
-            "hospitalization_end": "2022-07-18 17:07:16.954632",
-            "spo2": "123",
-        }
+        assert inference == Constants.MONGO_INFERENCE_JSON_1
 
     except:
         assert False
