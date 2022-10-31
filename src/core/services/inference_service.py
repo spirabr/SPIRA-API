@@ -144,6 +144,7 @@ async def create_new_inference(
             rgh=inference_form.rgh,
             covid_status=inference_form.covid_status,
             mask_type=inference_form.mask_type,
+            local=inference_form.local,
             cid=inference_form.cid,
             bpm=inference_form.bpm,
             model_id=inference_form.model_id,
@@ -159,7 +160,7 @@ async def create_new_inference(
             spo2=inference_form.spo2,
         )
         new_id = database_port.insert_inference(new_inference)
-        
+
         logging.info("inference inserted in database.")
 
         new_inserted_inference = Inference(
@@ -170,6 +171,7 @@ async def create_new_inference(
             rgh=inference_form.rgh,
             covid_status=inference_form.covid_status,
             mask_type=inference_form.mask_type,
+            local=inference_form.local,
             cid=inference_form.cid,
             bpm=inference_form.bpm,
             model_id=inference_form.model_id,

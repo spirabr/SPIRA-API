@@ -11,111 +11,14 @@ from core.model.user import User, UserCreationForm
 from core.ports.database_port import DatabasePort
 
 from adapters.routers.app import create_app
+from tests.mocks.constants import Constants
 
 from tests.config import (
     configure_ports_without_auth,
     configure_ports_with_auth,
 )
 from tests.mocks.mongo_mock import MongoMock
-
-INFERENCE_JSON_1_WITH_ID = {
-    "id": "629f815d6abaa3c5e6cf7c16",
-    "gender": "M",
-    "age": 23,
-    "rgh": "fake_rgh",
-    "covid_status": "Sim",
-    "mask_type": "None",
-    "user_id": "507f191e810c19729de860ea",
-    "model_id": "629f994245cda830033cf4cf",
-    "status": "processing",
-    "cid": "fake_cid",
-    "bpm": "fake_bpm",
-    "created_in": "2022-07-18 17:07:16.954632",
-    "respiratory_frequency": "123",
-    "respiratory_insufficiency_status": "Sim",
-    "location": "h1",
-    "last_positive_diagnose_date": "",
-    "hospitalized": "TRUE",
-    "hospitalization_start": "2022-07-18 17:07:16.954632",
-    "hospitalization_end": "2022-07-18 17:07:16.954632",
-    "spo2": "123",
-}
-
-INFERENCE_JSON_2_WITH_ID = {
-    "id": "629f81986abaa3c5e6cf7c17",
-    "gender": "F",
-    "age": 32,
-    "rgh": "fake_rgh",
-    "covid_status": "Sim",
-    "mask_type": "None",
-    "cid": "fake_cid",
-    "bpm": "fake_bpm",
-    "user_id": "507f191e810c19729de860ea",
-    "model_id": "629f994245cda830033cf4cf",
-    "status": "processing",
-    "cid": "fake_cid",
-    "bpm": "fake_bpm",
-    "created_in": "2022-07-18 17:07:16.954632",
-    "respiratory_frequency": "123",
-    "respiratory_insufficiency_status": "Sim",
-    "location": "h1",
-    "last_positive_diagnose_date": "",
-    "hospitalized": "TRUE",
-    "hospitalization_start": "2022-07-18 17:07:16.954632",
-    "hospitalization_end": "2022-07-18 17:07:16.954632",
-    "spo2": "123",
-}
-
-INFERENCE_JSON_2 = {
-    "gender": "F",
-    "age": 32,
-    "rgh": "fake_rgh",
-    "covid_status": "Sim",
-    "mask_type": "None",
-    "cid": "fake_cid",
-    "bpm": "fake_bpm",
-    "user_id": "507f191e810c19729de860ea",
-    "model_id": "629f994245cda830033cf4cf",
-    "status": "processing",
-    "cid": "fake_cid",
-    "bpm": "fake_bpm",
-    "created_in": "2022-07-18 17:07:16.954632",
-    "respiratory_frequency": "123",
-    "respiratory_insufficiency_status": "Sim",
-    "location": "h1",
-    "last_positive_diagnose_date": "",
-    "hospitalized": "TRUE",
-    "hospitalization_start": "2022-07-18 17:07:16.954632",
-    "hospitalization_end": "2022-07-18 17:07:16.954632",
-    "spo2": "123",
-}
-
-FAKE_INFERENCE = {
-    "gender": "F",
-    "age": 23,
-    "rgh": "fake_rgh",
-    "covid_status": "Sim",
-    "mask_type": "None",
-    "cid": "fake_cid",
-    "bpm": "fake_bpm",
-    "model_id": "629f994245cda830033cf4cf",
-    "respiratory_frequency": "123",
-    "respiratory_insufficiency_status": "Sim",
-    "location": "h1",
-    "last_positive_diagnose_date": "",
-    "hospitalized": "TRUE",
-    "hospitalization_start": "2022-07-18 17:07:16.954632",
-    "hospitalization_end": "2022-07-18 17:07:16.954632",
-    "spo2": "123",
-}
-
-FAKE_FILES = {
-    "aceite": open("tests/mocks/audio_files/audio4.wav", "rb"),
-    "sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
-    "parlenda": open("tests/mocks/audio_files/audio2.wav", "rb"),
-    "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
-}
-
+from tests.mocks.constants import Constants
 
 database_port_instance = DatabasePort(MongoMock())
 
@@ -137,7 +40,7 @@ def client_without_auth():
 def test_get_inference_by_id_success(client_with_auth: TestClient):
 
     with patch("adapters.routers.v1.inference_router.get_by_id") as mock_get_by_id:
-        mock_get_by_id.return_value = Inference(**INFERENCE_JSON_1_WITH_ID)
+        mock_get_by_id.return_value = Inference(**Constants.INFERENCE_JSON_1_WITH_ID)
         headers = {"Authorization": "Bearer mock_token"}
         response = client_with_auth.get(
             "/v1/users/507f191e810c19729de860ea/inferences/629f815d6abaa3c5e6cf7c16",
@@ -151,7 +54,7 @@ def test_get_inference_by_id_success(client_with_auth: TestClient):
             "507f191e810c19729de860ea",
             Token(content="mock_token"),
         )
-        assert response.json() == INFERENCE_JSON_1_WITH_ID
+        assert response.json() == Constants.INFERENCE_JSON_1_WITH_ID
         assert response.status_code == 200
 
 
@@ -183,8 +86,8 @@ def test_get_inference_list_success(client_with_auth: TestClient):
 
     with patch("adapters.routers.v1.inference_router.get_list") as mock_get_list:
         mock_get_list.return_value = [
-            Inference(**INFERENCE_JSON_1_WITH_ID),
-            Inference(**INFERENCE_JSON_2_WITH_ID),
+            Inference(**Constants.INFERENCE_JSON_1_WITH_ID),
+            Inference(**Constants.INFERENCE_JSON_2_WITH_ID),
         ]
         headers = {"Authorization": "Bearer mock_token"}
         response = client_with_auth.get(
@@ -200,8 +103,8 @@ def test_get_inference_list_success(client_with_auth: TestClient):
         )
         assert response.json() == {
             "inferences": [
-                INFERENCE_JSON_1_WITH_ID,
-                INFERENCE_JSON_2_WITH_ID,
+                Constants.INFERENCE_JSON_1_WITH_ID,
+                Constants.INFERENCE_JSON_2_WITH_ID,
             ]
         }
         assert response.status_code == 200
@@ -245,8 +148,8 @@ def test_post_create_inference_and_result_success(client_with_auth: TestClient):
             headers={
                 "Authorization": "Bearer mock_token",
             },
-            data=FAKE_INFERENCE,
-            files=FAKE_FILES,
+            data=Constants.INFERENCE_JSON_2,
+            files=Constants.INFERENCE_FILES,
         )
 
         mock_create_inference.assert_called_once_with(
@@ -284,8 +187,8 @@ def test_get_inference_by_id_no_token_header(client_without_auth: TestClient):
 def test_post_create_inference_no_token_header(client_without_auth: TestClient):
     response = client_without_auth.post(
         "/v1/users/507f191e810c19729de860ea/inferences",
-        data=FAKE_INFERENCE,
-        files=FAKE_FILES,
+        data=Constants.INFERENCE_JSON_2,
+        files=Constants.INFERENCE_FILES,
     )
     assert response.json() == {"detail": "Not authenticated"}
     assert response.status_code == 401
