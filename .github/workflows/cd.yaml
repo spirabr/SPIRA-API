@@ -17,5 +17,5 @@ jobs:
         run: echo "RELEASE_VERSION=${GITHUB_REF#REFS/*/}" >> $GITHUB_ENV && echo "API_IMAGE=daitamae/spira-api:${RELEASE_VERSION}"
 
       - name: Push Image
-        run: bash push-image.sh
+        run: bash push_image.sh
       
