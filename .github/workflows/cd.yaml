@@ -1,0 +1,17 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "pushing image to dockerhub..."
+
+      - name: Push Image
+        run: bash push-image.sh
+      
