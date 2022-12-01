@@ -12,16 +12,28 @@ jobs:
     steps:
       - run: echo "pushing image to dockerhub..."
 
-      - name: Set Env
-        run: echo "RELEASE_VERSION=${GITHUB_REF#REFS/*/}" >> $GITHUB_ENV && echo "API_IMAGE=daitamae/spira-api:${{env.RELEASE_VERSION}}" >> $GITHUB_ENV
-
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
 
       - name: Switch to Current Branch
         run: git checkout feature/cd-pipeline
+
+      - name: Get Tag Value
+        id: vars
+        run: |
+          echo "tag=${GITHUB_REF#REFS/*/}" >> $GITHUB_OUTPUT
+
+      - name: Set Env
+        run: echo "API_IMAGE=${{ secrets.DOCKER_USERNAME }}/spira-api:${{steps.vars.outputs.tag}}" >> $GITHUB_ENV
 
       - name: Push Image
         run: bash push-image.sh
