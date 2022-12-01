@@ -25,7 +25,7 @@ jobs:
 
 
       - name: Switch to Current Branch
-        run: git checkout feature/cd-pipeline
+        run: git checkout main
 
       - name: Set Env
         run: echo "API_IMAGE=${{ secrets.DOCKER_USERNAME }}/spira-api:${{github.ref_name}}" >> $GITHUB_ENV
