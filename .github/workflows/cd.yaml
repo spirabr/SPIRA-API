@@ -13,9 +13,16 @@ jobs:
       - run: echo "pushing image to dockerhub..."
 
       - name: Set Env
-
         run: echo "RELEASE_VERSION=${GITHUB_REF#REFS/*/}" >> $GITHUB_ENV && echo "API_IMAGE=daitamae/spira-api:${RELEASE_VERSION}"
 
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Switch to Current Branch
+        run: git checkout feature/cd-pipeline
+
       - name: Push Image
-        run: bash push_image.sh
+        run: bash push-image.sh
       
