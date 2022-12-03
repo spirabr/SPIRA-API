@@ -214,3 +214,10 @@ class Constants:
         "parlenda": open("tests/mocks/audio_files/audio2.wav", "rb"),
         "frase": open("tests/mocks/audio_files/audio3.wav", "rb"),
     }
+
+    INFERENCE_FILES_WITHOUT_FRASE = {
+        "aceite": open("tests/mocks/audio_files/audio4.wav", "rb"),
+        "sustentada": open("tests/mocks/audio_files/audio1.wav", "rb"),
+        "parlenda": open("tests/mocks/audio_files/audio2.wav", "rb"),
+        "frase": None,
+    }
