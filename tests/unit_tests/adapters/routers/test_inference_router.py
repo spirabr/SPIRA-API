@@ -172,6 +172,48 @@ def test_post_create_inference_and_result_success(client_with_auth: TestClient):
         assert response.status_code == 200
         assert response.json() == {"message": "inference registered!"}
 
+def test_post_create_inference_without_frase(client_with_auth: TestClient):
+    def fake_insert_result(new_result: ResultCreation):
+        pass
+
+    with patch(
+        "adapters.routers.v1.inference_router.create_new_inference"
+    ) as mock_create_inference, patch.object(
+        database_port_instance,
+        "insert_result",
+        MagicMock(side_effect=fake_insert_result),
+    ) as fake_result_insert:
+        mock_create_inference.return_value = "fake_inference_id"
+        response = client_with_auth.post(
+            "/v1/users/507f191e810c19729de860ea/inferences",
+            headers={
+                "Authorization": "Bearer mock_token",
+            },
+            data=Constants.INFERENCE_JSON_2,
+            files=Constants.INFERENCE_FILES_WITHOUT_FRASE,
+        )
+
+        mock_create_inference.assert_called_once_with(
+            ANY,
+            ANY,
+            ANY,
+            ANY,
+            "507f191e810c19729de860ea",
+            ANY,
+            ANY,
+            Token(content="mock_token"),
+        )
+        fake_result_insert.assert_called_once_with(
+            ResultCreation(
+                inference_id="fake_inference_id",
+                output=[-1],
+                diagnosis="not available",
+            )
+        )
+        assert response.status_code == 200
+        assert response.json() == {"message": "inference registered!"}
+
+
 
 # tests without authentication
 
