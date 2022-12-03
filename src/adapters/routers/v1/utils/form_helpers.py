@@ -55,5 +55,5 @@ async def get_inference_form_files(
             content=sustentada.file.read(), filename=sustentada.filename
         ),
         parlenda=UploadAudio(content=parlenda.file.read(), filename=parlenda.filename),
-        frase=UploadAudio(content=frase.file.read(), filename=frase.filename),
+        frase=UploadAudio(content=frase.file.read() if frase != None else b'', filename=frase.filename),
     )
