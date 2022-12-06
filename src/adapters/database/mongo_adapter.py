@@ -11,7 +11,7 @@ class MongoAdapter:
     """Adapter for the mongoDB database
 
     Args:
-        mongo_conn_url (str) : connection url to mongoDB container
+        conn_url (str) : connection url to mongoDB container
         database_name (str) : name of the database used
         user_collection_name (str) : name of the collection referring to users
         inference_collection_name (str) : name of the collection referring to inferences

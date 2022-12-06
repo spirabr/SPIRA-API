@@ -5,8 +5,8 @@ class DatabaseSettings(BaseSettings):
     """Settings holding the environment variables for the MongoAdapter
 
     Attributes:
-        mongo_conn_url (str) : connection url to mongoDB container
-        database_name (str) : name of the database used
+        M_CONN_URL (str) : connection url to mongoDB container
+        DATABASE_NAME (str) : name of the database used
         user_collection_name (str) : name of the collection referring to users
         inference_collection_name (str) : name of the collection referring to inferences
         model_collection_name (str) : name of the collection referring to models
@@ -14,8 +14,8 @@ class DatabaseSettings(BaseSettings):
 
     """
 
-    mongo_conn_url: str
-    database_name: str
+    M_CONN_URL: str
+    DATABASE_NAME: str
     user_collection_name: str
     inference_collection_name: str
     model_collection_name: str
