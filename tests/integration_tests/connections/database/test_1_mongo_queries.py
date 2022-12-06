@@ -10,13 +10,13 @@ from tests.mocks.constants import Constants
 @pytest.fixture()
 def database_adapter():
     try:
-        conn = MongoClient(Settings.database_settings.mongo_conn_url)
+        conn = MongoClient(Settings.database_settings.M_CONN_URL)
         conn.drop_database("test_database")
     finally:
         pass
 
     adapter = MongoAdapter(
-        Settings.database_settings.mongo_conn_url,
+        Settings.database_settings.M_CONN_URL,
         "test_database",
         Settings.database_settings.user_collection_name,
         Settings.database_settings.inference_collection_name,

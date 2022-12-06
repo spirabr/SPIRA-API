@@ -111,8 +111,8 @@ def create_new_user(
 
     """
     try:
-        if not authentication_port.validate_token(token):
-            raise DefaultExceptions.credentials_exception
+        # if not authentication_port.validate_token(token):
+        #     raise DefaultExceptions.credentials_exception
 
         _validate_new_user(database_port, user_form)
 

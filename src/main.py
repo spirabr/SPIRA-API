@@ -31,8 +31,8 @@ def configure_ports() -> Ports:
     ports = Ports(
         DatabasePort(
             MongoAdapter(
-                Settings.database_settings.mongo_conn_url,
-                Settings.database_settings.database_name,
+                Settings.database_settings.M_CONN_URL,
+                Settings.database_settings.DATABASE_NAME,
                 Settings.database_settings.user_collection_name,
                 Settings.database_settings.inference_collection_name,
                 Settings.database_settings.model_collection_name,
