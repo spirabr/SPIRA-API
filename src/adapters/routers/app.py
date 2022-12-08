@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordBearer
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
 from adapters.routers.v1.result_router import create_result_router
 from adapters.routers.v1.inference_router import create_inference_router
@@ -16,7 +17,7 @@ def create_app(ports: Ports) -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=[
-            "http://localhost:8080",
+            os.environ['CLIENT_URL'],
         ],
         allow_credentials=True,
         allow_methods=["*"],
