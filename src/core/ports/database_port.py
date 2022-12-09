@@ -1,4 +1,5 @@
 from typing import Optional, List
+from core.model.hospital import Hospital
 from core.model.model import Model, ModelCreationForm
 from core.model.result import Result, ResultCreation
 from core.model.user import User, UserCreation, UserWithPassword
@@ -281,6 +282,27 @@ class DatabasePort:
                 }
             )
             for model in model_list
+        ]
+
+    def get_hospital_list(self) -> List[Model]:
+        """gets all hospital objects
+
+        Args:
+            None
+
+        Returns:
+            the list of hospital objects
+
+        """
+        hospital_list = self._database_adapter.get_hospital_list()
+        return [
+            Hospital(
+                **{
+                    "id": str(hospital["_id"]),
+                    "name": hospital["name"],
+                }
+            )
+            for hospital in hospital_list
         ]
 
     def insert_model(self, new_model: ModelCreationForm):

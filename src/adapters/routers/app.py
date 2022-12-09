@@ -1,3 +1,4 @@
+from adapters.routers.v1.hospital_router import create_hospital_router
 from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordBearer
 import uvicorn
@@ -47,6 +48,11 @@ def create_app(ports: Ports) -> FastAPI:
     )
     app.include_router(
         create_result_router(
+            ports.authentication_port, ports.database_port, oauth2_scheme
+        )
+    )
+    app.include_router(
+        create_hospital_router(
             ports.authentication_port, ports.database_port, oauth2_scheme
         )
     )

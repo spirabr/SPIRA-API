@@ -16,7 +16,7 @@ class MongoAdapter:
         user_collection_name (str) : name of the collection referring to users
         inference_collection_name (str) : name of the collection referring to inferences
         model_collection_name (str) : name of the collection referring to models
-        result_collection_name (str) : : name of the collection referring to results
+        result_collection_name (str) : name of the collection referring to results
 
     """
 
@@ -35,6 +35,7 @@ class MongoAdapter:
         self._inferences = getattr(self._db, inference_collection_name)
         self._models = getattr(self._db, model_collection_name)
         self._results = getattr(self._db, result_collection_name)
+        self._hospitals = getattr(self._db, 'hospitals')
 
     # user methods
 
@@ -115,6 +116,18 @@ class MongoAdapter:
 
         """
         return self._models.find()
+
+    def get_hospital_list(self):
+        """gets all hospital documents
+
+        Args:
+            None
+
+        Returns:
+            an iterator in the hospital documents
+
+        """
+        return self._hospitals.find()
 
     def insert_model(self, new_model: ModelCreationForm):
         """inserts a new model document in the models collection
