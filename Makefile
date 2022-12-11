@@ -26,7 +26,7 @@ endef
 # --- CUSTOM COMMANDS --- #
 
 BUILD-API-IMAGE := docker compose build tester
-RUN-CONTAINERS := docker compose --profile test run --rm tester
+RUN-CONTAINERS := docker compose --profile test run --rm tester -m py.test -vv
 STOP-CONTAINERS := docker compose stop
 
 # --- CUSTOM COMMANDS --- #
@@ -97,11 +97,22 @@ all-integration-tests:
 
 # --- INTEGRATION TESTS --- #
 
+# --- SYSTEM TESTS --- #
+
+user-system-tests:
+	$(MAKE) -f ./tests/system_tests/users/test_model_endpoint.mak
+
+all-system-tests:
+	$(MAKE) user-system-tests
+
+# --- SYSTEM TESTS --- #
+
 
 # --- RUN ALL TESTS --- #
 all-tests:
 	$(STOP-CONTAINERS)
 	$(MAKE) all-unit-tests
 	$(MAKE) all-integration-tests
+	$(MAKE) all-system-tests
 
 	
