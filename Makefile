@@ -100,7 +100,9 @@ all-integration-tests:
 # --- SYSTEM TESTS --- #
 
 user-system-tests:
-	$(MAKE) -f ./tests/system_tests/users/test_model_endpoint.mak
+	$(call warn,"running system tests for user endpoints")
+	$(MAKE) -f ./tests/system_tests/users/test_users_endpoint.mak test-auth-user-endpoint || $(call failure,"failed in system tests for user endpoints!")
+	$(call success,"passed in system tests for user endpoints!")
 
 all-system-tests:
 	$(MAKE) user-system-tests
