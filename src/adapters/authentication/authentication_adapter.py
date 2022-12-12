@@ -1,7 +1,6 @@
 from typing import Optional
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
-from passlib.context import CryptContext
 from jose import jwt
 
 from core.model.token import Token, TokenData
