@@ -46,6 +46,12 @@ user-auth-request:
 		--data-urlencode 'username=testuser' \
 		--data-urlencode 'password=123'
 
+get-token:
+	curl --request POST 'localhost:3000/v1/users/auth' \
+		--header 'Content-Type: application/x-www-form-urlencoded' \
+		--data-urlencode 'username=testuser' \
+		--data-urlencode 'password=123' | 
+
 test-auth-user-endpoint:
 	$(MAKE) -f tests/system_tests/users/test_users_endpoint.mak setup
 	$(RUN-CONTAINERS) tests/system_tests/users/insert_entities.py
