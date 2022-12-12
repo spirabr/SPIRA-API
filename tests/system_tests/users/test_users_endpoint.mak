@@ -25,7 +25,7 @@ endef
 
 BUILD-API-IMAGE := docker compose build tester
 RUN-CONTAINERS := docker compose --profile test run --rm tester 
-UP-CONTAINERS := DATABASE_NAME=test_db docker compose --profile production up --force-recreate -d
+UP-CONTAINERS := docker compose --profile production up --force-recreate -d
 STOP-CONTAINERS := docker compose stop
 SLEEP := sleep 5
 MAKE-HERE := $(MAKE) -f tests/system_tests/users/test_users_endpoint.mak
@@ -42,7 +42,7 @@ user-auth-request:
 	curl -f -o /dev/null --request POST 'localhost:3000/v1/users/auth' \
 		--header 'Content-Type: application/x-www-form-urlencoded' \
 		--data-urlencode 'username=testuser' \
-		--data-urlencode 'password=123'
+		--data-urlencode 'password=abcdef'
 
 get-token:
 	curl --request POST 'localhost:3000/v1/users/auth' \
