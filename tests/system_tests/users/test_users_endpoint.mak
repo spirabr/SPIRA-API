@@ -25,21 +25,18 @@ endef
 
 BUILD-API-IMAGE := docker compose build tester
 RUN-CONTAINERS := docker compose --profile test run --rm tester 
-UP-CONTAINERS := docker compose --profile production up --force-recreate -d
+UP-CONTAINERS := DATABASE_NAME=test_db docker compose --profile production up --force-recreate -d
 STOP-CONTAINERS := docker compose stop
-CLEAN-DB := rm -rf ./data/db
 SLEEP := sleep 5
 MAKE-HERE := $(MAKE) -f tests/system_tests/users/test_users_endpoint.mak
 
 setup:
 	$(STOP-CONTAINERS)
-	$(CLEAN-DB)
 	$(UP-CONTAINERS)
 	$(SLEEP)
 
 cleanup:
 	$(STOP-CONTAINERS)
-	$(CLEAN-DB)
 
 user-auth-request:
 	curl -f -o /dev/null --request POST 'localhost:3000/v1/users/auth' \

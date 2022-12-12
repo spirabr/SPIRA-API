@@ -5,6 +5,7 @@ from passlib.context import CryptContext
 
 if __name__=="__main__":
   conn = MongoClient(os.environ["M_CONN_URL"])
+  conn.drop_database("test_db")
   db = getattr(conn, "test_db")
   users = getattr(db, 'users')
   pwd_context = CryptContext(
