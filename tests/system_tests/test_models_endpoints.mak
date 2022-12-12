@@ -57,6 +57,10 @@ get-model-request:
 	$(MAKE-HERE) get-token | curl --location --request GET 'localhost:3000/v1/models/629e4f781ed5308d4b8212bc' \
 		--header 'Authorization: Bearer {}'
 
+get-models-request:
+	$(MAKE-HERE) get-token | curl --location --request GET 'localhost:3000/v1/models/' \
+		--header 'Authorization: Bearer {}'
+
 test-create-model-endpoint:
 	$(MAKE-HERE) setup
 	$(RUN-CONTAINERS) tests/system_tests/config/insert_user.py
@@ -71,8 +75,17 @@ test-get-model-endpoint:
 	$(MAKE-HERE) get-model-request && $(call success,"PASSED") || $(call failure,"NOT PASSED")
 	$(MAKE-HERE) cleanup
 
+test-get-models-endpoint:
+	$(MAKE-HERE) setup
+	$(RUN-CONTAINERS) tests/system_tests/config/insert_user.py
+	$(RUN-CONTAINERS) tests/system_tests/config/insert_model.py
+	$(MAKE-HERE) get-models-request && $(call success,"PASSED") || $(call failure,"NOT PASSED")
+	$(MAKE-HERE) cleanup
+
+
 test-models-endpoints:
-	$(MAKE-HERE)  test-get-model-endpoint
-	$(MAKE-HERE)  test-create-model-endpoint
+	$(MAKE-HERE) test-get-model-endpoint
+	$(MAKE-HERE) test-get-models-endpoint
+	$(MAKE-HERE) test-create-model-endpoint
 	
 	
