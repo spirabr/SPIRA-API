@@ -13,4 +13,6 @@ if __name__=="__main__":
 
   users.insert_one({"_id": ObjectId(),"username": "testuser", "password":pwd_context.hash("123")})
 
+  print(users.find_one())
+
   

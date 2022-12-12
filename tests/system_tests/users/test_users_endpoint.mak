@@ -29,6 +29,7 @@ UP-CONTAINERS := docker compose --profile production up --force-recreate -d
 STOP-CONTAINERS := docker compose stop
 CLEAN-DB := rm -rf ./data/db
 SLEEP := sleep 5
+MAKE-HERE := $(MAKE) -f tests/system_tests/users/test_users_endpoint.mak
 
 setup:
 	$(STOP-CONTAINERS)
@@ -50,10 +51,15 @@ get-token:
 	curl --request POST 'localhost:3000/v1/users/auth' \
 		--header 'Content-Type: application/x-www-form-urlencoded' \
 		--data-urlencode 'username=testuser' \
-		--data-urlencode 'password=123' | 
+		--data-urlencode 'password=123' | jq -r '.access_token'
 
 test-auth-user-endpoint:
-	$(MAKE) -f tests/system_tests/users/test_users_endpoint.mak setup
+	$(MAKE-HERE) setup
 	$(RUN-CONTAINERS) tests/system_tests/users/insert_entities.py
-	$(MAKE) -s -f tests/system_tests/users/test_users_endpoint.mak user-auth-request && $(call success,"PASSED") || $(call failure,"NOT PASSED")
-	$(MAKE) -f tests/system_tests/users/test_users_endpoint.mak cleanup
+	$(MAKE-HERE) user-auth-request && $(call success,"PASSED") || $(call failure,"NOT PASSED")
+	$(MAKE-HERE) cleanup
+
+test-user-creation-endpoint:
+	$(MAKE-HERE) setup
+	$(RUN-CONTAINERS) tests/system_tests/users/insert_entities.py
+	$(MAKE-HERE) get-token
