@@ -23,12 +23,13 @@ define failure
 (printf "${RED}%s${RESTORE}\n" $(strip $1); exit 1)
 endef
 
+DIR := tests/system_tests/users
 BUILD-API-IMAGE := docker compose build tester
 RUN-CONTAINERS := docker compose --profile test run --rm tester 
 UP-CONTAINERS := docker compose --profile production up --force-recreate -d
 STOP-CONTAINERS := docker compose stop
 SLEEP := sleep 5
-MAKE-HERE := $(MAKE) -f tests/system_tests/test_users_endpoints.mak
+MAKE-HERE := $(MAKE) -f $(DIR)/test_users_endpoints.mak
 
 setup:
 	$(STOP-CONTAINERS)
@@ -51,9 +52,9 @@ user-auth-request:
 		--data-urlencode 'password=abcdef'
 
 create-user-request:
-	$(MAKE-HERE) get-token | curl -f -o /dev/null --request POST 'localhost:3000/v1/users' \
+	curl -f -o /dev/null --request POST 'localhost:3000/v1/users' \
 		--header 'Content-Type: application/json' \
-		--header 'Authorization: Bearer {}' \
+		--header 'Authorization: Bearer %' \
 		--data-raw '{ \
 				"username" : "testuser2", \
 				"email" : "test@usp.br", \
@@ -62,13 +63,13 @@ create-user-request:
 		}'
 
 get-user-request:
-	$(MAKE-HERE) get-token | curl --location --request GET 'localhost:3000/v1/users/639686c4ba1604f1387a6c00' --header 'Authorization: Bearer {}'
+	curl --location --request GET 'localhost:3000/v1/users/639686c4ba1604f1387a6c00' --header 'Authorization: Bearer $(TOKEN)'
 
 test-auth-user-endpoint:
-	$(MAKE-HERE) setup
-	$(RUN-CONTAINERS) tests/system_tests/config/insert_user.py
-	$(MAKE-HERE) user-auth-request && $(call success,"PASSED") || $(call failure,"NOT PASSED")
-	$(MAKE-HERE) cleanup
+	bash $(DIR)/auth-user-endpoint.sh && $(call success,"PASSED") || $(call failure,"NOT PASSED")
+
+test-get-user-endpoint:
+	bash $(DIR)/get-user-endpoint.sh && $(call success,"PASSED") || $(call failure,"NOT PASSED")
 
 test-create-user-endpoint:
 	$(MAKE-HERE) setup
@@ -76,16 +77,13 @@ test-create-user-endpoint:
 	$(MAKE-HERE) create-user-request && $(call success,"PASSED") || $(call failure,"NOT PASSED")
 	$(MAKE-HERE) cleanup
 
-test-get-user-endpoint:
+test-users-endpoints:
 	$(MAKE-HERE) setup
 	$(RUN-CONTAINERS) tests/system_tests/config/insert_user.py
-	$(MAKE-HERE) get-user-request && $(call success,"PASSED") || $(call failure,"NOT PASSED")
+	$(MAKE-HERE) test-auth-user-endpoint
+	# $(MAKE-HERE) test-get-user-endpoint
+	# $(MAKE-HERE) test-create-user-endpoint
 	$(MAKE-HERE) cleanup
-
-test-users-endpoints:
-	$(MAKE-HERE)  test-get-user-endpoint
-	$(MAKE-HERE)  test-auth-user-endpoint
-	$(MAKE-HERE)  test-create-user-endpoint
 	
 	
 	

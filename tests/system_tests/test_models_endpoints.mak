@@ -54,11 +54,11 @@ create-model-request:
 		}'
 
 get-model-request:
-	$(MAKE-HERE) get-token | curl --location --request GET 'localhost:3000/v1/models/629e4f781ed5308d4b8212bc' \
+	$(MAKE-HERE) get-token | xargs -I {} curl --location --request GET 'localhost:3000/v1/models/629e4f781ed5308d4b8212bc' \
 		--header 'Authorization: Bearer {}'
 
 get-models-request:
-	$(MAKE-HERE) get-token | curl --location --request GET 'localhost:3000/v1/models/' \
+	$(MAKE-HERE) get-token | xargs -I {} curl --location --request GET 'localhost:3000/v1/models/' \
 		--header 'Authorization: Bearer {}'
 
 test-create-model-endpoint:
