@@ -7,20 +7,20 @@ TOKEN=$(curl --request POST 'localhost:3000/v1/users/auth' \
 )
 
 RESPONSE_STATUS=$(curl --write-out '%{http_code}' --silent --output /dev/null \
-		'localhost:3000/v1/users/639686c4ba1604f1387a6c00' --header "Authorization: Bearer $TOKEN")
+		'localhost:3000/v1/users/639686c4ba1604f1387a6c00/inferences' --header "Authorization: Bearer $TOKEN")
 
-FAILED_RESPONSE_STATUS=$(curl --write-out '%{http_code}' --silent --output /dev/null \
-		'localhost:3000/v1/users/639686c4ba1604f1387a6c01' --header "Authorization: Bearer $TOKEN")
+UNAUTH_RESPONSE_STATUS=$(curl --write-out '%{http_code}' --silent --output /dev/null \
+		'localhost:3000/v1/users/639686c4ba1604f1387a6c00/inferences' --header "Authorization: Bearer")
 
 if [ $RESPONSE_STATUS -eq 200 ]
-	then
+ 	then
  		echo 'PASSED';
 	else
 		echo 'FAILED';
 		exit 1;
 fi;
 
-if [ $FAILED_RESPONSE_STATUS -eq 404 ]
+if [ $UNAUTH_RESPONSE_STATUS -eq 401 ]
  	then
  		echo 'PASSED';
 	else

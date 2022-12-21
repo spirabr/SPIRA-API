@@ -23,13 +23,13 @@ define failure
 (printf "${RED}%s${RESTORE}\n" $(strip $1); exit 1)
 endef
 
-DIR := tests/system_tests/users
+DIR := tests/system_tests/models
 BUILD-API-IMAGE := docker compose build tester
 RUN-CONTAINERS := docker compose --profile test run --rm tester 
 UP-CONTAINERS := docker compose --profile production up --force-recreate -d
 STOP-CONTAINERS := docker compose stop
 SLEEP := sleep 5
-MAKE-HERE := $(MAKE) -f $(DIR)/test_users_endpoints.mak
+MAKE-HERE := $(MAKE) -f $(DIR)/test_models_endpoints.mak
 
 setup:
 	$(STOP-CONTAINERS)
@@ -39,21 +39,18 @@ setup:
 cleanup:
 	$(STOP-CONTAINERS)
 
-test-auth-user:
-	bash $(DIR)/test-auth-user.sh && $(call success,"PASSED") || $(call failure,"NOT PASSED")
+test-get-models:
+	bash $(DIR)/test-get-models.sh && $(call success,"PASSED") || $(call failure,"NOT PASSED")
 
-test-get-user:
-	bash $(DIR)/test-get-user.sh && $(call success,"PASSED") || $(call failure,"NOT PASSED")
+test-create-model:
+	bash $(DIR)/test-create-model.sh && $(call success,"PASSED") || $(call failure,"NOT PASSED")
 
-test-create-user:
-	bash $(DIR)/test-create-user.sh && $(call success,"PASSED") || $(call failure,"NOT PASSED")
-
-test-users-endpoints:
+test-models-endpoints:
 	$(MAKE-HERE) setup
 	$(RUN-CONTAINERS) tests/system_tests/config/insert_user.py
-	$(MAKE-HERE) test-auth-user
-	$(MAKE-HERE) test-get-user
-	$(MAKE-HERE) test-create-user
+	$(RUN-CONTAINERS) tests/system_tests/config/insert_model.py
+	$(MAKE-HERE) test-get-models
+	$(MAKE-HERE) test-create-model
 	$(MAKE-HERE) cleanup
 	
 	

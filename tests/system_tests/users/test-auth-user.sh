@@ -20,9 +20,18 @@ FAILED_RESPONSE_STATUS=$(curl --write-out '%{http_code}' --silent --output /dev/
 		--data-urlencode 'password=abcdefg'
 )
 
-if [ $RESPONSE_STATUS -eq 200 ] && [ $FAILED_RESPONSE_STATUS -eq 401 ]
+if [ $RESPONSE_STATUS -eq 200 ]
  	then
- 		exit 0;
+ 		echo 'PASSED';
 	else
+		echo 'FAILED';
+		exit 1;
+fi;
+
+if [ $FAILED_RESPONSE_STATUS -eq 401 ]
+ 	then
+ 		echo 'PASSED';
+	else
+		echo 'FAILED';
 		exit 1;
 fi;

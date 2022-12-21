@@ -106,12 +106,18 @@ user-system-tests:
 
 model-system-tests:
 	$(call warn,"running system tests for model endpoints")
-	$(MAKE) -f ./tests/system_tests/test_models_endpoints.mak test-models-endpoints || $(call failure,"failed in system tests for model endpoints!")
+	$(MAKE) -f ./tests/system_tests/models/test_models_endpoints.mak test-models-endpoints || $(call failure,"failed in system tests for model endpoints!")
 	$(call success,"passed in system tests for model endpoints!")
+
+inference-system-tests:
+	$(call warn,"running system tests for inference endpoints")
+	$(MAKE) -f ./tests/system_tests/inferences/test_inferences_endpoints.mak test-inferences-endpoints || $(call failure,"failed in system tests for inference endpoints!")
+	$(call success,"passed in system tests for inference endpoints!")
 
 all-system-tests:
 	$(MAKE) user-system-tests
-	# $(MAKE) model-system-tests
+	$(MAKE) model-system-tests
+	$(MAKE) inference-system-tests
 
 # --- SYSTEM TESTS --- #
 

@@ -7,25 +7,26 @@ TOKEN=$(curl --request POST 'localhost:3000/v1/users/auth' \
 )
 
 RESPONSE_STATUS=$(curl --write-out '%{http_code}' --silent --output /dev/null \
-		--request POST 'localhost:3000/v1/users/' \
+		--request POST 'localhost:3000/v1/models/' \
 		--header 'Content-Type: application/json' \
 		--header "Authorization: Bearer $TOKEN" \
-		--data-raw '{ "username" : "testuser2", "email" : "test2@usp.br", "password" : "123", "password_confirmation" : "123" }')
-
+		--data-raw '{ "name" : "testmodel2", "publishing_channel" : "testtopic2" }')
+	
 FAILED_RESPONSE_STATUS=$(curl --write-out '%{http_code}' --silent --output /dev/null \
-		--request POST 'localhost:3000/v1/users/' \
+		--request POST 'localhost:3000/v1/models/' \
 		--header 'Content-Type: application/json' \
 		--header "Authorization: Bearer $TOKEN" \
-		--data-raw '{}')
+		--data-raw "{}")
 
 UNAUTH_RESPONSE_STATUS=$(curl --write-out '%{http_code}' --silent --output /dev/null \
-		--request POST 'localhost:3000/v1/users/' \
+		--request POST 'localhost:3000/v1/models/' \
 		--header 'Content-Type: application/json' \
 		--header "Authorization: Bearer fake-token" \
-		--data-raw '{ "username" : "testuser3", "email" : "test3@usp.br", "password" : "123", "password_confirmation" : "123" }')
+		--data-raw '{ "name" : "testmodel3", "publishing_channel" : "testtopic3" }')
+
 
 if [ $RESPONSE_STATUS -eq 200 ]
-	then
+ 	then
  		echo 'PASSED';
 	else
 		echo 'FAILED';
@@ -33,7 +34,7 @@ if [ $RESPONSE_STATUS -eq 200 ]
 fi;
 
 if [ $FAILED_RESPONSE_STATUS -gt 399 ]
-	then
+ 	then
  		echo 'PASSED';
 	else
 		echo 'FAILED';
