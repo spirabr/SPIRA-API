@@ -80,10 +80,9 @@ test-create-user:
 test-users-endpoints:
 	$(MAKE-HERE) setup
 	$(RUN-CONTAINERS) tests/system_tests/config/insert_user.py
-	$(MAKE-HERE) test-unauthorized-user
 	$(MAKE-HERE) test-auth-user
-	# $(MAKE-HERE) test-get-user
-	# $(MAKE-HERE) test-create-user
+	$(MAKE-HERE) test-get-user
+	$(MAKE-HERE) test-create-user
 	$(MAKE-HERE) cleanup
 	
 	

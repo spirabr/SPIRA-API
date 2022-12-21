@@ -7,9 +7,12 @@ TOKEN=$(curl --request POST 'localhost:3000/v1/users/auth' \
 )
 
 RESPONSE_STATUS=$(curl --write-out '%{http_code}' --silent --output /dev/null \
-	 'localhost:3000/v1/users/639686c4ba1604f1387a6c00' --header "Authorization: Bearer $TOKEN")
+		'localhost:3000/v1/users/639686c4ba1604f1387a6c00' --header "Authorization: Bearer $TOKEN")
 
-if [ $RESPONSE_STATUS -eq 200 ]
+FAILED_RESPONSE_STATUS=$(curl --write-out '%{http_code}' --silent --output /dev/null \
+		'localhost:3000/v1/users/639686c4ba1604f1387a6c01' --header "Authorization: Bearer $TOKEN")
+
+if [ $RESPONSE_STATUS -eq 200 ] && [ $FAILED_RESPONSE_STATUS -eq 404 ]
  	then
  		exit 0;
 	else
