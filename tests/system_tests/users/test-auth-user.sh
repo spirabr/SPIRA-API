@@ -13,7 +13,7 @@ RESPONSE_STATUS=$(curl --write-out '%{http_code}' --silent --output /dev/null \
 		--data-urlencode 'password=abcdef'
 )
 
-if [ $RESPONSE_STATUS -eq 401 ]
+if [ $RESPONSE_STATUS -eq 200 ]
  	then
  		exit 0;
 	else

@@ -62,16 +62,16 @@ create-user-request:
 				"password_confirmation" : "123" \
 		}'
 
-get-user-request:
-	curl --location --request GET 'localhost:3000/v1/users/639686c4ba1604f1387a6c00' --header 'Authorization: Bearer $(TOKEN)'
+test-unauthorized-user:
+	bash $(DIR)/test-authorized-user.sh && $(call success,"PASSED") || $(call failure,"NOT PASSED")
 
-test-auth-user-endpoint:
-	bash $(DIR)/auth-user-endpoint.sh && $(call success,"PASSED") || $(call failure,"NOT PASSED")
+test-auth-user:
+	bash $(DIR)/test-auth-user.sh && $(call success,"PASSED") || $(call failure,"NOT PASSED")
 
-test-get-user-endpoint:
-	bash $(DIR)/get-user-endpoint.sh && $(call success,"PASSED") || $(call failure,"NOT PASSED")
+test-get-user:
+	bash $(DIR)/test-get-user.sh && $(call success,"PASSED") || $(call failure,"NOT PASSED")
 
-test-create-user-endpoint:
+test-create-user:
 	$(MAKE-HERE) setup
 	$(RUN-CONTAINERS) tests/system_tests/config/insert_user.py
 	$(MAKE-HERE) create-user-request && $(call success,"PASSED") || $(call failure,"NOT PASSED")
@@ -80,9 +80,10 @@ test-create-user-endpoint:
 test-users-endpoints:
 	$(MAKE-HERE) setup
 	$(RUN-CONTAINERS) tests/system_tests/config/insert_user.py
-	$(MAKE-HERE) test-auth-user-endpoint
-	# $(MAKE-HERE) test-get-user-endpoint
-	# $(MAKE-HERE) test-create-user-endpoint
+	$(MAKE-HERE) test-unauthorized-user
+	$(MAKE-HERE) test-auth-user
+	# $(MAKE-HERE) test-get-user
+	# $(MAKE-HERE) test-create-user
 	$(MAKE-HERE) cleanup
 	
 	
