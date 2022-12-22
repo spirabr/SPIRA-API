@@ -125,8 +125,8 @@ all-system-tests:
 # --- RUN ALL TESTS --- #
 all-tests:
 	$(STOP-CONTAINERS)
-	# $(MAKE) all-unit-tests
-	# $(MAKE) all-integration-tests
+	$(MAKE) all-unit-tests
+	$(MAKE) all-integration-tests
 	$(MAKE) all-system-tests
 
 	
