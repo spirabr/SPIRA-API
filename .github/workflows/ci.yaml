@@ -28,6 +28,9 @@ jobs:
       - name: Switch to Current Branch
         run: git checkout ${{ env.BRANCH }}
 
+      - name: Set Env
+        run: echo "API_IMAGE=${{ secrets.DOCKER_USERNAME }}/spira-api" >> $GITHUB_ENV
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
         with:
