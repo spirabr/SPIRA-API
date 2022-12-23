@@ -61,7 +61,7 @@ async def listen_for_messages_and_update(
         logging.info("update received.")
         _update_database(database_port, result_update)
 
-        simple_storage_port.remove_inference_directory(result_update.inference_id)
+        # simple_storage_port.remove_inference_directory(result_update.inference_id)
 
     except LogicException:
         raise
