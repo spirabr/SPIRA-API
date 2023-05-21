@@ -3,6 +3,8 @@ FROM python:3.8 as base
 
 ENV POETRY_VERSION=1.3.2
 
+RUN apt update
+RUN apt install jq -y
 RUN pip install "poetry==$POETRY_VERSION"
 RUN poetry config virtualenvs.create false
 
