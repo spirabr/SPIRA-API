@@ -1,7 +1,7 @@
 #base image
 FROM python:3.8 as base
 
-ENV POETRY_VERSION=1.1.13
+ENV POETRY_VERSION=1.3.2
 
 RUN pip install "poetry==$POETRY_VERSION"
 RUN poetry config virtualenvs.create false
