@@ -28,8 +28,10 @@ jobs:
       - name: Switch to Current Branch
         run: git checkout ${{ env.BRANCH }}
 
-      - name: Set Env
+      - name: Set prod API image env var
         run: echo "API_IMAGE=${{ secrets.DOCKER_USERNAME }}/spira-api" >> $GITHUB_ENV
+
+      - name: Set test API image env var
         run: echo "API_TEST_IMAGE=${{ secrets.DOCKER_USERNAME }}/spira-api-test:${{github.ref_name}}" >> $GITHUB_ENV
 
       - name: Set up Python ${{ matrix.python-version }}
