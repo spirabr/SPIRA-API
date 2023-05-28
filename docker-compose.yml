@@ -24,6 +24,18 @@ services:
       - nats-network
       - mongo-network
       - minio-network
+
+  k8s-test-image:
+    build:
+      context: .
+      target: dev
+    image: ${API_TEST_IMAGE}
+    container_name: spira-api-tester-1
+    entrypoint: python3
+    volumes:
+      - ".:/app/"
+    ports:
+      - 3000:8000 
       
   tester:
     build:
