@@ -29,6 +29,8 @@ jobs:
 
       - name: Set Env
         run: echo "API_IMAGE=${{ secrets.DOCKER_USERNAME }}/spira-api:${{github.ref_name}}" >> $GITHUB_ENV
+        run: echo "API_TEST_IMAGE=${{ secrets.DOCKER_USERNAME }}/spira-api-test:${{github.ref_name}}" >> $GITHUB_ENV
+
 
       - name: Push Image
         run: bash push-image.sh
