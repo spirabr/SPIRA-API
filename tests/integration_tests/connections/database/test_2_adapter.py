@@ -15,13 +15,13 @@ from tests.mocks.constants import Constants
 def database_adapter():
     try:
         conn = MongoClient(Settings.database_settings.M_CONN_URL)
-        conn.drop_database("test_database")
+        conn.drop_database(Settings.database_settings.DATABASE_NAME)
     finally:
         pass
 
     adapter = MongoAdapter(
         Settings.database_settings.M_CONN_URL,
-        "test_database",
+        Settings.database_settings.DATABASE_NAME,
         Settings.database_settings.user_collection_name,
         Settings.database_settings.inference_collection_name,
         Settings.database_settings.model_collection_name,
@@ -79,7 +79,7 @@ def database_adapter():
 
     yield adapter
 
-    adapter._conn.drop_database("test_database")
+    adapter._conn.drop_database(Settings.database_settings.DATABASE_NAME)
 
 
 def test_get_user_by_username(database_adapter: MongoAdapter):
