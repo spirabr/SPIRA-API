@@ -26,7 +26,7 @@ endef
 DIR := tests/system_tests/users
 BUILD-API-IMAGE := docker compose build tester
 RUN-CONTAINERS := docker compose --profile test run --rm tester 
-UP-CONTAINERS := docker compose --profile production up -d
+UP-CONTAINERS := docker compose --profile production up --force-recreate -d
 STOP-CONTAINERS := docker compose stop
 SLEEP := sleep 5
 MAKE-HERE := $(MAKE) -f $(DIR)/test_users_endpoints.mak
