@@ -26,7 +26,7 @@ endef
 DIR := tests/system_tests/inferences
 BUILD-API-IMAGE := docker compose build tester
 RUN-CONTAINERS := docker compose --profile test run --rm tester 
-UP-CONTAINERS := docker compose --profile production up --force-recreate -d
+UP-CONTAINERS := docker compose --profile production up -d
 STOP-CONTAINERS := docker compose stop
 SLEEP := sleep 5
 MAKE-HERE := $(MAKE) -f $(DIR)/test_inferences_endpoints.mak
