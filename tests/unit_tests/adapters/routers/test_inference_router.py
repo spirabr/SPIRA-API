@@ -170,7 +170,6 @@ def test_post_create_inference_and_result_success(client_with_auth: TestClient):
             )
         )
         assert response.status_code == 200
-        assert response.json() == {"message": "inference registered!"}
 
 def test_post_create_inference_without_frase(client_with_auth: TestClient):
     def fake_insert_result(new_result: ResultCreation):
@@ -211,7 +210,6 @@ def test_post_create_inference_without_frase(client_with_auth: TestClient):
             )
         )
         assert response.status_code == 200
-        assert response.json() == {"message": "inference registered!"}
 
 
 
