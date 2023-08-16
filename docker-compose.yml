@@ -19,7 +19,7 @@ services:
     volumes:
       - "./src:/app/"
     ports:
-      - 3000:8000 
+      - 4000:8000 
     networks:
       - nats-network
       - mongo-network
