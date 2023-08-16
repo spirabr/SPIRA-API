@@ -88,6 +88,6 @@ def create_inference_router(
             )
         except LogicException as e:
             raise HTTPException(e.error_status, e.message)
-        return {"message": "inference registered!"}
+        return {"inference_id": inference_id}
 
     return router
