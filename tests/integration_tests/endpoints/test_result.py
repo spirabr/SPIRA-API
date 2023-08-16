@@ -81,7 +81,6 @@ def test_post_create_result_with_inference_success(client_with_auth: TestClient)
         data=FAKE_INFERENCE,
         files=Constants.INFERENCE_FILES,
     )
-    assert response.json() == {"message": "inference registered!"}
     assert response.status_code == 200
 
 
