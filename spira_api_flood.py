@@ -1,15 +1,35 @@
 import os
 import requests, json
 import uuid
+import signal
+import sys
+import time
+
 
 spira_api_base_url = os.environ["SPIRA_API_BASE_URL"]
 user = os.environ["SPIRA_USER"]
 password = os.environ["SPIRA_PASSWORD"]
 
+f = open('test_run_{}.txt'.format(str(uuid.uuid4())), 'a')
+
+def signal_handler(sig, frame):
+    print('Gracefully exiting {}'.format(sig))
+    f.close()
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+
 def main():
     (user_id, token, token_type) = get_token()
-    print(user_id, token)
-    register_inference(user_id, token)
+    flood_and_log(user_id, token)
+
+def flood_and_log(id, token):
+    while True:
+        try:
+            inf_id = register_inference(id, token)
+            f.write(inf_id + "\n")
+        except(requests.HTTPError):
+            f.write("fail\n")
 
 def get_token():
     
@@ -29,17 +49,17 @@ def get_token():
 
         json_response = json.loads(response.content)
 
-        return (json_response["id"], json_response["access_token"], json_response["token_type"])
-
         if response.status_code != 200:
             response.raise_for_status()
+
+        return (json_response["id"], json_response["access_token"], json_response["token_type"])
+
 
     except requests.exceptions.RequestException as e:
         raise(e)
 
 def register_inference(user_id, token):
     url = '{}/v1/users/{}/inferences'.format(spira_api_base_url, user_id)
-    print(create_inference_files())
     try:
         response = requests.post(
             url, 
@@ -50,10 +70,12 @@ def register_inference(user_id, token):
             }            
         )
 
-        print(response.content)
-
         if response.status_code != 200:
             response.raise_for_status()
+
+        inf_id = json.loads(response.content)['inference_id']
+
+        return inf_id
 
     except requests.exceptions.RequestException as e:
         raise(e)
