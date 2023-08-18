@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+import logging
 
 from core.model.user import User, UserCreationForm
 from core.model.exception import LogicException
@@ -22,6 +23,7 @@ def create_user_router(
 
     @router.get("/{user_id}", response_model=User)
     def get_user_by_id(user_id: str, token_content: str = Depends(oauth2_scheme)):
+        logging.info("Attempting to fetch user {}".format(user_id))
         try:
             user = get_by_id(
                 authentication_port,
@@ -31,12 +33,14 @@ def create_user_router(
             )
         except LogicException as e:
             raise HTTPException(e.error_status, e.message)
+        logging.info("Succeeded to fetch user {}".format(user_id))
         return user
 
     @router.post("/auth")
     async def authenticate_and_create_token(
         form_data: OAuth2PasswordRequestForm = Depends(),
     ):
+        logging.info("Attempting to auth user {}".format(form_data.username))
         try:
             user_id, access_token = authenticate_and_generate_token(
                 authentication_port,
@@ -46,6 +50,8 @@ def create_user_router(
             )
         except LogicException as e:
             raise HTTPException(e.error_status, e.message)
+        logging.info("Succeeded to auth user {}".format(user_id))
+
         return {
             "id": user_id,
             "access_token": access_token.content,
@@ -56,6 +62,8 @@ def create_user_router(
     def create_user(
         user_form: UserCreationForm, token_content: str = Depends(oauth2_scheme)
     ):
+        logging.info("Succeeded to fetch user {}".format(user_id))
+
         try:
             create_new_user(
                 authentication_port,

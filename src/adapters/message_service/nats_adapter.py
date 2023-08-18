@@ -1,6 +1,7 @@
 import asyncio
 import nats
 from nats.aio.client import Client
+import logging
 
 
 class NATSAdapter:
