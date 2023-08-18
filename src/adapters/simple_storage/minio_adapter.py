@@ -3,7 +3,6 @@ import logging
 import os
 from minio import Minio
 from minio.deleteobjects import DeleteObject
-import logging
 
 
 class MinioAdapter:
