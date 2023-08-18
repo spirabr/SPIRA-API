@@ -24,6 +24,7 @@ class MinioAdapter:
         bucket_name: str,
         file_extension: str,
     ):
+        logging.info("creating minio adapter")
         self._client = Minio(
             conn_url, access_key=access_key, secret_key=secret_key, secure=False
         )
@@ -31,6 +32,7 @@ class MinioAdapter:
         self._bucket_name = bucket_name
         if not self._client.bucket_exists(bucket_name):
             self._client.make_bucket(bucket_name)
+        logging.info("successfully created minio adapter")
 
     def store_inference_file(
         self, inference_id: str, file_type: str, raw_file: BytesIO

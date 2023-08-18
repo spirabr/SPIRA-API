@@ -12,10 +12,12 @@ class NATSAdapter:
     """
 
     def __init__(self, conn_url: str):
+        logging.info("creating nats adapter")
         self._conn_url = conn_url
         self._nc = Client()
         self._receiving_nc = Client()
         self._subs: dict = {}
+        logging.info("successfully created nats adapter")
 
     async def send_message(self, message: str, publishing_topic: str):
         """sends a message in the given topic

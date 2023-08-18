@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from bson import ObjectId
+import logging
 
 from core.model.inference import InferenceCreation
 from core.model.model import ModelCreationForm
@@ -29,6 +30,7 @@ class MongoAdapter:
         model_collection_name: str,
         result_collection_name: str,
     ):
+        logging.info("creating mongo adapter")
         self._conn: MongoClient = MongoClient(conn_url)
         self._db = getattr(self._conn, database_name)
         self._users = getattr(self._db, user_collection_name)
@@ -36,6 +38,7 @@ class MongoAdapter:
         self._models = getattr(self._db, model_collection_name)
         self._results = getattr(self._db, result_collection_name)
         self._hospitals = getattr(self._db, 'hospitals')
+        logging.info("successfully created mongo adapter")
 
     # user methods
 
