@@ -203,9 +203,9 @@ async def create_new_inference(
         logging.info("inference message sent.")
     except LogicException:
         raise
-    except:
+    except (Exception) as e:
         raise LogicException(
-            "cound not create new inference", status.HTTP_500_INTERNAL_SERVER_ERROR
+            "cound not create new inference. Unexpected exception: {}".format(e), status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
     return new_id
