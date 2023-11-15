@@ -45,7 +45,7 @@ def main():
         "name": "einstein",
         "id": "whatever",
     }
-    print("Attempting to crease hospital {}".format(hospital["hospital"]), file=sys.stdout )
+    print("Attempting to crease hospital {}".format(hospital["name"]), file=sys.stdout )
 
     hospitals.insert_one(hospital)
 
