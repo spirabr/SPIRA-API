@@ -41,11 +41,12 @@ def main():
     users.insert_one(entry)
     print("Success", file=sys.stdout)
 
-    print("Attempting to crease hospital {}".format(entry["hospital"]), file=sys.stdout )
     hospital = {
         "name": "einstein",
-        "id": whatever,
+        "id": "whatever",
     }
+    print("Attempting to crease hospital {}".format(hospital["hospital"]), file=sys.stdout )
+
     hospitals.insert_one(hospital)
 
     print("Success", file=sys.stdout)
